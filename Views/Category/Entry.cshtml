@@ -1,0 +1,33 @@
+﻿@model CategoryViewModel
+@{
+    var error = ViewBag.Msg;
+    if (error != null)
+    {
+        if (error.IsOccurError)
+        {
+            <div class="alert alert-danger">
+                @error.Message
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success">
+                @error.Message
+            </div>
+        }
+    }
+}
+<form action="/category/entry" method="post">
+
+    <div class="mb-3 col-6">
+        <label for="Name" class="form-label">Name</label>
+        <input type="text" name="Name" class="form-control" placeholder="Enter Name" require />
+    </div>
+    <div class="mb-3 col-6">
+        <label for="Description" class="form-label">Description</label>
+        <input type="text" name="Description" class="form-control" placeholder="Enter Name" requrie />
+    </div>
+
+    <button class="btn btn-success" type="submit">Save</button>
+    <a href="/category/list" class="btn btn-warning">Cancel</a>
+</form>

@@ -1,0 +1,63 @@
+﻿@model IList<CategoryViewModel>
+<head>
+    <!-- For JQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+@{
+    if (TempData["Msg"] != null)
+    {
+        if (Convert.ToBoolean(TempData["IsOccourError"]))
+        {
+            <div class="alert alert-danger col-6">
+                @TempData["Msg"]
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success col-6">
+                @TempData["Msg"]
+            </div>
+        }
+    }
+}
+<h1>Category List Information</h1>
+<a href="/category/entry" class="btn btn-primary mb-3">Create</a>
+<table class="table table-hover" id="CategoryTable">
+    <thead class="table-dark">
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    @{
+        int i = 1;
+    }
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@category.Name</td>
+                <td>@category.Description</td>
+                <td>
+                    <a href="/category/edit?id=@category.Id" class="btn btn-primary">Edit</a>
+                    <a href="/category/delete?id=@category.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+         i++;
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Initialize DataTable
+        $("#CategoryTable").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#CategoryTable_wrapper .col-md-6:eq(0)');
+    });
+</script>

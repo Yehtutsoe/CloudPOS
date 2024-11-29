@@ -1,0 +1,40 @@
+﻿@model PhoneModelViewModel
+@{
+    if (TempData["Msg"] != null)
+    {
+        if (Convert.ToBoolean(TempData["IsOccourError"]))
+        {
+            <div class="alert alert-danger col-6">
+                @TempData["Msg"]
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success col-6">
+                @TempData["Msg"]
+            </div>
+        }
+    }
+}
+<h2>Model Entry Form</h2>
+<form action="/phonemodel/update" method="post">
+    <input type="text" name="Id" value="@Model.Id" class="form-control" hidden />
+    <div class="col-6 mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Enter Model Name" required />
+    </div>
+    <div class="col-6 mb-3">
+        <label for="Brand" class="form-label">Brand</label>
+        <input type="text" name="Brand" value="@Model.Brand" class="form-control" placeholder="Enter Brand" required />
+    </div>
+    <div class="col-6 mb-3">
+        <label for="Specification" class="form-label">Specification</label>
+        <input type="text" name="Specification" value="@Model.Specification" class="form-control" placeholder="Enter Specification" required />
+    </div>
+    <div class="col-6 mb-3">
+        <label for="ReleaseDate" class="form-label">Release Date</label>
+        <input type="date" name="ReleaseDate" value="@Model.ReleaseDate?.ToString("yyyy-MM-dd")" class="form-control" placeholder="Enter Date" />
+    </div>
+    <button type="submit" class="btn btn-success">Update</button>
+    <a href="/model/list" class="btn btn-warning">Cancel</a>
+</form>
