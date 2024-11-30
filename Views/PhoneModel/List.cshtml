@@ -1,9 +1,5 @@
 ﻿
 @model IList<PhoneModelViewModel>
-<head>
-    <!-- For Sweetalert-->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
 
 @{
     if (TempData["Msg"] != null)
@@ -69,7 +65,6 @@
         // Handle Delete Button Click
         $(".delete-button").on("click", function (e) {
             e.preventDefault();
-            alert("Hello")
             // Get data attributes
             let url = $(this).data("url");
             let name = $(this).data("name");
