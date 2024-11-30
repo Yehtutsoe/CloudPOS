@@ -13,6 +13,6 @@
         public string CategoryId { get; set; }
         public string CategoryInfo { get; set; }
         public IList<CategoryViewModel> CategoryViewModels { get; set; } // List for UI Binding
-        public IList<PhoneModelViewModel> phoneModelViewModels { get; set; } //List for UI Binding
+        public IList<PhoneModelViewModel> PhoneModelViewModels { get; set; } //List for UI Binding
     }
 }

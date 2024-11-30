@@ -16,6 +16,9 @@ builder.Services.AddScoped<IPhoneModelService, PhoneModelService>();
 builder.Services.AddScoped<IPhoneModelRepository, PhoneModelRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
+
 
 var app = builder.Build();
 

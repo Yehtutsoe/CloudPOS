@@ -1,22 +1,19 @@
 ﻿@model IList<CategoryViewModel>
-<head>
-    <!-- For JQuery -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-</head>
+
 @{
     if (TempData["Msg"] != null)
     {
         if (Convert.ToBoolean(TempData["IsOccourError"]))
         {
-            <div class="alert alert-danger col-6">
-                @TempData["Msg"]
-            </div>
+                                    <div class="alert alert-danger col-6">
+                                        @TempData["Msg"]
+                                    </div>
         }
         else
         {
-            <div class="alert alert-success col-6">
-                @TempData["Msg"]
-            </div>
+                                    <div class="alert alert-success col-6">
+                                        @TempData["Msg"]
+                                    </div>
         }
     }
 }
@@ -43,7 +40,7 @@
                 <td>@category.Description</td>
                 <td>
                     <a href="/category/edit?id=@category.Id" class="btn btn-primary">Edit</a>
-                    <a href="/category/delete?id=@category.Id" class="btn btn-danger">Delete</a>
+                    <a href="javascript:void(0)" data-url="/category/delete?id=@category.Id" data-name="@category.Name" class="btn btn-danger delete-button">Delete</a>
                 </td>
             </tr>
          i++;
@@ -53,11 +50,26 @@
 <script type="text/javascript">
     $(document).ready(function () {
         // Initialize DataTable
-        $("#CategoryTable").DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#CategoryTable_wrapper .col-md-6:eq(0)');
+        $("#CategoryTable").DataTable();
+
+        $(".delete-button").on("click", function (e) {
+            e.preventDefault();
+            let url = $(this).data("url");
+            let name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure!',
+                text: `You are about to delete "${name}".This Action can not be undone`,
+                icon: 'Warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            });
+        });
     });
 </script>
