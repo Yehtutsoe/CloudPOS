@@ -1,0 +1,93 @@
+﻿@model IList<ProductViewModel>
+@{
+    if (TempData["Msg"] != null)
+    {
+        if (Convert.ToBoolean(TempData["IsOccourError"]))
+        {
+                <div class="alert alert-danger col-6">
+                    @TempData["Msg"]
+                </div>
+        }
+        else
+        {
+                <div class="alert alert-success col-6">
+                    @TempData["Msg"]
+                </div>
+        }
+    }
+}
+<h2 class="mb-3">Prdouct Information List</h2>
+<div class="mb-3">
+    <a href="/product/entry" class="btn btn-primary">Create</a>
+</div>
+<table id="productTable" class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Category</th>
+            <th scope="col">Product</th>
+            <th scope="col">Type</th>
+            <th scope="col">Serial Number</th>
+            <th scope="col">IMEI Number</th>
+            <th scope="col">Cost Price</th>
+            <th scope="col">Sale Price</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    @{
+        int i = 1;
+    }
+    <tbody>
+        @foreach (var prodcut in Model)
+        {
+            <tr>
+                <td scope="row">@i</td>
+                <td>@prodcut.CategoryInfo</td>
+                <td>@prodcut.PhoneModelInfo</td>
+                <td>@prodcut.Type</td>
+                <td>@prodcut.SerialNumber</td>
+                <td>@prodcut.IMEINumber</td>
+                <td>@prodcut.CostPrice</td>
+                <td>@prodcut.SalePrice</td>
+                <td>
+                    <a href="/product/edit?id=@prodcut.Id" class="btn btn-primary">Edit</a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@prodcut.Id" data-name="@prodcut.PhoneModelId">Delete</a>
+                </td>
+        </tr>
+        i++;
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Initialize DataTable
+        $("#productTable").DataTable();
+
+        $(".delete-button").on("click", function (e) {
+            e.preventDefault();
+            let url = $(this).data("url");
+            let name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure!',
+                text: `You are about to delete "${name}".This Action can not be undone`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: `You delete "${name}".`,
+                        icon: 'success'
+                        }).then(() => {
+                            window.location.href = url;
+                    });
+                    
+                }
+            });
+        });
+    });
+</script>

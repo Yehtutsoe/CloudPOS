@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241118140855_Initial db")]
-    partial class Initialdb
+    [Migration("20241130151209_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,7 +79,7 @@ namespace CloudPOS.Migrations
                     b.ToTable("Inventory");
                 });
 
-            modelBuilder.Entity("CloudPOS.Models.Entities.ModelEntity", b =>
+            modelBuilder.Entity("CloudPOS.Models.Entities.PhoneModelEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -131,7 +131,7 @@ namespace CloudPOS.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ModelId")
+                    b.Property<string>("PhoneModelId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -152,7 +152,7 @@ namespace CloudPOS.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("ModelId");
+                    b.HasIndex("PhoneModelId");
 
                     b.ToTable("Product");
                 });
@@ -328,15 +328,15 @@ namespace CloudPOS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloudPOS.Models.Entities.ModelEntity", "Models")
+                    b.HasOne("CloudPOS.Models.Entities.PhoneModelEntity", "PhoneModels")
                         .WithMany()
-                        .HasForeignKey("ModelId")
+                        .HasForeignKey("PhoneModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Categories");
 
-                    b.Navigation("Models");
+                    b.Navigation("PhoneModels");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.PurchaseEntity", b =>

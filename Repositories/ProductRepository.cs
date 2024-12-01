@@ -23,7 +23,8 @@ namespace CloudPOS.Repositories
                 CostPrice = productViewModel.CostPrice,
                 IsActive = true,
                 CategoryId = productViewModel.CategoryId,
-                PhoneModelId = productViewModel.PhoneModelId
+                PhoneModelId = productViewModel.PhoneModelId,
+                
             };
             _applicationDbContext.Products.Add(productEntity);
             _applicationDbContext.SaveChanges();

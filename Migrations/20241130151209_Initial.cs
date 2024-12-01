@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CloudPOS.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialdb : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,7 +82,7 @@ namespace CloudPOS.Migrations
                     IMEINumber = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ModelId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PhoneModelId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -96,8 +96,8 @@ namespace CloudPOS.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Model_ModelId",
-                        column: x => x.ModelId,
+                        name: "FK_Product_Model_PhoneModelId",
+                        column: x => x.PhoneModelId,
                         principalTable: "Model",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -216,9 +216,9 @@ namespace CloudPOS.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_ModelId",
+                name: "IX_Product_PhoneModelId",
                 table: "Product",
-                column: "ModelId");
+                column: "PhoneModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Purcahse_SupplierId",

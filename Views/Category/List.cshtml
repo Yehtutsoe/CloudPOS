@@ -59,7 +59,7 @@
             Swal.fire({
                 title: 'Are you sure!',
                 text: `You are about to delete "${name}".This Action can not be undone`,
-                icon: 'Warning',
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
@@ -67,7 +67,13 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url;
+                        Swal.fire({
+                            title: 'Success',
+                            text: `You delete "${name}".`,
+                            icon: 'success'
+                             }).then(() => {
+                                  window.location.href = url;
+                        });
                 }
             });
         });

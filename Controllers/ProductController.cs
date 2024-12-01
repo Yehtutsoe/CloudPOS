@@ -32,7 +32,29 @@ namespace CloudPOS.Controllers
                 error.IsOccurError = true;
                 throw;
             }
-            return View();
+            return RedirectToAction("List");
+        }
+
+        public IActionResult List()
+        {
+            return View(_productService.RetrieveAll());
+        }
+
+        public IActionResult Delete(string Id)
+        {
+            try
+            {
+                _productService.Delete(Id);
+                TempData["Msg"] = "Successfully Delete from the System";
+                TempData["IsOccourError"] = false;
+            }
+            catch (Exception)
+            {
+                TempData["Msg"] = "Error occour,Unsuccessfully Delete from the System";
+                TempData["IsOccourError"] = true;
+                throw;
+            }
+            return RedirectToAction("List");
         }
     }
 }
