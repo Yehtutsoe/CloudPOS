@@ -8,10 +8,14 @@ namespace CloudPOS.Repositories
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
+        #region Constructor
         public ProductRepository(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
+        #endregion
+
+        #region Create
         public void Create(ProductViewModel productViewModel)
         {
             ProductEntity productEntity = new ProductEntity() { 
@@ -29,7 +33,9 @@ namespace CloudPOS.Repositories
             _applicationDbContext.Products.Add(productEntity);
             _applicationDbContext.SaveChanges();
         }
+        #endregion
 
+        #region Delete
         public void Delete(string Id)
         {
             var existingProduct = _applicationDbContext.Products.Where(w => w.Id == Id).SingleOrDefault();
@@ -38,13 +44,16 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.SaveChanges();
             }
         }
+        #endregion
 
+        #region GetById
         public ProductViewModel GetById(string Id)
         {
             var products = _applicationDbContext.Products.Where(w => w.Id == Id)
                                                          .Select(s => new ProductViewModel
                                                                     {
                                                                         Id = s.Id,
+                                                                        Type=s.Type,
                                                                         SalePrice = s.SalePrice,
                                                                         CostPrice = s.CostPrice,
                                                                         IMEINumber = s.IMEINumber,
@@ -55,7 +64,9 @@ namespace CloudPOS.Repositories
 
             return products;
         }
+        #endregion
 
+        #region GetForCategoryAndModel
         public IList<CategoryViewModel> GetCategories()
         {
             IList<CategoryViewModel> categories = _applicationDbContext.Categorys.Select(s => new CategoryViewModel
@@ -63,6 +74,7 @@ namespace CloudPOS.Repositories
                 Id = s.Id,
                 Name= s.Name + "|" + s.Description
             }).ToList();
+            
             return categories;
         }
 
@@ -76,7 +88,9 @@ namespace CloudPOS.Repositories
 
             return phoneModels;
         }
+        #endregion
 
+        #region RetrieveAll
         public IList<ProductViewModel> RetrieveAll()
         {
             IList<ProductViewModel> product =(from p in _applicationDbContext.Products
@@ -99,6 +113,17 @@ namespace CloudPOS.Repositories
 
                                                 }).ToList();
             return product;
+        }
+        #endregion
+
+        public void Update(ProductEntity productEntity)
+        {
+            var existingEntity = _applicationDbContext.Products.Find(productEntity.Id);
+            if(existingEntity != null)
+            {
+                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(productEntity);
+                _applicationDbContext.SaveChanges();
+            }
         }
     }
 }

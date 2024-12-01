@@ -9,6 +9,6 @@ namespace CloudPOS.Services
         ProductViewModel GetById(string Id);
         void Delete(string Id);
         ProductViewModel GetCategoryAndModel();
-
+        void Update(ProductViewModel productViewModel);
     }
 }

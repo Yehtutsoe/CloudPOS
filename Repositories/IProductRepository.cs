@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.ViewModels;
+﻿using CloudPOS.Models.Entities;
+using CloudPOS.Models.ViewModels;
 
 namespace CloudPOS.Repositories
 {
@@ -10,5 +11,7 @@ namespace CloudPOS.Repositories
         void Delete(string Id);
         IList<CategoryViewModel> GetCategories();
         IList<PhoneModelViewModel> GetPhonesModels();
+        void Update(ProductEntity productEntity);
+
     }
 }

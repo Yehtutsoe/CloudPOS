@@ -40,6 +40,18 @@ namespace CloudPOS.Controllers
             return View(_productService.RetrieveAll());
         }
 
+        public IActionResult Edit(string Id)
+        {
+            var product = _productService.GetById(Id);
+            if(product == null)
+            {
+                TempData["Msg"] = "Error: Product not found!";
+                TempData["IsOccourError"] = true;
+                return RedirectToAction("List");
+            }
+            return View(product);
+        }
+
         public IActionResult Delete(string Id)
         {
             try
@@ -51,6 +63,23 @@ namespace CloudPOS.Controllers
             catch (Exception)
             {
                 TempData["Msg"] = "Error occour,Unsuccessfully Delete from the System";
+                TempData["IsOccourError"] = true;
+                throw;
+            }
+            return RedirectToAction("List");
+        }
+        [HttpPost]
+        public IActionResult Update(ProductViewModel ui)
+        {
+            try
+            {
+                _productService.Update(ui);
+                TempData["Msg"] = "Successfully update to the System";
+                TempData["IsOccourError"] = false;
+            }
+            catch (Exception)
+            {
+                TempData["Msg"] = "Error occour,Unsuccessfully update to the System";
                 TempData["IsOccourError"] = true;
                 throw;
             }

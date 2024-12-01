@@ -1,0 +1,79 @@
+﻿@model ProductViewModel
+@{
+    if (TempData["Msg"] != null)
+    {
+        if (Convert.ToBoolean(TempData["IsOccourError"]))
+        {
+            <div class="alert alert-danger col-6">
+                @TempData["Msg"]
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success col-6">
+                @TempData["Msg"]
+            </div>
+        }
+    }
+}
+<h2>Product Edit Form</h2>
+<form action="/product/update" method="post">
+
+    <input type="text" value="@Model.Id" hidden name="Id"/>
+    <div class="mb-3">
+        <label for="Category" class="form-label">Category</label>
+        <select name="CategoryId" id="Category" class="form-select">
+            
+            @foreach(var category in Model.CategoryViewModels)
+            {
+                if(category.Id == Model.CategoryId){
+                    <option value="@category.Id" selected>@category.Name</option>
+                }
+                else
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="PhoneModel" class="form-label">Model</label>
+        <select name="PhoneModelId" id="PhoneModel" class="form-select">
+            
+            @foreach(var phoneModel in Model.PhoneModelViewModels)
+            {
+                if(phoneModel.Id == Model.PhoneModelId)
+                {
+                    <option value="@phoneModel.Id" selected>@phoneModel.Name</option>
+                }
+                else
+                {
+                    <option value="@phoneModel.Id">@phoneModel.Name</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="Type">Type</label>
+        <input type="text" name="Type" value="@Model.Type" class="form-control" placeholder="Enter Type" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="SerialNumber">SerialNumber</label>
+        <input type="text" name="SerialNumber" value="@Model.SerialNumber" class="form-control" placeholder="Enter Serial Number" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="IMEINumber">IMEI Number</label>
+        <input type="text" name="IMEINumber" value="@Model.IMEINumber" class="form-control" placeholder="Enter IMEI Number" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="CostPrice">CostPrice</label>
+        <input type="number" name="CostPrice" value="@Model.CostPrice" class="form-control" placeholder="Enter Cost Price" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="SalePrice">SalePrice</label>
+        <input type="number" name="SalePrice" value="@Model.SalePrice" class="form-control" placeholder="Enter Sale Price" />
+    </div>
+    <button class="btn btn-primary" type="submit">Update</button>
+    <a href="/product/list" class="btn btn-warning">Cancel</a>
+</form>

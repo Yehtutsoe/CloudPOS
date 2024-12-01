@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.ViewModels;
+﻿using CloudPOS.Models.Entities;
+using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories;
 
 namespace CloudPOS.Services
@@ -23,7 +24,14 @@ namespace CloudPOS.Services
 
         public ProductViewModel GetById(string Id)
         {
-            return _productRepository.GetById(Id);
+            var product = _productRepository.GetById(Id);
+            if(product == null)
+            {
+                return null;
+            }
+            product.CategoryViewModels = _productRepository.GetCategories();
+            product.PhoneModelViewModels = _productRepository.GetPhonesModels();
+            return product;
         }
 
         public ProductViewModel GetCategoryAndModel()
@@ -39,6 +47,23 @@ namespace CloudPOS.Services
         public IList<ProductViewModel> RetrieveAll()
         {
             return _productRepository.RetrieveAll();
+        }
+
+        public void Update(ProductViewModel productViewModel)
+        {
+            var entity = new ProductEntity()
+            {
+                Id = productViewModel.Id,
+                Type = productViewModel.Type,
+                CategoryId = productViewModel.CategoryId,
+                PhoneModelId = productViewModel.PhoneModelId,
+                IMEINumber = productViewModel.IMEINumber,
+                SerialNumber = productViewModel.SerialNumber,
+                CostPrice = productViewModel.CostPrice,
+                SalePrice = productViewModel.SalePrice                
+            };
+            entity.IsActive = true;
+            _productRepository.Update(entity);
         }
     }
 }
