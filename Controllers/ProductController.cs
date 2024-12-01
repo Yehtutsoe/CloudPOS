@@ -34,6 +34,5 @@ namespace CloudPOS.Controllers
             }
             return View();
         }
-
     }
 }
