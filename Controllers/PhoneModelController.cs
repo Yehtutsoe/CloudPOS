@@ -7,7 +7,6 @@ namespace CloudPOS.Controllers
     public class PhoneModelController : Controller
     {
         private readonly IPhoneModelService _modelService;
-        ErrorViewModel error = new ErrorViewModel();
 
         public PhoneModelController(IPhoneModelService modelService)
         {

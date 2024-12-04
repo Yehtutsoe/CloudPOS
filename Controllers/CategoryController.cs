@@ -7,7 +7,6 @@ namespace CloudPOS.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-        ErrorViewModel error = new ErrorViewModel();
 
         #region Constructor
         public CategoryController(ICategoryService categoryService)

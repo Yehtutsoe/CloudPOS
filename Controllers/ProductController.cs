@@ -7,7 +7,6 @@ namespace CloudPOS.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
-        ErrorViewModel error = new ErrorViewModel();
 
         public ProductController(IProductService productService)
         {
