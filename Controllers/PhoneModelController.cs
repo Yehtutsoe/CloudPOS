@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.ViewModels;
+﻿using CloudPOS.Models;
+using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,71 +9,123 @@ namespace CloudPOS.Controllers
     {
         private readonly IPhoneModelService _modelService;
 
+        #region Constructor
         public PhoneModelController(IPhoneModelService modelService)
         {
             _modelService = modelService;
         }
+        #endregion
+
+        #region Create
         public IActionResult Entry()
         {
             return View();
         }
+    
         [HttpPost]
         public IActionResult Entry(PhoneModelViewModel modelViewModel)
         {
             try
             {
-                _modelService.Create(modelViewModel);
-                error.Message = "Successfully Save the record to the system!";
-                
+                if (!ModelState.IsValid)
+                {
+                    _modelService.Create(modelViewModel);
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successful save the record to the system",
+                        IsOccurError = false
+                    });
+                }
+                else
+                {
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Error Occour, can not save the record",
+                        IsOccurError = true
+                    });
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                error.Message = "Error ,Cann't save to the system";
-                error.IsOccurError = true;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = true
+                });
             }
-            ViewBag.Msg = error;
+            
             return RedirectToAction("List");
         }
+        #endregion
+
+        #region Retrieve
         public IActionResult List()
         {
             return View(_modelService.RetrieveAll());
         }
+        #endregion
+
+        #region Edit
         public IActionResult Edit(string Id)
         {
             return View(_modelService.GetById(Id));
         }
+        #endregion
+
+        #region Update
         [HttpPost]
         public IActionResult Update(PhoneModelViewModel model) {
 
-            try
-            {
-                _modelService.Update(model);
-                TempData["Msg"] = "Successfully update to the system!";
-                TempData["IsOccourError"] = false;
-            }
-            catch (Exception)
-            {
-                TempData["Msg"] = "Can not update to the system,Error Occour!";
-                TempData["IsOccourError"] = true;
-                throw;
-            }
+                if (!ModelState.IsValid)
+                {
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successful update the record to the system",
+                        IsOccurError = true
+                    });
+                }
+                try {
+                    _modelService.Update(model);
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successful update the record to the system",
+                        IsOccurError = false
+                    });
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = $"Error : {ex.Message}",
+                        IsOccurError = true
+                    });
+                }
             return RedirectToAction("List");
         }
+        #endregion
+
+        #region Delete
         public IActionResult Delete(string Id)
         {
             try
             {
-                _modelService.Delete(Id);
-                TempData["Msg"] = "Successfully Delete form System";
-                TempData["IsOccourError"] = false;
+                    _modelService.Delete(Id);
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successful delete the record to the system",
+                        IsOccurError = false
+                    });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["Msg"] = "Can not Delete from System,Error occour!";
-                TempData["IsOccourError"] = true;
-                throw;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = true
+                });
             }
             return RedirectToAction("List");
         }
+        #endregion
     }
 }

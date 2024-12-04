@@ -1,15 +1,14 @@
 ﻿@model PhoneModelViewModel;
 @{
-    var error = ViewBag.Msg;
-    if (error != null)
+    if (TempData["ErrorViewModel"] != null)
     {
-        if (error.IsOccurError)
-        {
-            <div class="alert alert-danger">
-                @error.Message
-            </div>
-        }
-}
+        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
+        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
+            @error.Message
+        </div>
+    }
+}  
+
 <h2>Model Entry Form</h2>
 <form action="/phonemodel/entry" method="post">
     <div class="col-6 mb-3">

@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.ViewModels;
+﻿using CloudPOS.Models;
+using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace CloudPOS.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        
 
         public ProductController(IProductService productService)
         {
@@ -21,15 +23,30 @@ namespace CloudPOS.Controllers
         {
             try
             {
-                _productService.Create(ui);
-                error.Message = "Successfull save the record to system";
-                
+                if (!ModelState.IsValid) {
+                    _productService.Create(ui);
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successful save the record to the system",
+                        IsOccurError = false
+                    });
+                }
+                else
+                {
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Error occour,unsuccessful save the record to the system",
+                        IsOccurError = true
+                    });
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                error.Message = "Error occour,Unsuccessfull save the record to system";
-                error.IsOccurError = true;
-                throw;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = false
+                });
             }
             return RedirectToAction("List");
         }
@@ -44,8 +61,11 @@ namespace CloudPOS.Controllers
             var product = _productService.GetById(Id);
             if(product == null)
             {
-                TempData["Msg"] = "Error: Product not found!";
-                TempData["IsOccourError"] = true;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = "Not Found the data",
+                    IsOccurError = true
+                });
                 return RedirectToAction("List");
             }
             return View(product);
@@ -56,20 +76,35 @@ namespace CloudPOS.Controllers
             try
             {
                 _productService.Delete(Id);
-                TempData["Msg"] = "Successfully Delete from the System";
-                TempData["IsOccourError"] = false;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = "Successful Delete the record from the system",
+                    IsOccurError = false
+                });
             }
-            catch (Exception)
+            
+            catch (Exception ex)
             {
-                TempData["Msg"] = "Error occour,Unsuccessfully Delete from the System";
-                TempData["IsOccourError"] = true;
-                throw;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error ,{ex.Message}",
+                    IsOccurError = true
+                });
             }
             return RedirectToAction("List");
         }
         [HttpPost]
         public IActionResult Update(ProductViewModel ui)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = "Can not update the data,please check the input fields",
+                    IsOccurError = true
+                });
+                return View(ui);
+            }
             try
             {
                 _productService.Update(ui);

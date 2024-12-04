@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.ViewModels;
+﻿using CloudPOS.Models;
+using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,7 @@ namespace CloudPOS.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-
+       
         #region Constructor
         public CategoryController(ICategoryService categoryService)
         {
@@ -23,19 +24,37 @@ namespace CloudPOS.Controllers
         }
         [HttpPost]
         public IActionResult Entry(CategoryViewModel ui) {
+
             try
             {
-                _categoryService.Create(ui);
-                error.Message = "Successful save the record to the system";
+                if (!ModelState.IsValid)
+                {
+                    _categoryService.Create(ui);
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successfully save the record to the system",
+                        IsOccurError = false
+                    });
+                }
+                else
+                {
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Error occour, can not save to the system",
+                        IsOccurError = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = true
+                });
                 
             }
-            catch (Exception)
-            {
-                error.Message = "Error occour, can not save the record";
-                error.IsOccurError = true;
-                throw;
-            }
-            ViewBag.Msg = error;
+           
             return RedirectToAction("List");
         }
 
@@ -60,15 +79,21 @@ namespace CloudPOS.Controllers
         {
             try
             {
-                _categoryService.Delete(Id);
-                TempData["Msg"] = "Successfully Delete from the System";
-                TempData["IsOccourError"] = false;
+                    _categoryService.Delete(Id);
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Successfully delete the record from the system",
+                        IsOccurError = false
+                    });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["Msg"] = "Error Occour,unsuccessfully Delete from the System";
-                TempData["IsOccourError"] = true;
-                throw;
+
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = true
+                });
             }
             return RedirectToAction("List");
         }
@@ -77,17 +102,32 @@ namespace CloudPOS.Controllers
         #region Update
         public IActionResult Update(CategoryViewModel ui)
         {
+          
+                if (!ModelState.IsValid)
+                {
+                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                    {
+                        Message = "Validation Error occour, please check input field",
+                        IsOccurError = true
+                    });
+                return View(ui);
+                }
             try
             {
                 _categoryService.Update(ui);
-                TempData["Msg"] = "Successfully Update to the System";
-                TempData["IsOccourError"] = false;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = "Successful update to the system",
+                    IsOccurError = false
+                });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["Msg"] = "Error Occour,unsuccessfully Update to the System";
-                TempData["IsOccourError"] = true;
-                throw;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = true
+                });
             }
             return RedirectToAction("List");
         }

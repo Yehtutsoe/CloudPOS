@@ -1,20 +1,11 @@
 ﻿@model CategoryViewModel
 @{
-    var error = ViewBag.Msg;
-    if (error != null)
+    if (TempData["ErrorViewModel"] != null)
     {
-        if (error.IsOccurError)
-        {
-            <div class="alert alert-danger">
-                @error.Message
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-success">
-                @error.Message
-            </div>
-        }
+        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
+        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
+            @error.Message
+        </div>
     }
 }
 <form action="/category/entry" method="post">

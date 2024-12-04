@@ -1,20 +1,12 @@
 ﻿@model IList<CategoryViewModel>
 
 @{
-    if (TempData["Msg"] != null)
+    if (TempData["ErrorViewModel"] != null)
     {
-        if (Convert.ToBoolean(TempData["IsOccourError"]))
-        {
-                                    <div class="alert alert-danger col-6">
-                                        @TempData["Msg"]
-                                    </div>
-        }
-        else
-        {
-                                    <div class="alert alert-success col-6">
-                                        @TempData["Msg"]
-                                    </div>
-        }
+        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
+        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
+            @error.Message
+        </div>
     }
 }
 <h1>Category List Information</h1>
