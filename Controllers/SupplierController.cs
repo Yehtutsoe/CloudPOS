@@ -80,29 +80,7 @@ namespace CloudPOS.Controllers
 
         public IActionResult Edit(string Id)
         {
-            try
-            {
-                var supplier = _supplierService.GetById(Id);
-                if (supplier == null)
-                {
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Not found the record",
-                        IsOccurError = true
-                    });
-                    return RedirectToAction("List");
-                }
-                return View(supplier);
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                }); ;
-            }
-            return RedirectToAction("List");
+             return View(_supplierService.GetById(Id));     
         }
 
         [HttpPost]
@@ -115,6 +93,7 @@ namespace CloudPOS.Controllers
                     Message = "Can not update the record to the System",
                     IsOccurError = true
                 });
+                return View(ui);
             }
             try
             {

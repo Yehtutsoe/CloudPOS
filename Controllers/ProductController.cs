@@ -96,26 +96,33 @@ namespace CloudPOS.Controllers
         [HttpPost]
         public IActionResult Update(ProductViewModel ui)
         {
-            if (!ModelState.IsValid)
-            {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = "Can not update the data,please check the input fields",
-                    IsOccurError = true
-                });
-                return View(ui);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+            //    {
+            //        Message = "Can not update the data,please check the input fields",
+            //        IsOccurError = true
+            //    });
+            //    return View("Edit",ui);
+            //}
             try
             {
                 _productService.Update(ui);
-                TempData["Msg"] = "Successfully update to the System";
-                TempData["IsOccourError"] = false;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = "Successful update to system",
+                    IsOccurError = false
+                });
+                //return RedirectToAction("List");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["Msg"] = "Error occour,Unsuccessfully update to the System";
-                TempData["IsOccourError"] = true;
-                throw;
+                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
+                {
+                    Message = $"Error : {ex.Message}",
+                    IsOccurError = true
+                });
+               
             }
             return RedirectToAction("List");
         }
