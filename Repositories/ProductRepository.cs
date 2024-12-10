@@ -116,6 +116,7 @@ namespace CloudPOS.Repositories
         }
         #endregion
 
+        #region Update
         public void Update(ProductEntity productEntity)
         {
             var existingEntity = _applicationDbContext.Products.Find(productEntity.Id);
@@ -125,5 +126,6 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.SaveChanges();
             }
         }
+        #endregion
     }
 }

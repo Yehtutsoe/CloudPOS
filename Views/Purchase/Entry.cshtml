@@ -1,0 +1,33 @@
+﻿@model PurchaseViewModel
+<h2>Purchase Entry Form</h2>
+<form action="/purchase/entry" method="post">
+    <div class="col-6">
+        <div class="mb-3">
+            <label for="supplierId" class="form-label">Supplier</label>
+            <select name="SupplierId" id="SupplierId" class="form-select">
+                <option value="x">[ Select One ]</option>
+
+                @foreach (var supplier in Model.SupplierViewModels)
+                {
+                    <option value="@supplier.Id">@supplier.Name</option>
+                }
+
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="PurchaseDate" class="form-label">Purchase Date</label>
+            <input type="date" name="PurchaseDate" class="form-control" placeholder="Enter Date"/>
+        </div>
+        <div class="mb-3">
+            <label for="TotalCost" class="form-label">Total Cost</label>
+            <input type="number" name="TotalCost" class="form-control" placeholder="Enter Total Cost" />
+        </div>
+        <div class="mb-3">
+            <label for="DeliverStatus" class="form-label">Deliver Status</label>
+            <input type="text" name="DeliveryStatus" class="form-control" placeholder="Enter Deliver Status" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success"> <i class="bi bi-floppy-fill"></i>Save</button>
+    <a href="/purchase/list" class="btn btn-warning"><i class="bi bi-x-square-fill"></i>Cancel</a>
+</form>

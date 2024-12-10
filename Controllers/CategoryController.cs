@@ -100,6 +100,7 @@ namespace CloudPOS.Controllers
         #endregion
 
         #region Update
+        [HttpPost]
         public IActionResult Update(CategoryViewModel ui)
         {
           
