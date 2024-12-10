@@ -93,7 +93,6 @@ namespace CloudPOS.Controllers
                     Message = "Can not update the record to the System",
                     IsOccurError = true
                 });
-                return View(ui);
             }
             try
             {
