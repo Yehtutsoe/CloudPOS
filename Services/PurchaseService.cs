@@ -19,7 +19,6 @@ namespace CloudPOS.Services
                 Id = Guid.NewGuid().ToString(),
                 DeliveryStatus = purchaseViewModel.DeliveryStatus,
                 PurchaseDate = purchaseViewModel.PurchaseDate,
-                IsActive = true,
                 TotalCost = purchaseViewModel.TotalCost,
                 SupplierId = purchaseViewModel.SupplierId,
             };
