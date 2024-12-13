@@ -1,7 +1,9 @@
 ﻿@model PurchaseViewModel
-<h2>Purchase Entry Form</h2>
+<h2>Purchase Update Form</h2>
 <form action="/purchase/update" method="post">
     <div class="col-6">
+        <input type="text" name="Id" value="@Model.Id" hidden/>
+
         <div class="mb-3">
             <label for="SupplierId" class="form-label">Model</label>
             <select name="SupplierId" id="SupplierId" class="form-select">
@@ -21,7 +23,7 @@
         </div>
         <div class="mb-3">
             <label for="PurchaseDate" class="form-label">Purchase Date</label>
-            <input type="date" value="@Model.PurchaseDate.ToString("dd-MM-yyyy")" name="PurchaseDate" class="form-control"/>
+            <input type="date" value="@Model.PurchaseDate.ToString("yyyy-MM-dd")" name="PurchaseDate" class="form-control"/>
         </div>
         <div class="mb-3">
             <label for="TotalCost" class="form-label">Total Cost</label>

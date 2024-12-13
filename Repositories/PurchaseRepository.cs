@@ -50,7 +50,7 @@ namespace CloudPOS.Repositories
            var existingEntity = _applicationDbContext.Purchases.Find(purchaseEntity.Id);
             if(existingEntity != null)
             {
-                _applicationDbContext.Entry(purchaseEntity).CurrentValues.SetValues(existingEntity);
+                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(purchaseEntity);
                 _applicationDbContext.SaveChanges();
             }
         }

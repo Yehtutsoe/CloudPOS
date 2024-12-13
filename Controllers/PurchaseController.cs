@@ -33,7 +33,10 @@ namespace CloudPOS.Controllers
         }
         public IActionResult Edit(string Id)
         {
-            return RedirectToAction("List");
+            var purchaseEdit = _purchaseService.GetById(Id);
+            // supplier ViewModel is populated dropdown list
+            purchaseEdit.SupplierViewModels = _purchaseService.GetActiveSupplier().SupplierViewModels;
+            return View(purchaseEdit);
         }
         [HttpPost]
         public IActionResult Update(PurchaseViewModel purchaseViewModel) {
