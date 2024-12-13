@@ -1,0 +1,51 @@
+﻿using CloudPOS.DAO;
+using CloudPOS.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace CloudPOS.Repositories
+{
+    public class SaleRepository : ISaleRepository
+    {
+        private readonly ApplicationDbContext _applicationDbContext;
+
+        public SaleRepository(ApplicationDbContext applicationDbContext)
+        {
+            _applicationDbContext = applicationDbContext;
+        }
+        public decimal CalculateProfit(SaleEntity saleEntity)
+        {
+            var totalAmount = saleEntity.TotalAmount;
+            var totalCost = saleEntity.SaleItems.Sum(si => si.UnitPrice - si.Quantity);
+            var profit = totalAmount - totalCost;
+            return profit;
+
+        }
+
+        public void Create(SaleEntity saleEntity)
+        {
+            _applicationDbContext.Sales.Add(saleEntity);
+            _applicationDbContext.SaveChanges();
+        }
+
+        public void Delete(SaleEntity saleEntity)
+        {
+            _applicationDbContext.Sales.Remove(saleEntity);
+            _applicationDbContext.SaveChanges();
+        }
+
+        public IEnumerable<SaleEntity> GetById(string Id)
+        {
+            return _applicationDbContext.Sales.Where(s => s.Id == Id).ToList();
+        }
+
+        public IEnumerable<SaleEntity> RetrieveAll()
+        {
+            return _applicationDbContext.Sales.Include(s => s.SaleItems).ToList();
+        }
+
+        public void Update(SaleEntity saleEntity)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

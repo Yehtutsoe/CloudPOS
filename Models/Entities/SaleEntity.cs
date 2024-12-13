@@ -12,5 +12,7 @@ namespace CloudPOS.Models.Entities
         public Decimal TotalAmount { get; set; }
         public Decimal TotalCost { get; set; }
         public Decimal Profit { get; set; }
+        public IList<SaleItemEntity> SaleItems { get; set; }
+
     }
 }
