@@ -9,5 +9,7 @@ namespace CloudPOS.Repositories
         IEnumerable<PurchaseEntity> GetById(string Id);
         void Delete(string Id);
         void Update(PurchaseEntity purchaseEntity);
+        IEnumerable<SupplierEntity> GetActiveSupplier();
+
     }
 }

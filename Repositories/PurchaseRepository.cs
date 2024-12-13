@@ -1,5 +1,6 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudPOS.Repositories
 {
@@ -19,22 +20,40 @@ namespace CloudPOS.Repositories
 
         public void Delete(string Id)
         {
-            throw new NotImplementedException();
+            var entity = _applicationDbContext.Purchases.Find(Id);
+            if(entity != null)
+            {
+                _applicationDbContext.Purchases.Remove(entity);
+                _applicationDbContext.SaveChanges();
+            }
+        }
+
+        public IEnumerable<SupplierEntity> GetActiveSupplier()
+        {
+            return _applicationDbContext.Suppliers.ToList();
         }
 
         public IEnumerable<PurchaseEntity> GetById(string Id)
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.Purchases.Where(w => w.Id == Id).ToList();
         }
 
         public IEnumerable<PurchaseEntity> RetrieveAll()
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.Purchases
+                                        .Include(p => p.Suppliers)
+                                        .ToList();
         }
 
         public void Update(PurchaseEntity purchaseEntity)
         {
-            throw new NotImplementedException();
+           var existingEntity = _applicationDbContext.Purchases.Find(purchaseEntity.Id);
+            if(existingEntity != null)
+            {
+                _applicationDbContext.Entry(purchaseEntity).CurrentValues.SetValues(existingEntity);
+                _applicationDbContext.SaveChanges();
+            }
         }
+
     }
 }

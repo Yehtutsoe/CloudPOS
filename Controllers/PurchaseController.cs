@@ -14,12 +14,32 @@ namespace CloudPOS.Controllers
         }
         public IActionResult Entry()
         {
-            return View();
+
+            return View(_purchaseService.GetActiveSupplier());
         }
         [HttpPost]
         public IActionResult Entry(PurchaseViewModel purchaseViewModel) {
             _purchaseService.Create(purchaseViewModel);
-            return View();
+            return RedirectToAction("List");
         }
+        public IActionResult List()
+        {
+            return View(_purchaseService.RetrieveAll());
+        }
+        public IActionResult Delete(string Id)
+        {
+            _purchaseService.Delete(Id);
+            return RedirectToAction("List");
+        }
+        public IActionResult Edit(string Id)
+        {
+            return RedirectToAction("List");
+        }
+        [HttpPost]
+        public IActionResult Update(PurchaseViewModel purchaseViewModel) {
+            _purchaseService.Update(purchaseViewModel);
+            return RedirectToAction("List");
+        }
+
     }
 }

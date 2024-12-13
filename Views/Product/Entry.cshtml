@@ -2,46 +2,48 @@
 
 <h2>Product Entry Form</h2>
 <form action="/product/entry" method="post">
-    <div class="mb-3">
-        <label for="Category" class="form-label">Category</label>
-        <select name="CategoryId" id="Category" class="form-select">
-            <option value="x">[Select One]</option>
-            @foreach(var category in Model.CategoryViewModels)
-            {
-                <option value="@category.Id">@category.Name</option>                
-            }
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="PhoneModel" class="form-label">Model</label>
-        <select name="PhoneModelId" id="PhoneModel" class="form-select">
-            <option value="x">[Select One]</option>
-            @foreach (var phoneModel in Model.PhoneModelViewModels)
-            {
-                <option value="@phoneModel.Id">@phoneModel.Name</option>
-            }
-        </select>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="Type">Type</label>
-        <input type="text" name="Type" class="form-control" placeholder="Enter Type" />
-    </div>
+    <div class="col-6">
+        <div class="mb-3">
+            <label for="Category" class="form-label">Category</label>
+            <select name="CategoryId" id="Category" class="form-select">
+                <option value="x">[Select One]</option>
+                @foreach(var category in Model.CategoryViewModels)
+                {
+                    <option value="@category.Id">@category.Name</option>                
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="PhoneModel" class="form-label">Model</label>
+            <select name="PhoneModelId" id="PhoneModel" class="form-select">
+                <option value="x">[Select One]</option>
+                @foreach (var phoneModel in Model.PhoneModelViewModels)
+                {
+                    <option value="@phoneModel.Id">@phoneModel.Name</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="Type">Type</label>
+            <input type="text" name="Type" class="form-control" placeholder="Enter Type" />
+        </div>
 
-    <div class="mb-3">
-        <label class="form-label" for="SerialNumber">SerialNumber</label>
-        <input type="text" name="SerialNumber" class="form-control" placeholder="Enter Serial Number" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="IMEINumber">IMEI Number</label>
-        <input type="text" name="IMEINumber" class="form-control" placeholder="Enter IMEI Number" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="CostPrice">CostPrice</label>
-        <input type="number" name="CostPrice" class="form-control" placeholder="Enter Cost Price" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="SalePrice">SalePrice</label>
-        <input type="number" name="SalePrice" class="form-control" placeholder="Enter Sale Price" />
+        <div class="mb-3">
+            <label class="form-label" for="SerialNumber">SerialNumber</label>
+            <input type="text" name="SerialNumber" class="form-control" placeholder="Enter Serial Number" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="IMEINumber">IMEI Number</label>
+            <input type="text" name="IMEINumber" class="form-control" placeholder="Enter IMEI Number" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="CostPrice">CostPrice</label>
+            <input type="number" name="CostPrice" class="form-control" placeholder="Enter Cost Price" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="SalePrice">SalePrice</label>
+            <input type="number" name="SalePrice" class="form-control" placeholder="Enter Sale Price" />
+        </div>
     </div>
     <button class="btn btn-primary" type="submit">Save</button>
     <a href="/product/list" class="btn btn-warning">Cancel</a>

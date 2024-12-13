@@ -9,5 +9,6 @@ namespace CloudPOS.Services
         void Delete(string Id);
         PurchaseViewModel GetById(string Id);
         void Update(PurchaseViewModel purchaseViewModel);
+        PurchaseViewModel GetActiveSupplier();
     }
 }

@@ -1,33 +1,37 @@
-﻿@model IList<SupplierViewModel>
-<h2 class="mb-3">Supplier Information List</h2>
-
+﻿@model IList<PurchaseViewModel>
+<h1 class="mb-3">Purchase Information View</h1>
 <div>
-    <a href="/supplier/entry" class="btn btn-primary"><i class="bi bi-plus-square-fill"></i>Create</a>
+    <a href="/purchase/entry" class="btn btn-primary">
+        <i class="bi bi-plus-square-fill"></i>Create
+    </a>
 </div>
-<table class="table table-hover" id="supplierTable">
+<table class="table table-hover" id="PurchaseTable">
     <thead class="table-dark">
         <tr>
-            <th scope="col">No</th>
-            <th scope="col">Name</th>
-            <th scope="col">Contact Information</th>
-            <th scope="col">Address</th>
-            <th scope="col">Action</th>
+            <th>No</th>
+            <th>Supplier Information</th>
+            <th>Purchase Date</th>
+            <th>Total Cost</th>
+            <th>Delivery Status</th>
+            <th>Action</th>
         </tr>
     </thead>
     @{
         int i = 1;
     }
     <tbody>
-        @foreach(var supplier in Model)
+        @foreach (var purchase in Model)
         {
             <tr>
                 <td>@i</td>
-                <td>@supplier.Name</td>
-                <td>@supplier.ContactInformation</td>
-                <td>@supplier.Address</td>
+                <td>@purchase.SupplierInfo</td>
+                <td>@purchase.PurchaseDate.ToString("dd-MM-yyyy")</td>
+                <td>@purchase.TotalCost</td>
+                <td>@purchase.DeliveryStatus</td>
                 <td>
-                    <a href="/supplier/edit?id=@supplier.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-name="@supplier.Name" data-url="/supplier/delete?id=@supplier.Id"><i class="bi bi-trash3-fill"></i></a>
+
+                    <a href="/purchase/edit?id=@purchase.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/purchase/delete?id=@purchase.Id" data-name="@purchase.SupplierInfo"><i class="bi bi-trash3-fill"></a>
                 </td>
             </tr>
             i++;
@@ -37,7 +41,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         // Initialize DataTable
-        $("#supplierTable").DataTable();
+        $("#PurchaseTable").DataTable();
 
         $(".delete-button").on("click", function (e) {
             e.preventDefault();
@@ -58,8 +62,8 @@
                         title: 'Success',
                         text: `You delete "${name}".`,
                         icon: 'success'
-                    }).then(() => {
-                        window.location.href = url;
+                        }).then(() => {
+                            window.location.href = url;
                     });
 
                 }

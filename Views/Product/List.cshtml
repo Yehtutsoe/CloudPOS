@@ -18,7 +18,7 @@
 }
 <h2 class="mb-3">Prdouct Information List</h2>
 <div class="mb-3">
-    <a href="/product/entry" class="btn btn-primary">Create</a>
+    <a href="/product/entry" class="btn btn-primary"><i class="bi bi-plus-square-fill"></i>Create</a>
 </div>
 <table id="productTable" class="table table-hover">
     <thead class="table-dark">
@@ -50,8 +50,8 @@
                 <td>@prodcut.CostPrice</td>
                 <td>@prodcut.SalePrice</td>
                 <td>
-                    <a href="/product/edit?id=@prodcut.Id" class="btn btn-primary">Edit</a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@prodcut.Id" data-name="@prodcut.PhoneModelId">Delete</a>
+                    <a href="/product/edit?id=@prodcut.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@prodcut.Id" data-name="@prodcut.PhoneModelId"><i class="bi bi-trash3-fill"></i></a>
                 </td>
         </tr>
         i++;

@@ -13,7 +13,7 @@
 
 <h2>Model List Information</h2>
 <div class="mb-3">
-    <a href="/phonemodel/entry" class="btn btn-primary">Create</a>
+    <a href="/phonemodel/entry" class="btn btn-primary"><i class="bi bi-plus-square-fill"></i>Create</a>
 </div>
 
 <table class="table table-hover" id="PhoneModelTable">
@@ -40,8 +40,8 @@
                 <td>@data.Specification</td>
                 <td>@data.ReleaseDate?.ToString("dd-MM-yyyy")</td>
                 <td>
-                    <a href="/phoneModel/Edit?id=@data.Id" class="btn btn-primary">Edit</a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/phoneModel/Delete?id=@data.Id" data-name="@data.Name">Delete</a>
+                    <a href="/phoneModel/Edit?id=@data.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/phoneModel/Delete?id=@data.Id" data-name="@data.Name"><i class="bi bi-trash3-fill"></i></a>
                 </td>
             </tr>
             i++;
