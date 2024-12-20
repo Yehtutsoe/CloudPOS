@@ -1,0 +1,22 @@
+﻿@model SaleViewModel
+<h1>Sale Entry Form</h1>
+<form action="/sale/entry" method="post">
+    <div class="mb-3">
+        <label for="SaleDate" class="form-label">Sale Date</label>
+        <input type="date" id="SaleDate" name="SaleDate" class="form-control" placeholder="Enter Sale Date" />
+    </div>
+    <div class="mb-3">
+        <label for="TotalAmount" class="form-label">Total Amount</label>
+        <input type="number" id="TotalAmount" name="TotalAmount" class="form-control" placeholder="Enter Total Amount" />
+    </div>
+    <div class="mb-3">
+        <label for="TotalCost" class="form-label">Total Cost</label>
+        <input type="number" id="TotalCost" name="TotalCost" class="form-control" placeholder="Enter Total Cost" />
+    </div>
+    <div class="mb-3">
+        <label for="Profit" class="form-label">Profit</label>
+        <input type="number" id="Profit" name="Profit" class="form-control" readonly />
+    </div>
+    <button type="submit" class="btn btn-success"> <i class="bi bi-floppy-fill"></i>Save</button>
+    <a href="/sale/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
+</form>

@@ -22,6 +22,8 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 
 
 var app = builder.Build();

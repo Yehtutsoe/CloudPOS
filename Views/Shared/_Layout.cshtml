@@ -9,6 +9,8 @@
     <!-- Bootstrapt Icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+    <!--Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="~/CloudPOS.styles.css" asp-append-version="true" />
     <!-- For Sweetalert-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -80,6 +82,17 @@
                                 <ul class="dropdown-menu dropdown-menu-white">
                                     <li><a class="dropdown-item active" href="/purchase/Entry">Entry</a></li>
                                     <li><a class="dropdown-item" href="/purchase/List">List</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown me-1">
+                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class=""></i>Sale
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-white">
+                                    <li><a class="dropdown-item active" href="/sale/Entry">Entry</a></li>
+                                    <li><a class="dropdown-item" href="/sale/List">List</a></li>
                                 </ul>
                             </div>
                         </li>

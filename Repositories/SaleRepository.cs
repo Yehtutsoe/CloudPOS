@@ -33,9 +33,9 @@ namespace CloudPOS.Repositories
             _applicationDbContext.SaveChanges();
         }
 
-        public IEnumerable<SaleEntity> GetById(string Id)
+        public SaleEntity GetById(string Id)
         {
-            return _applicationDbContext.Sales.Where(s => s.Id == Id).ToList();
+            return _applicationDbContext.Sales.Include(s => s.SaleItems).SingleOrDefault(s => s.Id == Id);
         }
 
         public IEnumerable<SaleEntity> RetrieveAll()
@@ -45,7 +45,11 @@ namespace CloudPOS.Repositories
 
         public void Update(SaleEntity saleEntity)
         {
-            throw new NotImplementedException();
+            var existingEntity = _applicationDbContext.Sales.Find(saleEntity.Id);
+            if (existingEntity != null) { 
+                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(saleEntity);
+                _applicationDbContext.SaveChanges();
+            }
         }
     }
 }

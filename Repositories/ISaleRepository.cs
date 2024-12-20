@@ -6,7 +6,7 @@ namespace CloudPOS.Repositories
     {
         void Create(SaleEntity saleEntity);
         IEnumerable<SaleEntity> RetrieveAll();
-        IEnumerable<SaleEntity> GetById(string Id);
+        SaleEntity GetById(string Id);
         void Update(SaleEntity saleEntity);
         void Delete(SaleEntity saleEntity);
         Decimal CalculateProfit(SaleEntity saleEntity);

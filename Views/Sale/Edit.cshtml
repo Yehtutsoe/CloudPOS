@@ -1,0 +1,23 @@
+﻿@model SaleViewModel
+<h1>Sale Entry Form</h1>
+<form action="/sale/update" method="post">
+    <input type="text" value="@Model.Id" name="Id" class="form-control" hidden />
+    <div class="mb-3">
+        <label for="SaleDate" class="form-label">Sale Date</label>
+        <input type="date" id="SaleDate" value="@Model.SaleDate.ToString("yyyy-MM-dd")" name="SaleDate" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="TotalAmount" class="form-label">Total Amount</label>
+        <input type="number" id="TotalAmount" value="@Model.TotalAmount" name="TotalAmount" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="TotalCost" class="form-label">Total Cost</label>
+        <input type="number" id="TotalCost" value="@Model.TotalCost" name="TotalCost" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label for="Profit" class="form-label">Profit</label>
+        <input type="number" id="Profit" name="Profit" value="@Model.Profit" class="form-control" readonly />
+    </div>
+    <button type="submit" class="btn btn-success"> <i class="bi bi-floppy-fill"></i>Save</button>
+    <a href="/sale/list" class="btn btn-warning"><i class="bi bi-x-square-fill"></i>Cancel</a>
+</form>
