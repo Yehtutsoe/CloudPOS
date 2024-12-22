@@ -9,11 +9,7 @@ namespace CloudPOS.Models.Entities
         
         [MaxLength(20)]
         public int Quantity { get; set; }
-        public Decimal UnitPrice { get; set; }
         public Decimal TotalPrice { get; set; }
-        public string SaleId { get; set; }
-        [ForeignKey(nameof(SaleId))]
-        public SaleEntity Sales { get; set; }
         public string ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public ProductEntity Products { get; set; }
