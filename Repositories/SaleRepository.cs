@@ -12,14 +12,6 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public decimal CalculateProfit(SaleEntity saleEntity)
-        {
-            var totalAmount = saleEntity.TotalAmount;
-            var totalCost = saleEntity.SaleItems.Sum(si => si.UnitPrice - si.Quantity);
-            var profit = totalAmount - totalCost;
-            return profit;
-
-        }
 
         public void Create(SaleEntity saleEntity)
         {

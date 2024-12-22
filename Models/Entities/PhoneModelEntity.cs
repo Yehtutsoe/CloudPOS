@@ -17,5 +17,8 @@ namespace CloudPOS.Models.Entities
         public string Specification { get; set; }
         [MaxLength(15)]
         public DateTime? ReleaseDate { get; set; }
+        public string CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public CategoryEntity Categories { get; set; }
     }
 }

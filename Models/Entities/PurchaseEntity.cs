@@ -2,7 +2,7 @@
 
 namespace CloudPOS.Models.Entities
 {
-    [Table("Purcahse")]
+    [Table("Purchase")]
     public class PurchaseEntity:BaseEntity
     {
         public DateTime PurchaseDate { get; set; }

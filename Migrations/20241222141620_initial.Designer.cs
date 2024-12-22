@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241130151209_Initial")]
-    partial class Initial
+    [Migration("20241222141620_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,10 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -107,6 +111,8 @@ namespace CloudPOS.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Model");
                 });
@@ -182,7 +188,7 @@ namespace CloudPOS.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("Purcahse");
+                    b.ToTable("Purchase");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.PurhcaseItemEntity", b =>
@@ -207,9 +213,6 @@ namespace CloudPOS.Migrations
                     b.Property<int>("Quantity")
                         .HasMaxLength(10)
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalCost")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -262,21 +265,17 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<string>("SaleId")
-                        .IsRequired()
+                    b.Property<string>("SaleEntityId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("SaleId");
+                    b.HasIndex("SaleEntityId");
 
                     b.ToTable("SaleItem");
                 });
@@ -318,6 +317,17 @@ namespace CloudPOS.Migrations
                         .IsRequired();
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("CloudPOS.Models.Entities.PhoneModelEntity", b =>
+                {
+                    b.HasOne("CloudPOS.Models.Entities.CategoryEntity", "Categories")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>
@@ -377,15 +387,16 @@ namespace CloudPOS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloudPOS.Models.Entities.SaleEntity", "Sales")
-                        .WithMany()
-                        .HasForeignKey("SaleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("CloudPOS.Models.Entities.SaleEntity", null)
+                        .WithMany("SaleItems")
+                        .HasForeignKey("SaleEntityId");
 
                     b.Navigation("Products");
+                });
 
-                    b.Navigation("Sales");
+            modelBuilder.Entity("CloudPOS.Models.Entities.SaleEntity", b =>
+                {
+                    b.Navigation("SaleItems");
                 });
 #pragma warning restore 612, 618
         }

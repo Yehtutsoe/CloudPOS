@@ -9,6 +9,5 @@ namespace CloudPOS.Repositories
         SaleEntity GetById(string Id);
         void Update(SaleEntity saleEntity);
         void Delete(SaleEntity saleEntity);
-        Decimal CalculateProfit(SaleEntity saleEntity);
     }
 }

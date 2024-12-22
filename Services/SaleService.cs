@@ -37,16 +37,12 @@ namespace CloudPOS.Services
         public SaleViewModel GetById(string Id)
         {
             var entity = _saleRepository.GetById(Id);
-            var profit = _saleRepository.CalculateProfit(entity);
+            
             if( entity != null)
             {
                 return new SaleViewModel()
                 {
-                    Id = entity.Id,
-                    SaleDate = entity.SaleDate,
-                    TotalAmount = entity.TotalAmount,
-                    TotalCost = entity.TotalCost,
-                    Profit = profit
+                    
                 };
             }
             return null;
