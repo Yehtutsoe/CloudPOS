@@ -7,11 +7,12 @@ namespace CloudPOS.Models.Entities
     public class ProductEntity:BaseEntity
     {
         [MaxLength(50)]      
-        public string Type { get; set; }
+        public string Name { get; set; }
         [MaxLength(50)]
         public string SerialNumber { get; set; }
         [MaxLength(18)]      
         public string IMEINumber { get; set; }
+        public int Quantity { get; set; }
         public Decimal CostPrice { get; set; }
         public Decimal SalePrice { get; set; }
         public string PhoneModelId { get; set; }

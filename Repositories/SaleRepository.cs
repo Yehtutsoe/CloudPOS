@@ -12,5 +12,36 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
+
+        public async Task Create(SaleEntity entity)
+        {
+           _applicationDbContext.Sales.AddAsync(entity);
+            _applicationDbContext.SaveChangesAsync();   
+        }
+
+        public async Task Delete(string Id)
+        {
+            var sale = await _applicationDbContext.Sales.FindAsync(Id);
+            if (sale != null) {
+                _applicationDbContext.Sales.Remove(sale);
+                _applicationDbContext.SaveChanges();
+            }
+        }
+
+        public async Task<IEnumerable<SaleEntity>> GetAllSaleAsync()
+        {
+           return await _applicationDbContext.Sales.Include(s => s.SaleItems).ToListAsync();
+        }
+
+        public async Task<SaleEntity> GetById(string Id)
+        {
+            return await _applicationDbContext.Sales.Include(s => s.SaleItems).SingleOrDefaultAsync(s => s.Id == Id);
+        }
+
+        public async Task Update(SaleEntity entity)
+        {
+            _applicationDbContext.Sales.Update(entity);
+            _applicationDbContext.SaveChangesAsync();
+        }
     }
 }

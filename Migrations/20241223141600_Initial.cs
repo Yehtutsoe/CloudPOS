@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CloudPOS.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,22 @@ namespace CloudPOS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Model",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Specification = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", maxLength: 15, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Model", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,26 +73,34 @@ namespace CloudPOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Model",
+                name: "Product",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Brand = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    Specification = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", maxLength: 15, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    SerialNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    IMEINumber = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PhoneModelId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Model", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Model_Category_CategoryId",
+                        name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Product_Model_PhoneModelId",
+                        column: x => x.PhoneModelId,
+                        principalTable: "Model",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,37 +126,6 @@ namespace CloudPOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    SerialNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IMEINumber = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
-                    CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PhoneModelId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Product_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Product_Model_PhoneModelId",
-                        column: x => x.PhoneModelId,
-                        principalTable: "Model",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Inventory",
                 columns: table => new
                 {
@@ -150,34 +143,6 @@ namespace CloudPOS.Migrations
                         name: "FK_Inventory_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PurchaseItem",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", maxLength: 10, nullable: false),
-                    CostPerUnit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PurchaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PurchaseItem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PurchaseItem_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PurchaseItem_Purchase_PurchaseId",
-                        column: x => x.PurchaseId,
-                        principalTable: "Purchase",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -209,15 +174,38 @@ namespace CloudPOS.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PurchaseItem",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", maxLength: 10, nullable: false),
+                    CostPerUnit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PurchaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseItem_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PurchaseItem_Purchase_PurchaseId",
+                        column: x => x.PurchaseId,
+                        principalTable: "Purchase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Inventory_ProductId",
                 table: "Inventory",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Model_CategoryId",
-                table: "Model",
-                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",
@@ -280,10 +268,10 @@ namespace CloudPOS.Migrations
                 name: "Supplier");
 
             migrationBuilder.DropTable(
-                name: "Model");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Model");
         }
     }
 }

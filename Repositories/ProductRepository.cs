@@ -20,12 +20,13 @@ namespace CloudPOS.Repositories
         {
             ProductEntity productEntity = new ProductEntity() { 
                 Id = Guid.NewGuid().ToString(),
-                Type= productViewModel.Type,
+                Name= productViewModel.Name,
                 SerialNumber = productViewModel.SerialNumber,
                 IMEINumber = productViewModel.IMEINumber,
                 SalePrice = productViewModel.SalePrice,
                 CostPrice = productViewModel.CostPrice,
                 IsActive = true,
+                Quantity = 1,
                 CategoryId = productViewModel.CategoryId,
                 PhoneModelId = productViewModel.PhoneModelId,
                 
@@ -53,7 +54,7 @@ namespace CloudPOS.Repositories
                                                          .Select(s => new ProductViewModel
                                                                     {
                                                                         Id = s.Id,
-                                                                        Type=s.Type,
+                                                                        Name=s.Name,
                                                                         SalePrice = s.SalePrice,
                                                                         CostPrice = s.CostPrice,
                                                                         IMEINumber = s.IMEINumber,
@@ -101,7 +102,7 @@ namespace CloudPOS.Repositories
                                                 select new  ProductViewModel
                                                 {
                                                     Id = p.Id,
-                                                    Type = p.Type,
+                                                    Name = p.Name,
                                                     CostPrice = p.CostPrice,
                                                     SalePrice = p.SalePrice,
                                                     IMEINumber = p.IMEINumber,
@@ -110,6 +111,7 @@ namespace CloudPOS.Repositories
                                                     PhoneModelId = p.PhoneModelId,
                                                     CategoryInfo = c.Description,
                                                     PhoneModelInfo = phm.Name,
+                                                    
 
                                                 }).ToList();
             return product;

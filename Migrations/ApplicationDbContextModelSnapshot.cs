@@ -86,10 +86,6 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -108,8 +104,6 @@ namespace CloudPOS.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Model");
                 });
@@ -314,17 +308,6 @@ namespace CloudPOS.Migrations
                         .IsRequired();
 
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.PhoneModelEntity", b =>
-                {
-                    b.HasOne("CloudPOS.Models.Entities.CategoryEntity", "Categories")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>

@@ -6,7 +6,7 @@ namespace CloudPOS.Models.ViewModels
     {
         public string Id { get; set; }
         [Required(ErrorMessage ="Requried Type")]
-        public string Type { get; set; }
+        public string Name { get; set; }
         [Required(ErrorMessage = "Requried Serial Number")]
         public string SerialNumber { get; set; }
         [Required(ErrorMessage = "IMEI Number is Requried")]
@@ -14,6 +14,7 @@ namespace CloudPOS.Models.ViewModels
         [Range(0,double.MaxValue,ErrorMessage = "Sale Price must be positive number")]
         public Decimal SalePrice { get; set; }
         [Range(0, double.MaxValue, ErrorMessage = "Cost Price must be positive number")]
+        public int? Quantity { get; set; }
         public Decimal CostPrice { get; set; }
         [Required(ErrorMessage = "Phone Model is required")]
         public string PhoneModelId { get; set; }

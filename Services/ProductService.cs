@@ -54,7 +54,7 @@ namespace CloudPOS.Services
             var entity = new ProductEntity()
             {
                 Id = productViewModel.Id,
-                Type = productViewModel.Type,
+                Name = productViewModel.Name,
                 CategoryId = productViewModel.CategoryId,
                 PhoneModelId = productViewModel.PhoneModelId,
                 IMEINumber = productViewModel.IMEINumber,

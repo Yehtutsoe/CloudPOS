@@ -1,4 +1,4 @@
-﻿@model IList<SaleViewModel>
+﻿@model IList<SaleProcessViewModel>
 <h1>Sale View Information</h1>
 <div class="mb-3">
     <a href="/sale/entry" class="btn btn-primary"><i class="fa fa-plus"></i> Create</a>
@@ -8,9 +8,9 @@
         <tr>
             <th>No</th>
             <th>Sale Date</th>
-            <th>Total Amount</th>
-            <th>Total Cost</th>
-            <th>Profit</th>
+            <th>Product</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -21,10 +21,11 @@
         @foreach(var sale in Model){
         <tr>
             <td>@i</td>
-            <td>@sale.SaleDate.ToString("dd-MM-yyyy")</td>
-            <td>@sale.TotalAmount</td>
-            <td>@sale.TotalCost</td>
-            <td>@sale.Profit</td>
+            <td>@sale.SaleDate.ToString("yyyy-MM-dd")</td>
+            <td>@sale.ProdcutInfo</td>
+            <td>@sale.UnitPrice MMK</td>
+            <td>@sale.Quantity</td>
+            
             <td>
                     <a href="/sale/edit?id=@sale.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
                     <a href="javascript:void(0)" data-url="/sale/delete?id=@sale.Id" data-name="Sale" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></a>
@@ -38,4 +39,34 @@
     $(document).ready(function () {
         // Initialize DataTable
         $("#saleTable").DataTable();
+
+        $(".delete-button").on("click", function (e) {
+            e.preventDefault();
+            let url = $(this).data("url");
+            let name = $(this).data("name");
+            Swal.fire({
+                title: 'Are you sure!',
+                text: `You are about to delete "${name}".This Action can not be undone`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: `You delete "${name}".`,
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = url;
+                    });
+
+                }
+            });
+        });
+    });
+</script>
+
 
