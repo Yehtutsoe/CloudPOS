@@ -9,7 +9,7 @@ namespace CloudPOS.Controllers
         private readonly ISaleService _saleService;
         private readonly IProductService _productService;
 
-        public SaleController(ISaleService saleService,IProductService productService)
+        public SaleController(ISaleService saleService, IProductService productService)
         {
             _saleService = saleService;
             _productService = productService;
@@ -19,13 +19,13 @@ namespace CloudPOS.Controllers
             var saleViewModel = new SaleProcessViewModel()
             {
                 ProductViewModels = GetProductList()
-            };   
+            };
             return View(saleViewModel);
         }
         [HttpPost]
         public async Task<IActionResult> Entry(SaleProcessViewModel saleViewModel)
         {
-            await  _saleService.Create(saleViewModel);
+            await _saleService.Create(saleViewModel);
             return RedirectToAction("List");
         }
         public async Task<IActionResult> List()
@@ -38,7 +38,7 @@ namespace CloudPOS.Controllers
                 UnitPrice = s.SaleItems?.Sum(item => item.TotalPrice / item.Quantity) ?? 0,
                 Quantity = s.SaleItems?.Sum(item => item.Quantity) ?? 0,
                 ProductId = string.Join(", ", s.SaleItems.Select(item => item.ProductId) ?? new List<string>()),
-                ProdcutInfo =string.Join(", ", s.SaleItems.Select(item => item.Products?.Name) ?? new List<string>())
+                ProdcutInfo = string.Join(", ", s.SaleItems.Select(item => item.Products?.Name) ?? new List<string>())
 
             }).ToList();
             return View(saleViewModel);
@@ -47,12 +47,14 @@ namespace CloudPOS.Controllers
         {
             return View(_saleService.GetById(Id));
         }
-        public IActionResult Delete(string Id) {
+        public IActionResult Delete(string Id)
+        {
             _saleService.Delete(Id);
             return RedirectToAction("List");
         }
         [HttpPost]
-        public IActionResult Update(SaleProcessViewModel saleViewModel) {
+        public IActionResult Update(SaleProcessViewModel saleViewModel)
+        {
             _saleService.Update(saleViewModel);
             return RedirectToAction("List");
         }
@@ -63,7 +65,7 @@ namespace CloudPOS.Controllers
             return _productService.RetrieveAll().Select(p => new ProductViewModel
             {
                 Id = p.Id,
-                Name=p.Name + p.CategoryInfo
+                Name = p.Name
             }).ToList();
         }
     }
