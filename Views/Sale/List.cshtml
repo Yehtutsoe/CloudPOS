@@ -39,30 +39,3 @@
         // Initialize DataTable
         $("#saleTable").DataTable();
 
-        $(".delete-button").on("click", function (e) {
-            e.preventDefault();
-            let url = $(this).data("url");
-            let name = $(this).data("name");
-            Swal.fire({
-                title: 'Are you sure!',
-                text: `You are about to delete "${name}".This Action can not be undone`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Success',
-                            text: `You delete "${name}".`,
-                            icon: 'success'
-                             }).then(() => {
-                                  window.location.href = url;
-                        });
-                }
-            });
-        });
-    });
-</script>
