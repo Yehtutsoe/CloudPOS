@@ -10,7 +10,7 @@ namespace CloudPOS.Models.ViewModels
         public Decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
         public string ProductId { get; set; }
-        public string ProdcutInfo { get; set; }
-        public IList<ProductViewModel> ProductViewModels { get; set; } = new List<ProductViewModel>();
+        public string ProductInfo { get; set; }
+
     }
 }

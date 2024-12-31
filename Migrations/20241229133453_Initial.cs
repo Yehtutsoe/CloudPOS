@@ -48,8 +48,6 @@ namespace CloudPOS.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SaleDate = table.Column<DateTime>(type: "datetime2", maxLength: 50, nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Profit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -77,9 +75,10 @@ namespace CloudPOS.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SerialNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IMEINumber = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PhoneModelId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -94,13 +93,13 @@ namespace CloudPOS.Migrations
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_Model_PhoneModelId",
                         column: x => x.PhoneModelId,
                         principalTable: "Model",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,7 +154,7 @@ namespace CloudPOS.Migrations
                     Quantity = table.Column<int>(type: "int", maxLength: 20, nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SaleEntityId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SaleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -168,10 +167,11 @@ namespace CloudPOS.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SaleItem_Sale_SaleEntityId",
-                        column: x => x.SaleEntityId,
+                        name: "FK_SaleItem_Sale_SaleId",
+                        column: x => x.SaleId,
                         principalTable: "Sale",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,9 +238,9 @@ namespace CloudPOS.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SaleItem_SaleEntityId",
+                name: "IX_SaleItem_SaleId",
                 table: "SaleItem",
-                column: "SaleEntityId");
+                column: "SaleId");
         }
 
         /// <inheritdoc />

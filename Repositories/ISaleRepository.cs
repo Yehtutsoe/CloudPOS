@@ -6,7 +6,7 @@ namespace CloudPOS.Repositories
     {
          Task<IEnumerable<SaleEntity>> GetAllSaleAsync();
         Task<SaleEntity> GetById(string Id);
-        Task Create(SaleEntity entity);
+        Task Create(SaleEntity entity,SaleItemEntity saleItemEntity);
         Task Update(SaleEntity entity);
         Task Delete(string Id);
     }

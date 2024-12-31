@@ -31,17 +31,8 @@ namespace CloudPOS.Controllers
         public async Task<IActionResult> List()
         {
             var sales = await _saleService.GetAllSale();
-            var saleViewModel = sales.Select(s => new SaleProcessViewModel
-            {
-                Id = s.Id,
-                SaleDate = s.SaleDate,
-                UnitPrice = s.SaleItems?.Sum(item => item.TotalPrice / item.Quantity) ?? 0,
-                Quantity = s.SaleItems?.Sum(item => item.Quantity) ?? 0,
-                ProductId = string.Join(", ", s.SaleItems.Select(item => item.ProductId) ?? new List<string>()),
-                ProdcutInfo = string.Join(", ", s.SaleItems.Select(item => item.Products?.Name) ?? new List<string>())
 
-            }).ToList();
-            return View(saleViewModel);
+            return View(sales);
         }
         public IActionResult Edit(string Id)
         {

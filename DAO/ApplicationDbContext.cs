@@ -18,6 +18,16 @@ namespace CloudPOS.DAO
         public DbSet<PurchaseEntity> Purchases { get; set; }
         public DbSet<PurhcaseItemEntity> PurchaseItems { get; set; }
         public DbSet<InventoryEntity> Inventorys { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SaleEntity>()
+                .HasMany(s => s.SaleItems)
+                .WithOne(si => si.Sales)
+                .HasForeignKey(si => si.SaleId)
+                .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete if necessary
+        }
+
     }
 }
     

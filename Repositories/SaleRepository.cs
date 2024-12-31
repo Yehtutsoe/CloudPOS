@@ -1,6 +1,7 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 
 namespace CloudPOS.Repositories
 {
@@ -13,9 +14,10 @@ namespace CloudPOS.Repositories
             _applicationDbContext = applicationDbContext;
         }
 
-        public async Task Create(SaleEntity entity)
+        public async Task Create(SaleEntity entity,SaleItemEntity saleItemEntity)
         {
            _applicationDbContext.Sales.AddAsync(entity);
+            _applicationDbContext.SaleItems.AddAsync(saleItemEntity);
             _applicationDbContext.SaveChangesAsync();   
         }
 
@@ -30,7 +32,7 @@ namespace CloudPOS.Repositories
 
         public async Task<IEnumerable<SaleEntity>> GetAllSaleAsync()
         {
-           return await _applicationDbContext.Sales.Include(s => s.SaleItems).ToListAsync();
+            return await _applicationDbContext.Sales.Include(s => s.SaleItems).ThenInclude(si =>si.Products).ToListAsync();
         }
 
         public async Task<SaleEntity> GetById(string Id)

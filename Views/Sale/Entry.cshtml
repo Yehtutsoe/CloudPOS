@@ -1,34 +1,36 @@
 ﻿@model SaleProcessViewModel
 <h1>Sale Entry Form</h1>
 <form action="/sale/entry" method="post">
-    <div class="mb-3">
-        <label for="SaleDate" class="form-label">Sale Date</label>
-        <input type="date" id="SaleDate" name="SaleDate" class="form-control" placeholder="Enter Sale Date" />
-    </div>
-    <div class="mb-3">
-        <label for="ProductId" class="form-label">Product</label>
-        <select name="ProductId" id="ProductId" class="form-select">
-            <option value="x">[Select One]</option>
-            @foreach (var product in Model.ProductViewModels)
+    <div class="col-6">
+        <div class="mb-3">
+            <label for="SaleDate" class="form-label">Sale Date</label>
+            <input type="date"  name="SaleDate" class="form-control" placeholder="Enter Sale Date" />
+        </div>
+        <div class="mb-3">
+            <label for="ProductId" class="form-label">Product</label>
+            <select name="ProductId" id="ProductId" class="form-select">
+                <option value="x">[Select One]</option>
+                @foreach (var product in Model.ProductViewModels)
+                {
+                    <option value="@product.Id">@product.Name</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="UnitPrice" class="form-label">Unit Price</label>
+            @foreach(var product in Model.ProductViewModels)
             {
-                <option value="@product.Id">@product.PhoneModelInfo</option>
+                <div>
+                    <input type="hidden" name="@product.Id"/>
+                    <input type="number" id="UnitPrice" name="UnitPrice" value="@product.SalePrice" class="form-control" readonly />
+                </div>
             }
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="UnitPrice" class="form-label">Unit Price</label>
-        @foreach(var product in Model.ProductViewModels)
-        {
-            <div>
-                <input type="hidden" name="@product.Id"/>
-                <input type="number" id="UnitPrice" name="UnitPrice" value="@product.SalePrice" class="form-control" readonly />
-            </div>
-        }
         
-    </div>
-    <div class="mb-3">
-        <label for="Quantity" class="form-label">Quantity</label>
-        <input type="number" id="Quantity" name="Quantity" class="form-control" placeholder="Enter Quantity" />
+        </div>
+        <div class="mb-3">
+            <label for="Quantity" class="form-label">Quantity</label>
+            <input type="number" id="Quantity" name="Quantity" class="form-control" placeholder="Enter Quantity" />
+        </div>
     </div>
     <button type="submit" class="btn btn-success"> <i class="fa-solid fa-floppy-disk"></i>Save</button>
     <a href="/sale/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>

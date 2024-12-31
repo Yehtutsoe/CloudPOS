@@ -21,8 +21,8 @@
         @foreach(var sale in Model){
         <tr>
             <td>@i</td>
-            <td>@sale.SaleDate.ToString("yyyy-MM-dd")</td>
-            <td>@sale.ProdcutInfo</td>
+            <td>@sale.SaleDate.ToString("dd-MM-yyyy")</td>
+            <td>@sale.ProductInfo</td>
             <td>@sale.UnitPrice MMK</td>
             <td>@sale.Quantity</td>
             
@@ -59,8 +59,8 @@
                         title: 'Success',
                         text: `You delete "${name}".`,
                         icon: 'success'
-                    }).then(() => {
-                        window.location.href = url;
+                        }).then(() => {
+                            window.location.href = url;
                     });
 
                 }
