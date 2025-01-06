@@ -1,7 +1,6 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Versioning;
 
 namespace CloudPOS.Repositories
 {
@@ -28,7 +27,6 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.Sales.Remove(sale);
                 _applicationDbContext.SaveChanges();
             }
-        }
 
         public async Task<IEnumerable<SaleEntity>> GetAllSaleAsync()
         {

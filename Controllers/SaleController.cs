@@ -28,36 +28,5 @@ namespace CloudPOS.Controllers
             await _saleService.Create(saleViewModel);
             return RedirectToAction("List");
         }
-        public async Task<IActionResult> List()
-        {
-            var sales = await _saleService.GetAllSale();
-
-            return View(sales);
-        }
-        public IActionResult Edit(string Id)
-        {
-            return View(_saleService.GetById(Id));
-        }
-        public IActionResult Delete(string Id)
-        {
-            _saleService.Delete(Id);
-            return RedirectToAction("List");
-        }
-        [HttpPost]
-        public IActionResult Update(SaleProcessViewModel saleViewModel)
-        {
-            _saleService.Update(saleViewModel);
-            return RedirectToAction("List");
-        }
-
-        private IList<ProductViewModel> GetProductList()
-        {
-            // Example: Fetch products from the database or repository
-            return _productService.RetrieveAll().Select(p => new ProductViewModel
-            {
-                Id = p.Id,
-                Name = p.Name
-            }).ToList();
-        }
     }
 }
