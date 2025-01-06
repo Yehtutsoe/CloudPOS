@@ -9,8 +9,9 @@ namespace CloudPOS.Models.Entities
        
         [MaxLength(50)]
         public DateTime SaleDate { get; set; }
+        public string VoucherNo { get; set; }
         public Decimal TotalAmount { get; set; }
-        public IList<SaleItemEntity> SaleItems { get; set; }
+        public IList<SaleItemEntity> SaleItems { get; set; } = new List<SaleItemEntity>();
 
     }
 }

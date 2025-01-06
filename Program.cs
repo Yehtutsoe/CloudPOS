@@ -12,23 +12,24 @@ var config = builder.Configuration;   //declare the configure to read json
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(config.GetConnectionString("CloudPOSConnectionString")));
 //Register Identity for UIs
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IPhoneModelService, PhoneModelService>();
+builder.Services.AddTransient<IPhoneModelService, PhoneModelService>();
 builder.Services.AddScoped<IPhoneModelRepository, PhoneModelRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
-builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+builder.Services.AddTransient<ISupplierService, SupplierService>();
+builder.Services.AddTransient<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddTransient<ISaleProcessService, SaleProcessService>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
-builder.Services.AddScoped<ISaleItemService, SaleItemService>();
+builder.Services.AddTransient<ISaleItemService, SaleItemService>();
 builder.Services.AddScoped<ISaleItemRepository, SaleItemRepository>();
 
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -42,7 +43,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+//app.UseSession(); // for AddToCart Function
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -51,3 +52,5 @@ app.MapControllerRoute(
 //Mapping the razor page route
 app.MapRazorPages();
 app.Run();
+
+

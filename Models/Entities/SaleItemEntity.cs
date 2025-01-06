@@ -15,5 +15,6 @@ namespace CloudPOS.Models.Entities
         public string SaleId { get; set; }
         [ForeignKey(nameof(SaleId))]
         public SaleEntity Sales { get; set; }
+        public string Remark { get; set; }
     }
 }

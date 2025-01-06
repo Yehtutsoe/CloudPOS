@@ -19,22 +19,30 @@ namespace CloudPOS.Repositories
 
         public void Delete(string Id)
         {
-            throw new NotImplementedException();
+           var existingEntity =  _applicationDbContext.SaleItems.Select(s=> s.Id).FirstOrDefault();
+            if (existingEntity != null) {
+                _applicationDbContext.Remove(existingEntity);
+                _applicationDbContext.SaveChanges();
+            }
         }
 
-        public IEnumerable<SaleItemEntity> GetById(string SaleId)
+        public IEnumerable<SaleItemEntity> GetById(string Id)
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.SaleItems.Where(s => s.Id == Id).ToList();
         }
 
         public IEnumerable<SaleItemEntity> RetrieveAll()
         {
-            throw new NotImplementedException();
+            return _applicationDbContext.SaleItems.ToList();
         }
 
         public void Update(SaleItemEntity saleItemEntity)
         {
-            throw new NotImplementedException();
+            var existingEntity = _applicationDbContext.SaleItems.Find(saleItemEntity.Id);
+            if (existingEntity != null) {
+                _applicationDbContext.Entry(saleItemEntity).CurrentValues.SetValues(existingEntity);
+                _applicationDbContext.SaveChanges();
+            }
         }
     }
 }

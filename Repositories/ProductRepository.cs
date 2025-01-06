@@ -109,7 +109,7 @@ namespace CloudPOS.Repositories
                                                     SerialNumber = p.SerialNumber,
                                                     CategoryId = p.CategoryId,
                                                     PhoneModelId = p.PhoneModelId,
-                                                    CategoryInfo = c.Description,
+                                                    CategoryInfo = c.Name,
                                                     PhoneModelInfo = phm.Name,
                                                     
 

@@ -8,6 +8,6 @@
         public string SaleId { get; set; }
         public string ProductId { get; set; }
         public string ProdcutInfo { get; set; }
-        public IList<ProductViewModel> ProductViewModels { get; set; }
+        public string Remark { get; set; }
     }
 }
