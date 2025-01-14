@@ -25,10 +25,8 @@ namespace CloudPOS.Repositories
             if (sale == null) {
                 throw new KeyNotFoundException("Sale Not Found");
             }
-            _applicationDbContext.SaleItems.RemoveRange(sale.SaleItems);
             _applicationDbContext.Sales.Remove(sale);
             _applicationDbContext.SaveChangesAsync();
-            
         }
 
         public async Task<IEnumerable<SaleEntity>> GetAllSaleAsync()

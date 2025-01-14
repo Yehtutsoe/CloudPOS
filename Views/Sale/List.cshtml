@@ -7,7 +7,6 @@
     <thead class="table-dark">
         <tr>
             <th>No</th>
-            <th>Sale Date</th>
             <th>Product</th>
             <th>Unit Price</th>
             <th>Quantity</th>
@@ -22,10 +21,7 @@
         <tr>
             <td>@i</td>
             <td>@sale.SaleDate.ToString("dd-MM-yyyy")</td>
-
-            
             <td>
-                    <a href="/sale/edit?id=@sale.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
                     <a href="javascript:void(0)" data-url="/sale/delete?id=@sale.Id" data-name="Sale" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></a>
             </td>
         </tr>
@@ -60,7 +56,6 @@
                         }).then(() => {
                             window.location.href = url;
                     });
-
                 }
             });
         });

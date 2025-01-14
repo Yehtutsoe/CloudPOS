@@ -50,7 +50,6 @@ namespace CloudPOS.Controllers
                     //add the cart record to the session
                     SessionHelper.SetDataToSession(HttpContext.Session, "cart", cart);
                 }
-            }
             return Json(null);
         }
         public IActionResult List()

@@ -24,7 +24,6 @@
         <legend style="text-align:center">Sale Item</legend>
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Product</label>
-            <div class="col-sm-10">
                 <select class="form-control" name="ProductId" id="ddlProductId">
                     @foreach (var p in ViewBag.Products)
                     {
@@ -32,7 +31,6 @@
                     }
                 </select>
             </div>
-        </div>
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Quantity</label>
             <input type="number" class="form-control" required name="Quantity" id="txtQty"/>
