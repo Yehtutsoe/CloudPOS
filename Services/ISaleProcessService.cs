@@ -7,5 +7,6 @@ namespace CloudPOS.Services
     {
         Task Create(SaleViewModel SaleViewModel,SaleItemViewModel saleItemViewModel);
         IList<SaleItemViewModel> GetAll();
+        void Delete(string Id);
     }
 }

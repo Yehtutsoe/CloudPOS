@@ -7,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache(); 
+builder.Services.AddSession(options => 
+{   options.IdleTimeout = TimeSpan.FromMinutes(30); 
+    options.Cookie.HttpOnly = true; 
+    options.Cookie.IsEssential = true;
+});
 var config = builder.Configuration;   //declare the configure to read json
 //add the dbContext that we defined the ApplicationDbContext to get connestion string
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(config.GetConnectionString("CloudPOSConnectionString")));
@@ -31,6 +37,7 @@ builder.Services.AddScoped<ISaleItemRepository, SaleItemRepository>();
 var app = builder.Build();
 
 
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -43,7 +50,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-//app.UseSession(); // for AddToCart Function
+app.UseSession(); // for AddToCart Function
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -52,5 +59,3 @@ app.MapControllerRoute(
 //Mapping the razor page route
 app.MapRazorPages();
 app.Run();
-
-

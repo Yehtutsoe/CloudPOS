@@ -19,27 +19,23 @@ namespace CloudPOS.Repositories
             _applicationDbContext.SaveChangesAsync();   
         }
 
-        public async Task Delete(string Id)
+        public void Delete(SaleEntity entity)
         {
-            var sale = await GetById(Id);
-            if (sale == null) {
-                throw new KeyNotFoundException("Sale Not Found");
-            }
-            _applicationDbContext.Sales.Remove(sale);
+            _applicationDbContext.Sales.Remove(entity);
             _applicationDbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<SaleEntity>> GetAllSaleAsync()
+        public IEnumerable<SaleEntity> GetAll()
         {
-            return await _applicationDbContext.Sales.Include(s => s.SaleItems).ThenInclude(si =>si.Products).ToListAsync();
+            return _applicationDbContext.Sales.ToList();
         }
 
-        public async Task<SaleEntity> GetById(string Id)
+        public SaleEntity GetById(string Id)
         {
-            return await _applicationDbContext.Sales
+            return  _applicationDbContext.Sales
                                               .Include(s => s.SaleItems)
                                               .ThenInclude(si => si.Products)
-                                              .SingleOrDefaultAsync(s => s.Id == Id);
+                                              .SingleOrDefault(s => s.Id == Id);
         }
 
     }

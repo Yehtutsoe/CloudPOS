@@ -1,4 +1,4 @@
-﻿@model IList<SaleViewModel>
+﻿@model IList<SaleItemViewModel>
 <h1>Sale View Information</h1>
 <div class="mb-3">
     <a href="/sale/entry" class="btn btn-primary"><i class="fa fa-plus"></i> Create</a>
@@ -10,6 +10,8 @@
             <th>Product</th>
             <th>Unit Price</th>
             <th>Quantity</th>
+            <th>Remark</th>
+            <th>Sale Date</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -20,6 +22,10 @@
         @foreach(var sale in Model){
         <tr>
             <td>@i</td>
+            <td>@sale.ProductInfo</td>
+            <td>@sale.UnitPrice  MMK</td>
+            <td>@sale.Quantity</td>
+            <td>@sale.Remark</td>
             <td>@sale.SaleDate.ToString("dd-MM-yyyy")</td>
             <td>
                     <a href="javascript:void(0)" data-url="/sale/delete?id=@sale.Id" data-name="Sale" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></a>
@@ -39,8 +45,8 @@
             let url = $(this).data("url");
             let name = $(this).data("name");
             Swal.fire({
-                title: 'Are you sure!',
-                text: `You are about to delete "${name}".This Action can not be undone`,
+                title: 'Are you sure?',
+                text: `You are about to delete "${name}". This action cannot be undone.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -49,17 +55,31 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Success',
-                        text: `You delete "${name}".`,
-                        icon: 'success'
-                        }).then(() => {
-                            window.location.href = url;
-                    });
-                }
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        success: function (response) {
+                        Swal.fire({
+                            title: 'Success',
+                                text: `You deleted "${name}".`,
+                                    icon: 'success'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                            error: function (response) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'There was an error deleting the sale item.',
+                                    icon: 'error'
+                                });
+                            }
+                        });
+                    }
+                });
             });
         });
-    });
 </script>
+
 
 

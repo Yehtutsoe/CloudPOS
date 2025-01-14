@@ -1,6 +1,7 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories;
+using Humanizer;
 
 namespace CloudPOS.Services
 {
@@ -12,13 +13,18 @@ namespace CloudPOS.Services
         {
             _saleItemRepository = saleItemRepository;
         }
-        public void Create(SaleItemViewModel saleItemViewModel)
+
+        public SaleItemViewModel GetActiveProduct()
         {
-            var entity = new SaleItemEntity()
+            IList<ProductViewModel> products = _saleItemRepository.GetProducts().Select(s => new ProductViewModel
             {
-            
+                Id = s.Id,
+                Name = s.Name,
+            }).ToList();
+            return new SaleItemViewModel()
+            {
+               ProductViewModels = products
             };
-            _saleItemRepository.Create(entity);
         }
     }
 }

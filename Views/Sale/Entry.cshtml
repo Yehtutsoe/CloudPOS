@@ -25,12 +25,13 @@
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Product</label>
                 <select class="form-control" name="ProductId" id="ddlProductId">
-                    @foreach (var p in ViewBag.Products)
+                    <option value="x">[ Select One ]</option>
+                    @foreach (var p in Model.ProductViewModels)
                     {
                         <option value="@p.Id">@p.Name</option>
                     }
                 </select>
-            </div>
+        </div>
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Quantity</label>
             <input type="number" class="form-control" required name="Quantity" id="txtQty"/>
@@ -53,7 +54,7 @@
     $("#btnAddToCart").click(function (evt) { 
         evt.preventDefault();
         var saleItem = {};
-        saleItem.ProductId = $("#ddlProdcutId").val();
+        saleItem.ProductId = $("#ddlProductId").val();
         saleItem.Quantity = $("#txtQty").val();
         saleItem.Remark = $("#txtRemark").val();
         var url = "/sale/AddToCart";

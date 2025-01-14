@@ -28,21 +28,17 @@ namespace CloudPOS.Repositories
 
         public IEnumerable<SaleItemEntity> GetById(string Id)
         {
-            return _applicationDbContext.SaleItems.Where(s => s.Id == Id).ToList();
+            return _applicationDbContext.SaleItems.Where(s => s.SaleId == Id).ToList();
+        }
+
+        public IEnumerable<ProductEntity> GetProducts()
+        {
+            return _applicationDbContext.Products.ToList();
         }
 
         public IEnumerable<SaleItemEntity> RetrieveAll()
         {
             return _applicationDbContext.SaleItems.ToList();
-        }
-
-        public void Update(SaleItemEntity saleItemEntity)
-        {
-            var existingEntity = _applicationDbContext.SaleItems.Find(saleItemEntity.Id);
-            if (existingEntity != null) {
-                _applicationDbContext.Entry(saleItemEntity).CurrentValues.SetValues(existingEntity);
-                _applicationDbContext.SaveChanges();
-            }
         }
     }
 }

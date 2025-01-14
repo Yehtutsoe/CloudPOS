@@ -9,29 +9,32 @@ namespace CloudPOS.Controllers
     {
         private readonly ISaleProcessService _saleService;
         private readonly IProductService _productService;
+        private readonly ISaleItemService _saleItemService;
 
-        public SaleController(ISaleProcessService saleService, IProductService productService)
+        public SaleController(ISaleProcessService saleService, IProductService productService,ISaleItemService saleItemService)
         {
             _saleService = saleService;
             _productService = productService;
+            _saleItemService = saleItemService;
         }
         public IActionResult Entry()
         {
-            ViewBag.Products = _productService.RetrieveAll();
-            return View();
+            var prodcuts = _saleItemService.GetActiveProduct();
+            _productService.RetrieveAll();
+            return View(prodcuts);
         }
         [HttpPost]
         public IActionResult AddToCart(SaleItemViewModel saleItem)
         {
             ViewBag.Info = "Adding an sale item to cart";
             var products = _productService.GetById(saleItem.ProductId);
-            saleItem.ProdcutInfo = products.Name;
+            saleItem.ProductInfo = products.Name;
             saleItem.UnitPrice = products.SalePrice;
-            if(SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session,"cart") == null)
+            if (SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart") == null)
             {
                 var cart = new List<SaleItemViewModel>();
                 cart.Add(saleItem);
-                SessionHelper.SetDataToSession(HttpContext.Session, "cart", cart);
+               SessionHelper.SetDataToSession(HttpContext.Session, "cart", cart);
             }
             else
             {
@@ -41,26 +44,29 @@ namespace CloudPOS.Controllers
                 if(index != -1)
                 {
                     //when item already have in cart,increase the quantity
-                    cart[index].Quantity++;
+                   cart[index].Quantity = cart[index].Quantity + saleItem.Quantity;
                 }
                 else
                 {
                     //if not in cart,add the new item
                     cart.Add(saleItem);
-                    //add the cart record to the session
-                    SessionHelper.SetDataToSession(HttpContext.Session, "cart", cart);
                 }
+                //add the cart record to the session
+                SessionHelper.SetDataToSession(HttpContext.Session, "cart", cart);
+            }
             return Json(null);
         }
-        public IActionResult List()
-        {
-            var sale = _saleService.GetAll();
-            return View(sale);
-        }
+        [HttpPost]
         public IActionResult CheckCart(SaleViewModel saleView)
         {
             var cart = SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart");
-            TempData["SaleDate"] = saleView.SaleDate;
+            if (cart == null || !cart.Any())
+            { // Handle the case where the cart is null or empty
+                TempData["TotalAmount"] = "0";
+                ViewBag.total = 0;
+                return View(new List<SaleItemViewModel>());
+            }
+                TempData["SaleDate"] = saleView.SaleDate;
             TempData["VoucherNo"] = saleView.VoucherNo;
             decimal total = cart.Sum(item => item.UnitPrice * item.Quantity);
             TempData["TotalAmount"] = total.ToString();
@@ -90,12 +96,24 @@ namespace CloudPOS.Controllers
         {
             var cart = SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart");
             for (var i = 0; i < cart.Count; i++) { 
-                if (cart[i].ProductId == productId)
+                if (cart[i].ProductId.Equals(productId))
                 {
                     return i;
                 }
             }
             return -1;
         }
+        public IActionResult List()
+        {
+            var sale = _saleService.GetAll();
+            return View(sale);
+        }
+
+        public IActionResult Delete(string Id)
+        {
+            _saleService.Delete(Id);
+            return Json(new {success = true});
+        }
+        
     }
 }

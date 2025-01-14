@@ -1,6 +1,7 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories;
+using Humanizer;
 
 namespace CloudPOS.Services
 {
@@ -41,16 +42,51 @@ namespace CloudPOS.Services
             _saleItemRepository.Create(saleItems);
         }
 
+        public void Delete(string Id)
+        {
+            var sale = _saleRepository.GetById(Id);
+            if (sale != null) {
+                _saleRepository.Delete(sale);
+            }
+        }
+
         public IList<SaleItemViewModel> GetAll()
         {
-            return _saleItemRepository.RetrieveAll().Select(s => new SaleItemViewModel
+            var sales = _saleRepository.GetAll();
+            var saleItems = _saleItemRepository.RetrieveAll();
+            var prodcuts = _productRepository.RetrieveAll();
+            var saleItemViewModels = new List<SaleItemViewModel>();
+            foreach (var item in saleItems)
             {
-                ProdcutInfo = _productRepository.GetById(s.Id).Name,
-                UnitPrice = _productRepository.RetrieveAll().SingleOrDefault().SalePrice,
-                Quantity = s.Quantity,
-                Remark = s.Remark,
-                ProductId = s.ProductId
-            }).OrderByDescending(o => o.SaleId).ToList();
+                var product = prodcuts.FirstOrDefault(p => p.Id == item.ProductId);
+                if (product == null)
+                {
+                    throw new Exception($"Product with ID {item.ProductId} not found.");
+                }
+                var sale = sales.FirstOrDefault(x => x.Id == item.SaleId);
+                saleItemViewModels.Add(new SaleItemViewModel
+                {
+                    ProductInfo = product.Name,
+                    SaleDate = sale.SaleDate,
+                    UnitPrice = product.SalePrice,
+                    Quantity = item.Quantity,
+                    Remark = item.Remark,
+                    ProductId = item.ProductId
+                });
+            }
+            return saleItemViewModels.OrderByDescending(o => o.ProductId).ToList();
         }
+
+    //    public IList<SaleItemViewModel> GetAll()
+    //    {
+    //        return _saleItemRepository.RetrieveAll().Select(s => new SaleItemViewModel
+    //        {
+    //            ProductInfo = _productRepository.GetById(s.Id).Name,
+    //            UnitPrice = _productRepository.RetrieveAll().SingleOrDefault().SalePrice,
+    //            Quantity = s.Quantity,
+    //            Remark = s.Remark,
+    //            ProductId = s.ProductId
+    //        }).OrderByDescending(o => o.SaleId).ToList();
+    //    }
     }
 }

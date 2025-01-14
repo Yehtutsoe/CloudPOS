@@ -8,6 +8,6 @@ namespace CloudPOS.Repositories
         IEnumerable<SaleItemEntity> RetrieveAll();
         IEnumerable<SaleItemEntity> GetById(string SaleId);
         void Delete(string Id);
-        void Update(SaleItemEntity saleItemEntity);
+        IEnumerable<ProductEntity> GetProducts();
     }
 }

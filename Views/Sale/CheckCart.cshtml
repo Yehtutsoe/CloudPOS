@@ -5,7 +5,7 @@
 </head>
 <h1>Cart Item are as following</h1>
 <hr />
-<form action="/saleorder/paid" method="post">
+<form action="/sale/paid" method="post">
     <fieldset>
         <legend style="text-align:center">Sale</legend>
         <div class="row mb-3">
@@ -17,7 +17,7 @@
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Saled date</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" name="SaledDate" required value="@TempData["SaledDate"]" readonly>
+                <input type="text" class="form-control" name="SaledDate" required value="@TempData["SaleDate"]" readonly>
             </div>
         </div>
         <div class="row mb-3">
@@ -45,7 +45,7 @@
             {
                 <tr>
                     <th scope="row">@i</th>
-                    <td>@c.ProdcutInfo</td>
+                    <td>@c.ProductInfo</td>
                     <td>@c.UnitPrice</td>
                     <td>@c.Quantity</td>
                     <td>@c.Remark</td>
