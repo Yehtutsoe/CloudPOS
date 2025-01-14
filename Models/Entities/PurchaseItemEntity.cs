@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CloudPOS.Models.Entities
 {
     [Table("PurchaseItem")]
-    public class PurhcaseItemEntity:BaseEntity
+    public class PurchaseItemEntity:BaseEntity
     {
         
         [MaxLength(10)]

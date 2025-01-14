@@ -16,7 +16,7 @@ namespace CloudPOS.DAO
         public DbSet<SaleEntity> Sales { get; set; }
         public DbSet<SaleItemEntity> SaleItems { get; set; }
         public DbSet<PurchaseEntity> Purchases { get; set; }
-        public DbSet<PurhcaseItemEntity> PurchaseItems { get; set; }
+        public DbSet<PurchaseItemEntity> PurchaseItems { get; set; }
         public DbSet<InventoryEntity> Inventorys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
