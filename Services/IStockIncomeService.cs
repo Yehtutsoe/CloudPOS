@@ -9,8 +9,8 @@ namespace CloudPOS.Services
         void Delete(string Id);
         StockIncomeViewModel GetById(string Id);
         void Update(StockIncomeViewModel purchaseViewModel);
-        StockIncomeViewModel GetActiveSupplier();
-        StockIncomeViewModel GetActiveProduct();
+        StockIncomeViewModel GetActiveSuppliersAndProducts ();
+        
 
     }
 }

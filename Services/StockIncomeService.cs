@@ -39,17 +39,24 @@ namespace CloudPOS.Services
             return null;
         }
 
-        public StockIncomeViewModel GetActiveSupplier()
+        public StockIncomeViewModel GetActiveSuppliersAndProducts()
         {
-            IList<SupplierViewModel> suppliersView = _stockIncomeRepository.GetActiveSupplier()
-                                                                    .Select(s => new SupplierViewModel()
-                                                                    {
-                                                                        Id = s.Id,
-                                                                        Name = s.Name
-                                                                    }).ToList();
+            IList<SupplierViewModel> suppliers = _stockIncomeRepository.GetActiveSupplier()
+                                                                   .Select(s => new SupplierViewModel()
+                                                                   {
+                                                                       Id = s.Id,
+                                                                       Name = s.Name
+                                                                   }).ToList();
+            IList<ProductViewModel> products = _stockIncomeRepository.GetActiveProducts()
+                                                                      .Select(s => new ProductViewModel()
+                                                                        {
+                                                                            Id = s.Id,
+                                                                            Name = s.Name,
+                                                                        }).ToList();
             return new StockIncomeViewModel()
             {
-                SupplierViewModels = suppliersView
+                SupplierViewModels = suppliers,
+                ProductViewModels = products
             };
         }
 

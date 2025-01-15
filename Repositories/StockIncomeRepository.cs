@@ -12,9 +12,9 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(StockIncomeEntity purchaseEntity)
+        public void Create(StockIncomeEntity stockIncome)
         {
-            _applicationDbContext.Purchases.Add(purchaseEntity);
+            _applicationDbContext.Purchases.Add(stockIncome);
             _applicationDbContext.SaveChanges();
         }
 
@@ -26,6 +26,11 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.Purchases.Remove(entity);
                 _applicationDbContext.SaveChanges();
             }
+        }
+
+        public IEnumerable<ProductEntity> GetActiveProducts()
+        {
+            return _applicationDbContext.Products.ToList();
         }
 
         public IEnumerable<SupplierEntity> GetActiveSupplier()

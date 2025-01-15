@@ -4,18 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
 {
-    public class PurchaseController : Controller
+    public class StockIncomeController : Controller
     {
-        private readonly IStockIncomeService _stockIncomeService;
+        private readonly IStockIncomeService _stockIncome;
 
-        public PurchaseController(IStockIncomeService purchaseService)
+        public StockIncomeController(IStockIncomeService stockIncome)
         {
-            _stockIncomeService = purchaseService;
+            _stockIncome = stockIncome;
         }
         public IActionResult Entry()
         {
 
-            return View(_stockIncomeService.GetActiveSupplier());
+            return View(_stockIncome.GetActiveSuppliersAndProducts());
         }
         [HttpPost]
         public IActionResult Entry(StockIncomeViewModel purchaseViewModel) {
@@ -24,23 +24,23 @@ namespace CloudPOS.Controllers
         }
         public IActionResult List()
         {
-            return View(_stockIncomeService.RetrieveAll());
+            return View(_stockIncome.RetrieveAll());
         }
         public IActionResult Delete(string Id)
         {
-            _stockIncomeService.Delete(Id);
+            _stockIncome.Delete(Id);
             return RedirectToAction("List");
         }
         public IActionResult Edit(string Id)
         {
-            var purchaseEdit = _stockIncomeService.GetById(Id);
-            // supplier ViewModel is populated dropdown list
-            purchaseEdit.SupplierViewModels = _stockIncomeService.GetActiveSupplier().SupplierViewModels;
+            var purchaseEdit = _stockIncome.GetById(Id);
+            // supplier and product  ViewModel are populated dropdown list
+            // some code
             return View(purchaseEdit);
         }
         [HttpPost]
         public IActionResult Update(StockIncomeViewModel purchaseViewModel) {
-            _stockIncomeService.Update(purchaseViewModel);
+            _stockIncome.Update(purchaseViewModel);
             return RedirectToAction("List");
         }
 
