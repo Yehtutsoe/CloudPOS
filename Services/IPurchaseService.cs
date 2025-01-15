@@ -4,7 +4,7 @@ namespace CloudPOS.Services
 {
     public interface IPurchaseService
     {
-        void Create(PurchaseViewModel purchaseViewModel);
+        void Create(PurchaseViewModel purchaseViewModel,PurchaseItemViewModel purchaseItemViewModel);
         IEnumerable<PurchaseViewModel> RetrieveAll();
         void Delete(string Id);
         PurchaseViewModel GetById(string Id);

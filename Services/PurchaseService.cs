@@ -7,14 +7,16 @@ namespace CloudPOS.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IPurchaseItemRepository _purchaseItemRepository;
 
-        public PurchaseService(IPurchaseRepository purchaseRepository)
+        public PurchaseService(IPurchaseRepository purchaseRepository,IPurchaseItemRepository purchaseItemRepository)
         {
             _purchaseRepository = purchaseRepository;
+            _purchaseItemRepository = purchaseItemRepository;
         }
-        public void Create(PurchaseViewModel purchaseViewModel)
+        public void Create(PurchaseViewModel purchaseViewModel,PurchaseItemViewModel purchaseItemViewModel)
         {
-            PurchaseEntity purchaseEntity = new PurchaseEntity()
+            var purchaseEntity = new PurchaseEntity()
             {
                 Id = Guid.NewGuid().ToString(),
                 DeliveryStatus = purchaseViewModel.DeliveryStatus,
@@ -23,7 +25,17 @@ namespace CloudPOS.Services
                 TotalCost = purchaseViewModel.TotalCost,
                 SupplierId = purchaseViewModel.SupplierId
             };
+            var purchaseItemEntity = new PurchaseItemEntity()
+            {
+                Id = Guid.NewGuid().ToString(),
+                IsActive = true,
+                PurchaseId = purchaseEntity.Id,
+                ProductId = purchaseItemViewModel.ProductId,
+                CostPerUnit = purchaseItemViewModel.CostPerUnit,
+                Quantity = purchaseItemViewModel.Quantity
+            };
             _purchaseRepository.Create(purchaseEntity);
+            _purchaseItemRepository.Create(purchaseItemEntity);
         }
 
         public void Delete(string Id)
