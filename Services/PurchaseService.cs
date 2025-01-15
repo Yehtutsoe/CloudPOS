@@ -9,12 +9,12 @@ namespace CloudPOS.Services
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IPurchaseItemRepository _purchaseItemRepository;
 
-        public PurchaseService(IPurchaseRepository purchaseRepository,IPurchaseItemRepository purchaseItemRepository)
+        public PurchaseService(IPurchaseRepository purchaseRepository, IPurchaseItemRepository purchaseItemRepository)
         {
             _purchaseRepository = purchaseRepository;
             _purchaseItemRepository = purchaseItemRepository;
         }
-        public void Create(PurchaseViewModel purchaseViewModel,PurchaseItemViewModel purchaseItemViewModel)
+        public void Create(PurchaseViewModel purchaseViewModel, PurchaseItemViewModel purchaseItemViewModel)
         {
             var purchaseEntity = new PurchaseEntity()
             {
@@ -46,12 +46,12 @@ namespace CloudPOS.Services
         public PurchaseViewModel GetActiveSupplier()
         {
             IList<SupplierViewModel> suppliersView = _purchaseRepository.GetActiveSupplier()
-                                                                    .Select(s => new SupplierViewModel() 
-                                                                    { 
-                                                                      Id = s.Id, 
-                                                                      Name = s.Name
+                                                                    .Select(s => new SupplierViewModel()
+                                                                    {
+                                                                        Id = s.Id,
+                                                                        Name = s.Name
                                                                     }).ToList();
-            return  new PurchaseViewModel()
+            return new PurchaseViewModel()
             {
                 SupplierViewModels = suppliersView
             };
@@ -60,7 +60,7 @@ namespace CloudPOS.Services
         public PurchaseViewModel GetById(string Id)
         {
             var entity = _purchaseRepository.GetById(Id).SingleOrDefault();
-            if(entity  == null)
+            if (entity == null)
             {
                 return null;
             }
@@ -70,7 +70,7 @@ namespace CloudPOS.Services
                 PurchaseDate = entity.PurchaseDate,
                 DeliveryStatus = entity.DeliveryStatus,
                 TotalCost = entity.TotalCost,
-                SupplierId= entity.SupplierId
+                SupplierId = entity.SupplierId
             };
         }
 
