@@ -1,8 +1,6 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SQLitePCL;
 
 namespace CloudPOS.Services
 {
