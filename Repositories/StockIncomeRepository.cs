@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloudPOS.Repositories
 {
-    public class PurchaseRepository : IPurchaseRepository
+    public class StockIncomeRepository : IStockIncomeRepository
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public PurchaseRepository(ApplicationDbContext applicationDbContext)
+        public StockIncomeRepository(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(PurchaseEntity purchaseEntity)
+        public void Create(StockIncomeEntity purchaseEntity)
         {
             _applicationDbContext.Purchases.Add(purchaseEntity);
             _applicationDbContext.SaveChanges();
@@ -33,19 +33,19 @@ namespace CloudPOS.Repositories
             return _applicationDbContext.Suppliers.ToList();
         }
 
-        public IEnumerable<PurchaseEntity> GetById(string Id)
+        public IEnumerable<StockIncomeEntity> GetById(string Id)
         {
             return _applicationDbContext.Purchases.Where(w => w.Id == Id).ToList();
         }
 
-        public IEnumerable<PurchaseEntity> RetrieveAll()
+        public IEnumerable<StockIncomeEntity> RetrieveAll()
         {
             return _applicationDbContext.Purchases
                                         .Include(s => s.Suppliers)
                                         .ToList();
         }
 
-        public void Update(PurchaseEntity purchaseEntity)
+        public void Update(StockIncomeEntity purchaseEntity)
         {
            var existingEntity = _applicationDbContext.Purchases.Find(purchaseEntity.Id);
             if(existingEntity != null)

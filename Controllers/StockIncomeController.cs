@@ -6,41 +6,41 @@ namespace CloudPOS.Controllers
 {
     public class PurchaseController : Controller
     {
-        private readonly IPurchaseProcessService _purchaseService;
+        private readonly IStockIncomeService _stockIncomeService;
 
-        public PurchaseController(IPurchaseProcessService purchaseService)
+        public PurchaseController(IStockIncomeService purchaseService)
         {
-            _purchaseService = purchaseService;
+            _stockIncomeService = purchaseService;
         }
         public IActionResult Entry()
         {
 
-            return View(_purchaseService.GetActiveSupplier());
+            return View(_stockIncomeService.GetActiveSupplier());
         }
         [HttpPost]
-        public IActionResult Entry(PurchaseViewModel purchaseViewModel) {
+        public IActionResult Entry(StockIncomeViewModel purchaseViewModel) {
             
             return RedirectToAction("List");
         }
         public IActionResult List()
         {
-            return View(_purchaseService.RetrieveAll());
+            return View(_stockIncomeService.RetrieveAll());
         }
         public IActionResult Delete(string Id)
         {
-            _purchaseService.Delete(Id);
+            _stockIncomeService.Delete(Id);
             return RedirectToAction("List");
         }
         public IActionResult Edit(string Id)
         {
-            var purchaseEdit = _purchaseService.GetById(Id);
+            var purchaseEdit = _stockIncomeService.GetById(Id);
             // supplier ViewModel is populated dropdown list
-            purchaseEdit.SupplierViewModels = _purchaseService.GetActiveSupplier().SupplierViewModels;
+            purchaseEdit.SupplierViewModels = _stockIncomeService.GetActiveSupplier().SupplierViewModels;
             return View(purchaseEdit);
         }
         [HttpPost]
-        public IActionResult Update(PurchaseViewModel purchaseViewModel) {
-            _purchaseService.Update(purchaseViewModel);
+        public IActionResult Update(StockIncomeViewModel purchaseViewModel) {
+            _stockIncomeService.Update(purchaseViewModel);
             return RedirectToAction("List");
         }
 
