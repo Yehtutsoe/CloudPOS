@@ -11,5 +11,6 @@ namespace CloudPOS.Models.Entities
         public string SupplierId { get; set; }
         [ForeignKey(nameof(SupplierId))]
         public SupplierEntity Suppliers { get; set; }
+        public IList<PurchaseItemEntity> PurchaseItems { get; set; } = new List<PurchaseItemEntity>();
     }
 }

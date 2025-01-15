@@ -9,5 +9,6 @@ namespace CloudPOS.Repositories
         IEnumerable<PurchaseItemEntity> GetById(string Id);
         void Delete(string Id);
         void Update(PurchaseItemEntity purchaseItemEntitty);
+        public IEnumerable<ProductEntity> GetActiveProduct();
     }
 }

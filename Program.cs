@@ -26,7 +26,7 @@ builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<ISupplierService, SupplierService>();
-builder.Services.AddTransient<IPurchaseService, PurchaseService>();
+builder.Services.AddTransient<IPurchaseProcessService, PurchaseProcessService>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddTransient<ISaleProcessService, SaleProcessService>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();

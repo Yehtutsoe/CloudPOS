@@ -18,15 +18,15 @@ namespace CloudPOS.Services
             _saleItemRepository = saleItemRepository;
         }
 
-        public async Task Create(SaleViewModel model,SaleItemViewModel saleItemViewModel)
+        public async Task Create(SaleViewModel saleViewModel,SaleItemViewModel saleItemViewModel)
         {
             var sale = new SaleEntity
             {
               Id = Guid.NewGuid().ToString(),
-              VoucherNo = model.VoucherNo,
+              VoucherNo = saleViewModel.VoucherNo,
               IsActive = true,
-              SaleDate = model.SaleDate,
-              TotalAmount = model.TotalAmount
+              SaleDate = saleViewModel.SaleDate,
+              TotalAmount = saleViewModel.TotalAmount
 
             };
             var saleItems = new SaleItemEntity

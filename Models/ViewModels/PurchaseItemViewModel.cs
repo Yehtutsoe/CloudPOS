@@ -11,5 +11,6 @@
         public string ProductInfo { get; set; }
         public string SupplierId { get; set; }
         public string SupplierInfo { get; set; }
+        public IList<ProductViewModel> ProductViewModels { get; set; }
     }
 }

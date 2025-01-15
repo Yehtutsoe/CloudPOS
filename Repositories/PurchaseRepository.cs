@@ -41,7 +41,7 @@ namespace CloudPOS.Repositories
         public IEnumerable<PurchaseEntity> RetrieveAll()
         {
             return _applicationDbContext.Purchases
-                                        .Include(p => p.Suppliers)
+                                        .Include(s => s.Suppliers)
                                         .ToList();
         }
 

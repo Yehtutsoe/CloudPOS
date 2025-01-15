@@ -22,6 +22,11 @@ namespace CloudPOS.Repositories
             
         }
 
+        public IEnumerable<ProductEntity> GetActiveProduct()
+        {
+            return _applicationDbContext.Products.ToList();
+        }
+
         public IEnumerable<PurchaseItemEntity> GetAll()
         {
             throw new NotImplementedException();

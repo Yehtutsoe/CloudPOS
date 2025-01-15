@@ -6,9 +6,9 @@ namespace CloudPOS.Controllers
 {
     public class PurchaseController : Controller
     {
-        private readonly IPurchaseService _purchaseService;
+        private readonly IPurchaseProcessService _purchaseService;
 
-        public PurchaseController(IPurchaseService purchaseService)
+        public PurchaseController(IPurchaseProcessService purchaseService)
         {
             _purchaseService = purchaseService;
         }
@@ -19,7 +19,7 @@ namespace CloudPOS.Controllers
         }
         [HttpPost]
         public IActionResult Entry(PurchaseViewModel purchaseViewModel) {
-            _purchaseService.Create(purchaseViewModel);
+            
             return RedirectToAction("List");
         }
         public IActionResult List()

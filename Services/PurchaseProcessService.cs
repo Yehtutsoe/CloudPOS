@@ -4,15 +4,17 @@ using CloudPOS.Repositories;
 
 namespace CloudPOS.Services
 {
-    public class PurchaseService : IPurchaseService
+    public class PurchaseProcessService : IPurchaseProcessService
     {
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IPurchaseItemRepository _purchaseItemRepository;
+        private readonly IProductRepository _productRepository;
 
-        public PurchaseService(IPurchaseRepository purchaseRepository, IPurchaseItemRepository purchaseItemRepository)
+        public PurchaseProcessService(IPurchaseRepository purchaseRepository, IPurchaseItemRepository purchaseItemRepository,IProductRepository productRepository)
         {
             _purchaseRepository = purchaseRepository;
             _purchaseItemRepository = purchaseItemRepository;
+            _productRepository = productRepository;
         }
         public void Create(PurchaseViewModel purchaseViewModel, PurchaseItemViewModel purchaseItemViewModel)
         {
@@ -32,7 +34,8 @@ namespace CloudPOS.Services
                 PurchaseId = purchaseEntity.Id,
                 ProductId = purchaseItemViewModel.ProductId,
                 CostPerUnit = purchaseItemViewModel.CostPerUnit,
-                Quantity = purchaseItemViewModel.Quantity
+                Quantity = purchaseItemViewModel.Quantity,
+
             };
             _purchaseRepository.Create(purchaseEntity);
             _purchaseItemRepository.Create(purchaseItemEntity);
@@ -41,6 +44,20 @@ namespace CloudPOS.Services
         public void Delete(string Id)
         {
             _purchaseRepository.Delete(Id);
+        }
+
+        public PurchaseItemViewModel GetActiveProduct()
+        {
+            IList<ProductViewModel> productViews = _purchaseItemRepository.GetActiveProduct()
+                                                                          .Select(p => new ProductViewModel
+                                                                                        {
+                                                                                            Id = p.Id,
+                                                                                            Name = p.Name
+                                                                                        }).ToList();
+            return new PurchaseItemViewModel()
+            {
+                ProductViewModels = productViews
+            };
         }
 
         public PurchaseViewModel GetActiveSupplier()

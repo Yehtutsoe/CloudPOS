@@ -2,7 +2,7 @@
 
 namespace CloudPOS.Services
 {
-    public interface IPurchaseService
+    public interface IPurchaseProcessService
     {
         void Create(PurchaseViewModel purchaseViewModel,PurchaseItemViewModel purchaseItemViewModel);
         IEnumerable<PurchaseViewModel> RetrieveAll();
@@ -10,5 +10,7 @@ namespace CloudPOS.Services
         PurchaseViewModel GetById(string Id);
         void Update(PurchaseViewModel purchaseViewModel);
         PurchaseViewModel GetActiveSupplier();
+        PurchaseItemViewModel GetActiveProduct();
+
     }
 }
