@@ -1,6 +1,6 @@
 ﻿@model StockIncomeViewModel
 <h2>Purchase Entry Form</h2>
-<form action="/purchase/entry" method="post">
+<form action="/stockincome/entry" method="post">
     <div class="col-6">
         <div class="mb-3">
             <label for="ProductId" class="form-label">Model</label>
@@ -19,23 +19,23 @@
         </div>
         <div class="mb-3">
             <label for="TotalCost" class="form-label">Quantity</label>
-            <input type="number" name="TotalCost" class="form-control" placeholder="Enter Total Cost" />
+            <input type="number" name="TotalCost" class="form-control" placeholder="Enter Quantity" />
         </div>
         <div class="mb-3">
             <label for="DeliverStatus" class="form-label">Deliver Status</label>
             <textarea rows="3" name="DeliveryStatus" class="form-control" placeholder="Enter Deliver Status"></textarea>
         </div>
-    <div class="mb-3">
-        <label for="SupplierId" class="form-label">Model</label>
-        <select name="SupplierId" id="SupplierId" class="form-select">
-            <option value="x">[Select One]</option>
-            @foreach (var suppliers in Model.SupplierViewModels)
-            {
-                <option value="@suppliers.Id">@suppliers.Name</option>
-            }
-        </select>
+        <div class="mb-3">
+            <label for="SupplierId" class="form-label">Supplier</label>
+            <select name="SupplierId" id="SupplierId" class="form-select">
+                <option value="x">[Select One]</option>
+                @foreach (var suppliers in Model.SupplierViewModels)
+                {
+                    <option value="@suppliers.Id">@suppliers.Name</option>
+                }
+            </select>
+        </div>
     </div>
-
     <button type="submit" class="btn btn-success"> <i class="fa-solid fa-floppy-disk"></i>Save</button>
     <a href="/stockIncome/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>

@@ -6,6 +6,7 @@ namespace CloudPOS.Models.Entities
     {
         [Key]
         public string Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public bool IsActive { get; set; }
     }
 }

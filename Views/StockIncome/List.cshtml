@@ -9,10 +9,11 @@
     <thead class="table-dark">
         <tr>
             <th>No</th>
-            <th>Supplier Information</th>
+            <th>Products</th>
             <th>Purchase Date</th>
-            <th>Total Cost</th>
+            <th>Quantity</th>
             <th>Delivery Status</th>
+            <th>Supplier Information</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -24,14 +25,15 @@
         {
             <tr>
                 <td>@i</td>
-                <td>@purchase.SupplierInfo</td>
+                <td>@purchase.ProductInfo</td>
                 <td>@purchase.PurchaseDate.ToString("dd-MM-yyyy")</td>
-                <td>@purchase.TotalCost</td>
+                <td>@purchase.Quantity</td>
                 <td>@purchase.DeliveryStatus</td>
+                <td>@purchase.SupplierInfo</td>
                 <td>
 
-                    <a href="/purchase/edit?id=@purchase.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/purchase/delete?id=@purchase.Id" data-name="@purchase.SupplierInfo"><i class="fa-solid fa-trash"></i></a>
+                    <a href="/stockincome/edit?id=@purchase.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/stockincome/delete?id=@purchase.Id" data-name="@purchase.SupplierInfo"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
             i++;

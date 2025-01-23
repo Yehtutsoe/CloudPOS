@@ -23,7 +23,8 @@ namespace CloudPOS.Services
                 IsActive = true,
                 Quantity = stockViewModel.Quantity,
                 SupplierId = stockViewModel.SupplierId,
-                ProductId = stockViewModel.ProductId
+                ProductId = stockViewModel.ProductId,
+                CreatedAt= DateTime.Now
             };
             
             _stockIncomeRepository.Create(purchaseEntity);
@@ -82,7 +83,9 @@ namespace CloudPOS.Services
                 DeliveryStatus = s.DeliveryStatus,
                 Quantity = s.Quantity,
                 SupplierId = s.SupplierId,
-                SupplierInfo = s.Suppliers.Name
+                SupplierInfo = s.Suppliers.Name,
+                ProductId = s.ProductId,
+                ProductInfo = s.Products.Name
             }).ToList();
         }
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241229133453_Initial")]
+    [Migration("20250119133138_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -29,6 +29,9 @@ namespace CloudPOS.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -55,6 +58,9 @@ namespace CloudPOS.Migrations
 
                     b.Property<DateTime>("AdjustmentDate")
                         .HasMaxLength(15)
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
@@ -89,6 +95,9 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -122,6 +131,9 @@ namespace CloudPOS.Migrations
 
                     b.Property<decimal>("CostPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("IMEINumber")
                         .IsRequired()
@@ -160,70 +172,13 @@ namespace CloudPOS.Migrations
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("CloudPOS.Models.Entities.PurchaseEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DeliveryStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("PurchaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SupplierId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("TotalCost")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("Purchase");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.PurhcaseItemEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("CostPerUnit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PurchaseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Quantity")
-                        .HasMaxLength(10)
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("PurchaseId");
-
-                    b.ToTable("PurchaseItem");
-                });
-
             modelBuilder.Entity("CloudPOS.Models.Entities.SaleEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -235,6 +190,10 @@ namespace CloudPOS.Migrations
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("VoucherNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Sale");
@@ -244,6 +203,9 @@ namespace CloudPOS.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -256,12 +218,13 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SaleId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -270,6 +233,43 @@ namespace CloudPOS.Migrations
                     b.HasIndex("SaleId");
 
                     b.ToTable("SaleItem");
+                });
+
+            modelBuilder.Entity("CloudPOS.Models.Entities.StockIncomeEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeliveryStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("StockIncome");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.SupplierEntity", b =>
@@ -286,6 +286,9 @@ namespace CloudPOS.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -330,36 +333,6 @@ namespace CloudPOS.Migrations
                     b.Navigation("PhoneModels");
                 });
 
-            modelBuilder.Entity("CloudPOS.Models.Entities.PurchaseEntity", b =>
-                {
-                    b.HasOne("CloudPOS.Models.Entities.SupplierEntity", "Suppliers")
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Suppliers");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.PurhcaseItemEntity", b =>
-                {
-                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Products")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CloudPOS.Models.Entities.PurchaseEntity", "Purchases")
-                        .WithMany()
-                        .HasForeignKey("PurchaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Products");
-
-                    b.Navigation("Purchases");
-                });
-
             modelBuilder.Entity("CloudPOS.Models.Entities.SaleItemEntity", b =>
                 {
                     b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Products")
@@ -377,6 +350,25 @@ namespace CloudPOS.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("CloudPOS.Models.Entities.StockIncomeEntity", b =>
+                {
+                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CloudPOS.Models.Entities.SupplierEntity", "Suppliers")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Suppliers");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.SaleEntity", b =>

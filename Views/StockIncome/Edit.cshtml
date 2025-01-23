@@ -4,18 +4,18 @@
     <div class="col-6">
         <input type="text" name="Id" value="@Model.Id" hidden/>
         <div class="mb-3">
-            <label for="SupplierId" class="form-label">Model</label>
-            <select name="SupplierId" id="SupplierId" class="form-select">
+            <label for="ProductId" class="form-label">Model</label>
+            <select name="ProductId" id="ProductId" class="form-select">
                 <option value="x">[Select One]</option>
-                @foreach (var suppliers in Model.SupplierViewModels)
+                @foreach (var product in Model.ProductViewModels)
                 {
-                    if(suppliers.Id == Model.SupplierId)
+                    if (product.Id == Model.SupplierId)
                     {
-                        <option value="@suppliers.Id" selected>@suppliers.Name</option>
+                        <option value="@product.Id" selected>@product.Name</option>
                     }
                     else
                     {
-                        <option value="@suppliers.Id">@suppliers.Name</option>
+                        <option value="@product.Id">@product.Name</option>
                     }
                 }
             </select>
@@ -25,12 +25,29 @@
             <input type="date" value="@Model.PurchaseDate.ToString("yyyy-MM-dd")" name="PurchaseDate" class="form-control"/>
         </div>
         <div class="mb-3">
-            <label for="TotalCost" class="form-label">Total Cost</label>
-            <input type="number" value="@Model.TotalCost" name="TotalCost" class="form-control"/>
+            <label for="Quantity" class="form-label">Quantity</label>
+            <input type="number" value="@Model.Quantity" name="Quantity" class="form-control"/>
         </div>
         <div class="mb-3">
             <label for="DeliverStatus" class="form-label">Deliver Status</label>
-            <input type="text" value="@Model.DeliveryStatus" name="DeliveryStatus" class="form-control"/>
+            <textarea rows="3" value="@Model.DeliveryStatus" name="DeliveryStatus" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="SupplierId" class="form-label">Model</label>
+            <select name="SupplierId" id="SupplierId" class="form-select">
+                <option value="x">[Select One]</option>
+                @foreach (var suppliers in Model.SupplierViewModels)
+                {
+                    if (suppliers.Id == Model.SupplierId)
+                    {
+                        <option value="@suppliers.Id" selected>@suppliers.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@suppliers.Id">@suppliers.Name</option>
+                    }
+                }
+            </select>
         </div>
     </div>
 

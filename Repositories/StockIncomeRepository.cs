@@ -14,16 +14,16 @@ namespace CloudPOS.Repositories
         }
         public void Create(StockIncomeEntity stockIncome)
         {
-            _applicationDbContext.Purchases.Add(stockIncome);
+            _applicationDbContext.StockIncomes.Add(stockIncome);
             _applicationDbContext.SaveChanges();
         }
 
         public void Delete(string Id)
         {
-            var entity = _applicationDbContext.Purchases.Find(Id);
+            var entity = _applicationDbContext.StockIncomes.Find(Id);
             if(entity != null)
             {
-                _applicationDbContext.Purchases.Remove(entity);
+                _applicationDbContext.StockIncomes.Remove(entity);
                 _applicationDbContext.SaveChanges();
             }
         }
@@ -40,19 +40,20 @@ namespace CloudPOS.Repositories
 
         public IEnumerable<StockIncomeEntity> GetById(string Id)
         {
-            return _applicationDbContext.Purchases.Where(w => w.Id == Id).ToList();
+            return _applicationDbContext.StockIncomes.Where(w => w.Id == Id).ToList();
         }
 
         public IEnumerable<StockIncomeEntity> RetrieveAll()
         {
-            return _applicationDbContext.Purchases
+            return _applicationDbContext.StockIncomes
                                         .Include(s => s.Suppliers)
+                                        .Include(p => p.Products)
                                         .ToList();
         }
 
         public void Update(StockIncomeEntity purchaseEntity)
         {
-           var existingEntity = _applicationDbContext.Purchases.Find(purchaseEntity.Id);
+           var existingEntity = _applicationDbContext.StockIncomes.Find(purchaseEntity.Id);
             if(existingEntity != null)
             {
                 _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(purchaseEntity);
