@@ -34,11 +34,6 @@ namespace CloudPOS.Services
             _stockIncomeRepository.Delete(Id);
         }
 
-        public StockIncomeViewModel GetActiveProduct()
-        {
-            return null;
-        }
-
         public StockIncomeViewModel GetActiveSuppliersAndProducts()
         {
             IList<SupplierViewModel> suppliers = _stockIncomeRepository.GetActiveSupplier()
