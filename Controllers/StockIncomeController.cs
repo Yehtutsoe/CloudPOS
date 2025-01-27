@@ -6,41 +6,42 @@ namespace CloudPOS.Controllers
 {
     public class StockIncomeController : Controller
     {
-        private readonly IStockIncomeService _stockIncome;
+        private readonly IStockIncomeService _stockIncomeService;
 
-        public StockIncomeController(IStockIncomeService stockIncome)
+        public StockIncomeController(IStockIncomeService stockIncomeService)
         {
-            _stockIncome = stockIncome;
+            _stockIncomeService = stockIncomeService;
         }
         public IActionResult Entry()
         {
 
-            return View(_stockIncome.GetActiveSuppliersAndProducts());
+            return View(_stockIncomeService.GetActiveSuppliersAndProducts());
         }
         [HttpPost]
-        public IActionResult Entry(StockIncomeViewModel purchaseViewModel) {
-            
+        public IActionResult Entry(StockIncomeViewModel stockIncomeViewModel) {
+
+            _stockIncomeService.Create(stockIncomeViewModel);
             return RedirectToAction("List");
         }
         public IActionResult List()
         {
-            return View(_stockIncome.RetrieveAll());
+            return View(_stockIncomeService.RetrieveAll());
         }
         public IActionResult Delete(string Id)
         {
-            _stockIncome.Delete(Id);
+            _stockIncomeService.Delete(Id);
             return RedirectToAction("List");
         }
         public IActionResult Edit(string Id)
         {
-            var purchaseEdit = _stockIncome.GetById(Id);
+            var purchaseEdit = _stockIncomeService.GetById(Id);
             // supplier and product  ViewModel are populated dropdown list
             // some code
             return View(purchaseEdit);
         }
         [HttpPost]
         public IActionResult Update(StockIncomeViewModel purchaseViewModel) {
-            _stockIncome.Update(purchaseViewModel);
+            _stockIncomeService.Update(purchaseViewModel);
             return RedirectToAction("List");
         }
 

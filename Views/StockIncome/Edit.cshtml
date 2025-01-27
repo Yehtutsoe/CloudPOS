@@ -1,15 +1,15 @@
 ﻿@model StockIncomeViewModel
-<h2>Purchase Update Form</h2>
-<form action="/purchase/update" method="post">
+<h2>StockIncome Update Form</h2>
+<form action="/stockincome/update" method="post">
     <div class="col-6">
         <input type="text" name="Id" value="@Model.Id" hidden/>
         <div class="mb-3">
-            <label for="ProductId" class="form-label">Model</label>
-            <select name="ProductId" id="ProductId" class="form-select">
-                <option value="x">[Select One]</option>
+            <label for="Product" class="form-label">Product</label>
+            <select name="ProductId" id="Product" class="form-select">
+
                 @foreach (var product in Model.ProductViewModels)
                 {
-                    if (product.Id == Model.SupplierId)
+                    if (product.Id == Model.ProductId)
                     {
                         <option value="@product.Id" selected>@product.Name</option>
                     }
@@ -29,13 +29,13 @@
             <input type="number" value="@Model.Quantity" name="Quantity" class="form-control"/>
         </div>
         <div class="mb-3">
-            <label for="DeliverStatus" class="form-label">Deliver Status</label>
+            <label for="DeliveryStatus" class="form-label">Delivery Status</label>
             <textarea rows="3" value="@Model.DeliveryStatus" name="DeliveryStatus" class="form-control"></textarea>
         </div>
         <div class="mb-3">
             <label for="SupplierId" class="form-label">Model</label>
             <select name="SupplierId" id="SupplierId" class="form-select">
-                <option value="x">[Select One]</option>
+
                 @foreach (var suppliers in Model.SupplierViewModels)
                 {
                     if (suppliers.Id == Model.SupplierId)

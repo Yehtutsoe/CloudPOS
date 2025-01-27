@@ -1,7 +1,7 @@
 ﻿@model IList<StockIncomeViewModel>
-<h1 class="mb-3">Purchase Information View</h1>
+<h1 class="mb-3">StockIncome Information View</h1>
 <div>
-    <a href="/purchase/entry" class="btn btn-primary">
+    <a href="/stockIncome/entry" class="btn btn-primary mb-3">
         <i class="fa fa-plus"></i>Create
     </a>
 </div>
@@ -33,7 +33,7 @@
                 <td>
 
                     <a href="/stockincome/edit?id=@purchase.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/stockincome/delete?id=@purchase.Id" data-name="@purchase.SupplierInfo"><i class="fa-solid fa-trash"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/stockincome/delete?id=@purchase.Id" data-name="@purchase.ProductInfo"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
             i++;

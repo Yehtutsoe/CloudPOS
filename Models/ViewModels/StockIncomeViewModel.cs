@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Humanizer;
+using System.ComponentModel.DataAnnotations;
 
 namespace CloudPOS.Models.ViewModels
 {
@@ -15,7 +16,7 @@ namespace CloudPOS.Models.ViewModels
         public string  ProductInfo { get; set; }
         public string SupplierId { get; set; }
         public string SupplierInfo { get; set; }
-        public IList<SupplierViewModel> SupplierViewModels { get; set; }
-        public IList<ProductViewModel> ProductViewModels { get; set; }
+        public IList<SupplierViewModel> SupplierViewModels { get; set; } = new List<SupplierViewModel>();
+        public IList<ProductViewModel> ProductViewModels { get; set; } = new List<ProductViewModel>();
     }
 }

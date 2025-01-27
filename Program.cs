@@ -32,6 +32,7 @@ builder.Services.AddTransient<ISaleProcessService, SaleProcessService>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddTransient<ISaleItemService, SaleItemService>();
 builder.Services.AddScoped<ISaleItemRepository, SaleItemRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 
 
 var app = builder.Build();

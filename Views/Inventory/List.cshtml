@@ -1,0 +1,33 @@
+﻿@model IList<InventoryViewModel>
+
+<h1 class="mb-3">Inventory List Informartion</h1>
+<table class="table table-hover" id="InventoryTable">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Create Date</th>
+        </tr>
+    </thead>
+    @{
+        int i = 1;
+    }
+    <tbody>
+            @foreach(var inventory in Model){
+            <tr>
+                <td>@i</td>
+                <td>@inventory.ProductInfo</td>
+                <td>@inventory.Quantity</td>
+                <td>@inventory.CreateAt</td>
+            </tr>
+            i++;
+            }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Initialize DataTable
+        $("#InventoryTable").DataTable();
+    });
+</script>

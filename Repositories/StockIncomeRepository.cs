@@ -51,12 +51,12 @@ namespace CloudPOS.Repositories
                                         .ToList();
         }
 
-        public void Update(StockIncomeEntity purchaseEntity)
+        public void Update(StockIncomeEntity stockEntity)
         {
-           var existingEntity = _applicationDbContext.StockIncomes.Find(purchaseEntity.Id);
+           var existingEntity = _applicationDbContext.StockIncomes.Find(stockEntity.Id);
             if(existingEntity != null)
             {
-                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(purchaseEntity);
+                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(stockEntity);
                 _applicationDbContext.SaveChanges();
             }
         }
