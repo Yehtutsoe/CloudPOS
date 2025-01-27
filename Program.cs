@@ -1,9 +1,11 @@
 using CloudPOS.DAO;
 using CloudPOS.Repositories;
 using CloudPOS.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -16,8 +18,11 @@ builder.Services.AddSession(options =>
 var config = builder.Configuration;   //declare the configure to read json
 //add the dbContext that we defined the ApplicationDbContext to get connestion string
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(config.GetConnectionString("CloudPOSConnectionString")));
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 //Register Identity for UIs
 builder.Services.AddRazorPages();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddTransient<IPhoneModelService, PhoneModelService>();
 builder.Services.AddScoped<IPhoneModelRepository, PhoneModelRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
@@ -52,6 +57,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession(); // for AddToCart Function
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
