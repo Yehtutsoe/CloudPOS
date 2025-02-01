@@ -15,34 +15,34 @@ namespace CloudPOS.Repositories
         }
         public void Create(CategoryEntity categoryEntity)
         {
-            _applicationDbContext.Categorys.Add(categoryEntity);
+            _applicationDbContext.Categories.Add(categoryEntity);
             _applicationDbContext.SaveChanges();
 
         }
 
         public void Delete(string Id)
         {
-            var entity = _applicationDbContext.Categorys.Find(Id);
+            var entity = _applicationDbContext.Categories.Find(Id);
             if(entity != null)
             {
-                _applicationDbContext.Categorys.Remove(entity);
+                _applicationDbContext.Categories.Remove(entity);
                 _applicationDbContext.SaveChanges();
             }
         }
 
         public IEnumerable<CategoryEntity> GetById(string Id)
         {
-            return _applicationDbContext.Categorys.Where(w => w.Id == Id).ToList();
+            return _applicationDbContext.Categories.Where(w => w.Id == Id).ToList();
         }
 
         public IEnumerable<CategoryEntity> RetrieveAll()
         {
-            return _applicationDbContext.Categorys.ToList();
+            return _applicationDbContext.Categories.ToList();
         }
 
         public void Update(CategoryEntity categoryEntity)
         {
-            var existingEntity = _applicationDbContext.Categorys.Find(categoryEntity.Id);
+            var existingEntity = _applicationDbContext.Categories.Find(categoryEntity.Id);
             if(existingEntity != null)
             {
                 _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(categoryEntity);

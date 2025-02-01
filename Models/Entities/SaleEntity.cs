@@ -12,6 +12,7 @@ namespace CloudPOS.Models.Entities
         public string VoucherNo { get; set; }
         public Decimal TotalAmount { get; set; }
         public IList<SaleItemEntity> SaleItems { get; set; } = new List<SaleItemEntity>();
+        public string UserId { get; set; }
 
     }
 }

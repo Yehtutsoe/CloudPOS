@@ -8,5 +8,6 @@ namespace CloudPOS.Models.ViewModels
         public string VoucherNo { get; set; }
         public DateTime SaleDate { get; set; }
         public Decimal TotalAmount { get; set; }
+        public string UserId { get; set; }
     }
 }

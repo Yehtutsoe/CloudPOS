@@ -14,32 +14,32 @@ namespace CloudPOS.Repositories
         }
         public void Create(InventoryEntity inventoryEntity)
         {
-           _applicationDbContext.Inventorys.Add(inventoryEntity);
+           _applicationDbContext.Inventories.Add(inventoryEntity);
             _applicationDbContext.SaveChanges();
         }
 
         public void Delete(string Id)
         {
-            var existingEntity = _applicationDbContext.Inventorys.Find(Id);
+            var existingEntity = _applicationDbContext.Inventories.Find(Id);
             if (existingEntity != null) { 
-                _applicationDbContext.Inventorys.Remove(existingEntity);
+                _applicationDbContext.Inventories.Remove(existingEntity);
                 _applicationDbContext.SaveChanges();
             }
         }
 
         public IEnumerable<InventoryEntity> GetById(string Id)
         {
-            return _applicationDbContext.Inventorys.Where(w => w.Id == Id).ToList();
+            return _applicationDbContext.Inventories.Where(w => w.Id == Id).ToList();
         }
 
         public IEnumerable<InventoryEntity> RetrieveAll()
         {
-            return _applicationDbContext.Inventorys.ToList();
+            return _applicationDbContext.Inventories.ToList();
         }
 
         public void Update(InventoryEntity inventoryEntity)
         {
-            var existingInventory = _applicationDbContext.Inventorys.Find(inventoryEntity.Id);
+            var existingInventory = _applicationDbContext.Inventories.Find(inventoryEntity.Id);
             if (existingInventory != null)
             {
                 _applicationDbContext.Entry(existingInventory).CurrentValues.SetValues(inventoryEntity);

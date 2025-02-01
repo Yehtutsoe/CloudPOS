@@ -70,7 +70,7 @@ namespace CloudPOS.Repositories
         #region GetForCategoryAndModel
         public IList<CategoryViewModel> GetCategories()
         {
-            IList<CategoryViewModel> categories = _applicationDbContext.Categorys.Select(s => new CategoryViewModel
+            IList<CategoryViewModel> categories = _applicationDbContext.Categories.Select(s => new CategoryViewModel
             {
                 Id = s.Id,
                 Name= s.Name + "|" + s.Description
@@ -95,7 +95,7 @@ namespace CloudPOS.Repositories
         public IList<ProductViewModel> RetrieveAll()
         {
             IList<ProductViewModel> product =(from p in _applicationDbContext.Products
-                                                join c in _applicationDbContext.Categorys
+                                                join c in _applicationDbContext.Categories
                                                 on p.CategoryId equals c.Id
                                                 join phm in _applicationDbContext.PhoneModels
                                                 on p.PhoneModelId equals phm.Id

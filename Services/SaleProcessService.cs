@@ -26,7 +26,8 @@ namespace CloudPOS.Services
               VoucherNo = saleViewModel.VoucherNo,
               IsActive = true,
               SaleDate = saleViewModel.SaleDate,
-              TotalAmount = saleViewModel.TotalAmount
+              TotalAmount = saleViewModel.TotalAmount,
+              UserId = saleViewModel.UserId
 
             };
             var saleItems = new SaleItemEntity
