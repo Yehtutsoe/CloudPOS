@@ -1,6 +1,7 @@
 ﻿using CloudPOS.Models;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
@@ -17,12 +18,14 @@ namespace CloudPOS.Controllers
         #endregion
 
         #region Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Entry()
         {
             return View();
         }
     
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Entry(PhoneModelViewModel modelViewModel)
         {
             try
@@ -66,6 +69,7 @@ namespace CloudPOS.Controllers
         #endregion
 
         #region Edit
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
             return View(_modelService.GetById(Id));
@@ -74,6 +78,7 @@ namespace CloudPOS.Controllers
 
         #region Update
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(PhoneModelViewModel model) {
 
                 if (!ModelState.IsValid)
@@ -105,6 +110,7 @@ namespace CloudPOS.Controllers
         #endregion
 
         #region Delete
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
         {
             try

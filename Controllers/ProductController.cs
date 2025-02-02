@@ -1,6 +1,7 @@
 ﻿using CloudPOS.Models;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
@@ -14,11 +15,13 @@ namespace CloudPOS.Controllers
         {
             _productService = productService;
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Entry()
         {
             return View(_productService.GetCategoryAndModel());
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Entry(ProductViewModel ui)
         {
             try
@@ -55,7 +58,7 @@ namespace CloudPOS.Controllers
         {
             return View(_productService.RetrieveAll());
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
             var product = _productService.GetById(Id);
@@ -70,7 +73,7 @@ namespace CloudPOS.Controllers
             }
             return View(product);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
         {
             try
@@ -94,6 +97,7 @@ namespace CloudPOS.Controllers
             return RedirectToAction("List");
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(ProductViewModel ui)
         {
             //if (!ModelState.IsValid)

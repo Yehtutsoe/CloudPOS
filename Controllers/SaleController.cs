@@ -1,6 +1,7 @@
 ﻿using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
 using CloudPOS.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
@@ -24,6 +25,7 @@ namespace CloudPOS.Controllers
             return View(prodcuts);
         }
         [HttpPost]
+
         public IActionResult AddToCart(SaleItemViewModel saleItem)
         {
             ViewBag.Info = "Adding an sale item to cart";
@@ -108,7 +110,7 @@ namespace CloudPOS.Controllers
             var sale = _saleService.GetAll();
             return View(sale);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
         {
             _saleService.Delete(Id);

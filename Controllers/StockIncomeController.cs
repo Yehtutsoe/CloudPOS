@@ -1,5 +1,6 @@
 ﻿using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
@@ -27,11 +28,13 @@ namespace CloudPOS.Controllers
         {
             return View(_stockIncomeService.RetrieveAll());
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
         {
             _stockIncomeService.Delete(Id);
             return RedirectToAction("List");
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
             var purchaseEdit = _stockIncomeService.GetById(Id);
@@ -40,6 +43,7 @@ namespace CloudPOS.Controllers
             return View(purchaseEdit);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(StockIncomeViewModel purchaseViewModel) {
             _stockIncomeService.Update(purchaseViewModel);
             return RedirectToAction("List");
