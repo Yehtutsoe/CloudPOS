@@ -1,6 +1,9 @@
 ﻿using CloudPOS.Models;
 using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Report.common;
+using CloudPOS.Repositories.Report.ReportDataSet;
 using CloudPOS.Services;
+using CloudPOS.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +12,16 @@ namespace CloudPOS.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
-        
+        private readonly ICategoryService _categoryService;
+        private readonly IPhoneModelService _modelService;
+        private readonly IReport _report;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService,ICategoryService categoryService,IPhoneModelService modelService,IReport report)
         {
             _productService = productService;
+            _categoryService = categoryService;
+            _modelService = modelService;
+            _report = report;
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Entry()
@@ -129,6 +137,32 @@ namespace CloudPOS.Controllers
                
             }
             return RedirectToAction("List");
+        }
+        public IActionResult ReportBy()
+        {
+            ViewBag.category = _categoryService.RetrieveAll();
+            ViewBag.model = _modelService.RetrieveAll();
+            return View();
+        }
+        public IActionResult ReportBy(string productName,string modelId,string categoryId)
+        {
+            string fileDownloadName = $"productReport{Guid.NewGuid():N}.pdf";
+            IList<ProductReport> productReports  = _report.GetProductReportBy(productName, modelId, categoryId);
+            if (productReports.Count > 0)
+            {
+                var fileContentInByte = ReportHelper.ExportToPdf(productReports, fileDownloadName);
+                var contentType = "application/pdf";
+                return File(fileContentInByte, contentType, fileDownloadName);
+            }
+            else
+            {
+                ViewBag.Info = "There is no data to export";
+                ViewBag.category = _categoryService.RetrieveAll();
+                ViewBag.model = _modelService.RetrieveAll();
+                return View();
+            }
+
+            
         }
     }
 }

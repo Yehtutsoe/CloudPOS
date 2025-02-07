@@ -14,7 +14,7 @@ namespace CloudPOS.Models.ViewModels
         [Range(0,double.MaxValue,ErrorMessage = "Sale Price must be positive number")]
         public Decimal SalePrice { get; set; }
         [Range(0, double.MaxValue, ErrorMessage = "Cost Price must be positive number")]
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
         public Decimal CostPrice { get; set; }
         [Required(ErrorMessage = "Phone Model is required")]
         public string PhoneModelId { get; set; }
