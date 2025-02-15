@@ -1,4 +1,4 @@
-﻿@model PhoneModelViewModel;
+﻿@model BrandViewModel;
 @{
     if (TempData["ErrorViewModel"] != null)
     {
@@ -10,7 +10,7 @@
 }  
 
 <h2>Model Entry Form</h2>
-<form action="/phonemodel/entry" method="post">
+<form action="/brand/entry" method="post">
     <div class="col-6 mb-3">
         <label for="Name" class="form-label">Name</label>
         <input type="text" name="Name" class="form-control" placeholder="Enter Model Name" required/>
@@ -28,5 +28,5 @@
         <input type="date" name="ReleaseDate" class="form-control" placeholder="Enter Date" />
     </div>
     <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i>Save</button>
-    <a href="/model/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
+    <a href="/brand/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>

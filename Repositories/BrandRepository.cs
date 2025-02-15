@@ -3,11 +3,11 @@ using CloudPOS.Models.Entities;
 
 namespace CloudPOS.Repositories
 {
-    public class PhoneModelRepository : IPhoneModelRepository
+    public class BrandRepository : IBrandRepository
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public PhoneModelRepository(ApplicationDbContext applicationDbContext)
+        public BrandRepository(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }

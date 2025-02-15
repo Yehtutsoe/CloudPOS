@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
 {
-    public class PhoneModelController : Controller
+    public class BrandController : Controller
     {
         private readonly IPhoneModelService _modelService;
 
         #region Constructor
-        public PhoneModelController(IPhoneModelService modelService)
+        public BrandController(IPhoneModelService modelService)
         {
             _modelService = modelService;
         }
@@ -26,7 +26,7 @@ namespace CloudPOS.Controllers
     
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Entry(PhoneModelViewModel modelViewModel)
+        public IActionResult Entry(BrandViewModel modelViewModel)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace CloudPOS.Controllers
         #region Update
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Update(PhoneModelViewModel model) {
+        public IActionResult Update(BrandViewModel model) {
 
                 if (!ModelState.IsValid)
                 {

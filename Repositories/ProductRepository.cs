@@ -79,9 +79,9 @@ namespace CloudPOS.Repositories
             return categories;
         }
 
-        public IList<PhoneModelViewModel> GetPhonesModels()
+        public IList<BrandViewModel> GetPhonesModels()
         {
-            IList<PhoneModelViewModel> phoneModels = _applicationDbContext.PhoneModels.Select(s => new PhoneModelViewModel
+            IList<BrandViewModel> phoneModels = _applicationDbContext.PhoneModels.Select(s => new BrandViewModel
             {
                 Id = s.Id,
                 Name = s.Name + "|" + s.Brand

@@ -35,7 +35,7 @@
             {
                 <tr>
                     <td>@i</td>
-                    <td>role.Name</td>
+                    <td>@role.Name</td>
                     <td>
                         <a href="/role/delete?id=@role.Id" class="btn btn-danger" onclick="return cofirm('Are you sure want to delete this role')"><i class="fa-solid fa-trash"></i></a>
                     </td>
@@ -52,6 +52,8 @@
         
     </tbody>
 </table>
-$(document).ready(function (){
-    $("#RoleTable").DataTable();
-});
+<script>
+    $(document).ready(function (){
+        $("#RoleTable").DataTable();
+    });
+</script>

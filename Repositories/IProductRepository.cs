@@ -10,7 +10,7 @@ namespace CloudPOS.Repositories
         ProductViewModel GetById(string Id);
         void Delete(string Id);
         IList<CategoryViewModel> GetCategories();
-        IList<PhoneModelViewModel> GetPhonesModels();
+        IList<BrandViewModel> GetPhonesModels();
         void Update(ProductEntity productEntity);
 
     }

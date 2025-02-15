@@ -29,6 +29,7 @@ namespace CloudPOS.Controllers
             ViewBag.Roles = roles;
             return View();
         }
+        [HttpPost]
         public async Task<IActionResult> Create(UserViewModel userViewModel)
         {
             if (ModelState.IsValid)

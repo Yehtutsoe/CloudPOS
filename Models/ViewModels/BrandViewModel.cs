@@ -2,7 +2,7 @@
 
 namespace CloudPOS.Models.ViewModels
 {
-    public class PhoneModelViewModel
+    public class BrandViewModel
     {
         public string Id { get; set; }
         [Required(ErrorMessage ="Name is required")]

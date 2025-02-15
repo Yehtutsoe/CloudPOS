@@ -23,11 +23,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServe
 builder.Services.AddRazorPages();
 //Register Identity for UIs
 builder.Services.AddRazorPages();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+ /* options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.SignIn.RequireConfirmedEmail = false;
+    // Configure lockout settings
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5; 
+    
+    */
+    // Configure user settings
+    options.User.RequireUniqueEmail = true;
+})
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI()
     .AddDefaultTokenProviders();
 builder.Services.AddTransient<IPhoneModelService, PhoneModelService>();
-builder.Services.AddScoped<IPhoneModelRepository, PhoneModelRepository>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IProductService, ProductService>();
@@ -44,6 +60,7 @@ builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<IEmailSender,EmailSender>();
 builder.Services.AddTransient<IReport, Report>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 
 var app = builder.Build();

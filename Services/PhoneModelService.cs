@@ -7,13 +7,13 @@ namespace CloudPOS.Services
 {
     public class PhoneModelService : IPhoneModelService
     {
-        private readonly IPhoneModelRepository _modelRepository;
+        private readonly IBrandRepository _modelRepository;
 
-        public PhoneModelService(IPhoneModelRepository modelRepository)
+        public PhoneModelService(IBrandRepository modelRepository)
         {
             _modelRepository = modelRepository;
         }
-        public void Create(PhoneModelViewModel modelViewModel)
+        public void Create(BrandViewModel modelViewModel)
         {
             var entity = new PhoneModelEntity()
             {
@@ -32,14 +32,14 @@ namespace CloudPOS.Services
              _modelRepository.Delete(Id);
         }
 
-        public PhoneModelViewModel GetById(string Id)
+        public BrandViewModel GetById(string Id)
         {
             var entity = _modelRepository.GetById(Id).FirstOrDefault();
             if(entity == null)
             {
                 return null;
             }
-            return new PhoneModelViewModel {
+            return new BrandViewModel {
                 Id = entity.Id,
                 Name = entity.Name,
                 Brand = entity.Brand,
@@ -48,10 +48,10 @@ namespace CloudPOS.Services
             };
         }
 
-        public IEnumerable<PhoneModelViewModel> RetrieveAll()
+        public IEnumerable<BrandViewModel> RetrieveAll()
         {
             var entities = _modelRepository.RetrieveAll();
-            return entities.Where(w => w.IsActive).Select(s => new PhoneModelViewModel { 
+            return entities.Where(w => w.IsActive).Select(s => new BrandViewModel { 
                 Id = s.Id,
                 Name = s.Name,
                 Brand = s.Brand,
@@ -60,7 +60,7 @@ namespace CloudPOS.Services
             }).ToList();
         }
 
-        public void Update(PhoneModelViewModel modelViewModel)
+        public void Update(BrandViewModel modelViewModel)
         {
             var entities = new PhoneModelEntity()
             {

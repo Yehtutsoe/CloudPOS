@@ -19,7 +19,7 @@ namespace CloudPOS.Models.ViewModels
         [Required(ErrorMessage = "Phone Model is required")]
         public string PhoneModelId { get; set; }
         public string PhoneModelInfo { get; set; }
-        public IList<PhoneModelViewModel> PhoneModelViewModels { get; set; } //List for UI Binding
+        public IList<BrandViewModel> PhoneModelViewModels { get; set; } //List for UI Binding
         [Required(ErrorMessage = "Category is required")]
         public string CategoryId { get; set; }
         public string CategoryInfo { get; set; }

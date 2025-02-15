@@ -2,7 +2,7 @@
 
 namespace CloudPOS.Repositories
 {
-    public interface IPhoneModelRepository
+    public interface IBrandRepository
     {
         void Create(PhoneModelEntity entity);
         IEnumerable<PhoneModelEntity> GetById(string Id);
