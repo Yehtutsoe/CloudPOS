@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace CloudPOS.Services
 {
-    public class PhoneModelService : IPhoneModelService
+    public class BrandService : IBrandService
     {
         private readonly IBrandRepository _modelRepository;
 
-        public PhoneModelService(IBrandRepository modelRepository)
+        public BrandService(IBrandRepository modelRepository)
         {
             _modelRepository = modelRepository;
         }

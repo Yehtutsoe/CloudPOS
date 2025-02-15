@@ -2,7 +2,7 @@
 
 namespace CloudPOS.Services
 {
-    public interface IPhoneModelService
+    public interface IBrandService
     {
         void Create(BrandViewModel modelViewModel);
         IEnumerable<BrandViewModel> RetrieveAll();

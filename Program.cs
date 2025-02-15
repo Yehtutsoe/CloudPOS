@@ -42,7 +42,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
-builder.Services.AddTransient<IPhoneModelService, PhoneModelService>();
+builder.Services.AddTransient<IBrandService, BrandService>();
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

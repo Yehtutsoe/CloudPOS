@@ -13,10 +13,10 @@ namespace CloudPOS.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        private readonly IPhoneModelService _modelService;
+        private readonly IBrandService _modelService;
         private readonly IReport _report;
 
-        public ProductController(IProductService productService,ICategoryService categoryService,IPhoneModelService modelService,IReport report)
+        public ProductController(IProductService productService,ICategoryService categoryService,IBrandService modelService,IReport report)
         {
             _productService = productService;
             _categoryService = categoryService;

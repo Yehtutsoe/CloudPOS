@@ -8,10 +8,10 @@ namespace CloudPOS.Controllers
 {
     public class BrandController : Controller
     {
-        private readonly IPhoneModelService _modelService;
+        private readonly IBrandService _modelService;
 
         #region Constructor
-        public BrandController(IPhoneModelService modelService)
+        public BrandController(IBrandService modelService)
         {
             _modelService = modelService;
         }
