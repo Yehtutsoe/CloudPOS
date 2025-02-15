@@ -41,7 +41,7 @@ builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddTransient<ISaleItemService, SaleItemService>();
 builder.Services.AddScoped<ISaleItemRepository, SaleItemRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<IEmailSender,EmailSender>();
 builder.Services.AddTransient<IReport, Report>();
 

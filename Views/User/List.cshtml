@@ -1,14 +1,32 @@
-﻿@model IList<UserViewModel>
+﻿@model IList<UserListViewModel>
+@{
+    ViewData["Title"] = "User List";
+}
 
-<h1>User View Information</h1>
+<h2>User List</h2>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<!-- Display Error Message -->
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <table class="table table-hover" id="UserTable">
     <thead class="table-dark">
         <tr>
             <th scope="col">No</th>
-            <th scope="col">UserName</th>
+            <th scope="col">User Name</th>
             <th scope="col">Email</th>
             <th scope="col">Role</th>
+            <th scope="col">Action</th>
         </tr>
     </thead>
     @{
@@ -21,7 +39,15 @@
                     <td scope="row">@i</td>
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
-                    <td>@user.Role</td>
+                    <td>@user.Roles</td>
+                <td>
+                    <a asp-controller="User" asp-action="EditUser" asp-route-id="@user.UserId" class="btn btn-primary">
+                        <i class="fa-solid fa-pencil"></i>
+                    </a>
+                    <a asp-controller="User" asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-danger" onclick="return confirm('Are you sure want to delete')">
+                        <i class="fa-solid fa-trash"></i>
+                    </a>
+                </td>
                 </tr>
             i++;
             }        
