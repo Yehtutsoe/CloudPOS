@@ -13,42 +13,40 @@ namespace CloudPOS.Repositories.Report.common
         }
         public IList<ProductReport> GetProductReportBy(string productName, string categoryId, string modelId)
         {
-           var products = new List<ProductReport>();
+            var query = _productService.RetrieveAll().AsQueryable();
+
+            // Filter by product name
             if (!string.IsNullOrEmpty(productName))
             {
-                products = _productService.RetrieveAll().Where(w => w.Name == productName)
-                                                        .Select(s => new ProductReport()
-                                                        {
-                                                            Name = s.Name,
-                                                            CostPrice = s.CostPrice,
-                                                            Quantity = s.Quantity,
-                                                            SalePrice = s.SalePrice,
-                                                            IMEINumber = s.IMEINumber,
-                                                            SerialNumber = s.SerialNumber,
-                                                            ModelInfo = s.PhoneModelInfo,
-                                                            CategoryInfo = s.CategoryInfo,
-                                                            ReportedAt = DateTime.Now
-
-                                                        }).ToList();
+                query = query.Where(w => w.Name == productName);
             }
-            else if (modelId != "a" || categoryId != "a")
+
+            // Filter by category and model
+            if (!string.IsNullOrEmpty(categoryId) && categoryId != "a")
             {
-                products = _productService.RetrieveAll().Where(w => w.CategoryId == categoryId || w.PhoneModelId == modelId)
-                                                        .Select(s => new ProductReport
-                                                                {
-                                                                    Name = s.Name,
-                                                                    CostPrice = s.CostPrice,
-                                                                    Quantity = s.Quantity,
-                                                                    SalePrice = s.SalePrice,
-                                                                    IMEINumber = s.IMEINumber,
-                                                                    SerialNumber = s.SerialNumber,
-                                                                    ModelInfo = s.PhoneModelInfo,
-                                                                    CategoryInfo = s.CategoryInfo,
-                                                                    ReportedAt = DateTime.Now
-                                                                 }).ToList();
-
-                 
+                query = query.Where(w => w.CategoryId.Trim() == categoryId.Trim());
             }
+            if (!string.IsNullOrEmpty(modelId) && modelId != "a")
+            {
+                query = query.Where(w => w.PhoneModelId.Trim() == modelId.Trim());
+            }
+
+            var products = query.Select(s => new ProductReport
+            {
+                Name = s.Name,
+                CostPrice = s.CostPrice,
+                Quantity = s.Quantity,
+                SalePrice = s.SalePrice,
+                IMEINumber = s.IMEINumber,
+                SerialNumber = s.SerialNumber,
+                ModelInfo = s.PhoneModelInfo,
+                CategoryInfo = s.CategoryInfo,
+                ReportedAt = DateTime.Now
+            }).ToList();
+
+            return products;
+        }
 
     }
 }
+

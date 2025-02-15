@@ -25,7 +25,6 @@ namespace CloudPOS.Controllers
             return View(prodcuts);
         }
         [HttpPost]
-
         public IActionResult AddToCart(SaleItemViewModel saleItem)
         {
             ViewBag.Info = "Adding an sale item to cart";
@@ -58,7 +57,6 @@ namespace CloudPOS.Controllers
             }
             return Json(null);
         }
-        [HttpPost]
         public IActionResult CheckCart(SaleViewModel saleView)
         {
             var cart = SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart");

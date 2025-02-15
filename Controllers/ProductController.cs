@@ -138,27 +138,31 @@ namespace CloudPOS.Controllers
             }
             return RedirectToAction("List");
         }
-        public IActionResult ReportBy()
+        public IActionResult Report()
         {
-            ViewBag.category = _categoryService.RetrieveAll();
-            ViewBag.model = _modelService.RetrieveAll();
+            ViewBag.Category = _categoryService.RetrieveAll();
+            ViewBag.PhoneModel = _modelService.RetrieveAll();
             return View();
         }
-        public IActionResult ReportBy(string productName,string modelId,string categoryId)
+        [HttpPost]
+        public IActionResult Report(string productName,string modelId,string categoryId)
         {
-            string fileDownloadName = $"productReport{Guid.NewGuid():N}.pdf";
+            string fileDownloadName = $"productReport{Guid.NewGuid():N}.xlsx";
+          // Console.WriteLine($"🔎 Searching with - Product Name: {productName}, ModelId: {modelId}, CategoryId: {categoryId}");
+
             IList<ProductReport> productReports  = _report.GetProductReportBy(productName, modelId, categoryId);
+           //Console.WriteLine($"📊 Total Records Found: {productReports.Count}");
             if (productReports.Count > 0)
             {
-                var fileContentInByte = ReportHelper.ExportToPdf(productReports, fileDownloadName);
-                var contentType = "application/pdf";
+                var fileContentInByte = ReportHelper.ExportToExcel(productReports, fileDownloadName);
+                var contentType = "application/vnd.ms-excel";
                 return File(fileContentInByte, contentType, fileDownloadName);
             }
             else
             {
                 ViewBag.Info = "There is no data to export";
-                ViewBag.category = _categoryService.RetrieveAll();
-                ViewBag.model = _modelService.RetrieveAll();
+                ViewBag.Category = _categoryService.RetrieveAll();
+                ViewBag.PhoneModel = _modelService.RetrieveAll();
                 return View();
             }
 
