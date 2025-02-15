@@ -1,6 +1,5 @@
 ﻿using CloudPOS.Repositories.Report.ReportDataSet;
 using CloudPOS.Services;
-using Humanizer;
 
 namespace CloudPOS.Repositories.Report.common
 {
@@ -50,22 +49,6 @@ namespace CloudPOS.Repositories.Report.common
 
                  
             }
-            else
-            {
-                products = _productService.RetrieveAll().Select(s => new ProductReport {
 
-                    Name = s.Name,
-                    CostPrice = s.CostPrice,
-                    Quantity = s.Quantity,
-                    SalePrice = s.SalePrice,
-                    IMEINumber = s.IMEINumber,
-                    SerialNumber = s.SerialNumber,
-                    ModelInfo = s.PhoneModelInfo,
-                    CategoryInfo = s.CategoryInfo,
-                    ReportedAt = DateTime.Now
-                }).ToList();
-            }
-            return products;
-        }
     }
 }
