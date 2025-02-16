@@ -13,20 +13,20 @@ namespace CloudPOS.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-        private readonly IBrandService _modelService;
+        private readonly IBrandService _brandService;
         private readonly IReport _report;
 
         public ProductController(IProductService productService,ICategoryService categoryService,IBrandService modelService,IReport report)
         {
             _productService = productService;
             _categoryService = categoryService;
-            _modelService = modelService;
+            _brandService = modelService;
             _report = report;
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Entry()
         {
-            return View(_productService.GetCategoryAndModel());
+            return View();
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -64,7 +64,7 @@ namespace CloudPOS.Controllers
 
         public IActionResult List()
         {
-            return View(_productService.RetrieveAll());
+            return null;
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
@@ -141,7 +141,7 @@ namespace CloudPOS.Controllers
         public IActionResult Report()
         {
             ViewBag.Category = _categoryService.RetrieveAll();
-            ViewBag.PhoneModel = _modelService.RetrieveAll();
+            ViewBag.PhoneModel = _brandService.RetrieveAll();
             return View();
         }
         [HttpPost]
@@ -162,7 +162,7 @@ namespace CloudPOS.Controllers
             {
                 ViewBag.Info = "There is no data to export";
                 ViewBag.Category = _categoryService.RetrieveAll();
-                ViewBag.PhoneModel = _modelService.RetrieveAll();
+                ViewBag.PhoneModel = _brandService.RetrieveAll();
                 return View();
             }
 

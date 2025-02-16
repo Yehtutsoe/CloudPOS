@@ -14,7 +14,7 @@ namespace CloudPOS.Models.Entities
         public string Brand { get; set; }
         
         [MaxLength(50)]
-        public string Specification { get; set; }
+        public string? Specification { get; set; }
         [MaxLength(15)]
         public DateTime? ReleaseDate { get; set; }
     }

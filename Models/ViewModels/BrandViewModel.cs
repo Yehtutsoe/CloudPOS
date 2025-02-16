@@ -10,7 +10,7 @@ namespace CloudPOS.Models.ViewModels
         [Required(ErrorMessage = "Brand is required")]
         public string Brand { get; set; }
         [Required(ErrorMessage = "Speicification is required")]
-        public string Specification { get; set; }
+        public string? Specification { get; set; }
         public DateTime? ReleaseDate { get; set; }
     }
 }
