@@ -4,7 +4,7 @@ namespace CloudPOS.Repositories
 {
     public interface ISaleItemRepository
     {
-        void Create(SaleItemEntity saleItemEntity);
+        Task Create(SaleItemEntity saleItemEntity);
         IEnumerable<SaleItemEntity> RetrieveAll();
         IEnumerable<SaleItemEntity> GetById(string SaleId);
         void Delete(string Id);

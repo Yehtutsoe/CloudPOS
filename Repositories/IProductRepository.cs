@@ -1,17 +1,15 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories
 {
-    public interface IProductRepository
+    public interface IProductRepository:IBaseRepository<ProductEntity>
     {
-        void Create(ProductViewModel productViewModel);
-        IList<ProductViewModel> RetrieveAll();
-        ProductViewModel GetById(string Id);
-        void Delete(string Id);
-        IList<CategoryViewModel> GetCategories();
-        IList<BrandViewModel> GetPhonesModels();
-        void Update(ProductEntity productEntity);
-
+        IEnumerable<ProductViewModel> GetProducts();
+        bool IsAlreadyExist(string productName, string productCode);
+        string GetNextProductCode();
+        IEnumerable<ProductViewModel> GetProductByCategory(string categoryId);
+        ProductEntity FindById(string productId);
     }
 }

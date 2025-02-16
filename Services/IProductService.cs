@@ -5,10 +5,13 @@ namespace CloudPOS.Services
     public interface IProductService
     {
         void Create(ProductViewModel productViewModel);
-        IList<ProductViewModel> RetrieveAll();
+        IEnumerable<ProductViewModel> GetAll();
         ProductViewModel GetById(string Id);
         void Delete(string Id);
-        ProductViewModel GetCategoryAndModel();
+        IEnumerable<ProductViewModel> GetProducts();
+        bool IsAlreadyExist(ProductViewModel productViewModel);
+        string GetNextProductCode();
+        IEnumerable<ProductViewModel> GetProductByCategory(string categoryId);
         void Update(ProductViewModel productViewModel);
     }
 }

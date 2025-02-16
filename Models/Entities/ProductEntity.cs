@@ -9,15 +9,15 @@ namespace CloudPOS.Models.Entities
         [MaxLength(50)]      
         public string Name { get; set; }
         [MaxLength(50)]
-        public string SerialNumber { get; set; }
+        public string ProductCode { get; set; }
         [MaxLength(18)]      
-        public string IMEINumber { get; set; }
+        public string Description { get; set; }
         public int Quantity { get; set; }
         public Decimal CostPrice { get; set; }
         public Decimal SalePrice { get; set; }
-        public string PhoneModelId { get; set; }
-        [ForeignKey(nameof(PhoneModelId))]
-        public PhoneModelEntity PhoneModels { get; set; }
+        public string BrandId { get; set; }
+        [ForeignKey(nameof(BrandId))]
+        public BrandEntity Brands { get; set; }
         public string CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
         public CategoryEntity Categories { get; set; }

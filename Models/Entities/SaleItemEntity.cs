@@ -11,7 +11,7 @@ namespace CloudPOS.Models.Entities
         public int Quantity { get; set; }
         public string ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
-        public ProductEntity Products { get; set; }
+        public ProductEntity Product { get; set; }
         public string SaleId { get; set; }
         [ForeignKey(nameof(SaleId))]
         public SaleEntity Sales { get; set; }

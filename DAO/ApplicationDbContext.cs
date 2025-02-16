@@ -10,7 +10,7 @@ namespace CloudPOS.DAO
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
         public DbSet<ProductEntity> Products { get; set; }
-        public DbSet<PhoneModelEntity> PhoneModels { get; set; }
+        public DbSet<BrandEntity> PhoneModels { get; set; }
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<SupplierEntity> Suppliers { get; set; }
         public DbSet<SaleEntity> Sales { get; set; }

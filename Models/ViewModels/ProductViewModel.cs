@@ -8,18 +8,18 @@ namespace CloudPOS.Models.ViewModels
         [Required(ErrorMessage ="Requried Type")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Requried Serial Number")]
-        public string SerialNumber { get; set; }
+        public string ProductCode { get; set; }
         [Required(ErrorMessage = "IMEI Number is Requried")]
-        public string IMEINumber { get; set; }
+        public string Description { get; set; }
         [Range(0,double.MaxValue,ErrorMessage = "Sale Price must be positive number")]
         public Decimal SalePrice { get; set; }
         [Range(0, double.MaxValue, ErrorMessage = "Cost Price must be positive number")]
         public int Quantity { get; set; }
         public Decimal CostPrice { get; set; }
         [Required(ErrorMessage = "Phone Model is required")]
-        public string PhoneModelId { get; set; }
-        public string PhoneModelInfo { get; set; }
-        public IList<BrandViewModel> PhoneModelViewModels { get; set; } //List for UI Binding
+        public string BrandId { get; set; }
+        public string BrandInfo { get; set; }
+        public IList<BrandViewModel> BrandViewModels { get; set; } //List for UI Binding
         [Required(ErrorMessage = "Category is required")]
         public string CategoryId { get; set; }
         public string CategoryInfo { get; set; }

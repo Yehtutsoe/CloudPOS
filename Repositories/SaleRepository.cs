@@ -15,14 +15,14 @@ namespace CloudPOS.Repositories
 
         public async Task Create(SaleEntity entity)
         {
-           _applicationDbContext.Sales.AddAsync(entity);
-            _applicationDbContext.SaveChangesAsync();   
+          await _applicationDbContext.Sales.AddAsync(entity);
+           await _applicationDbContext.SaveChangesAsync();   
         }
 
-        public void Delete(SaleEntity entity)
+        public async Task Delete(SaleEntity entity)
         {
             _applicationDbContext.Sales.Remove(entity);
-            _applicationDbContext.SaveChangesAsync();
+           await _applicationDbContext.SaveChangesAsync();
         }
 
         public IEnumerable<SaleEntity> GetAll()
@@ -34,7 +34,7 @@ namespace CloudPOS.Repositories
         {
             return  _applicationDbContext.Sales
                                               .Include(s => s.SaleItems)
-                                              .ThenInclude(si => si.Products)
+                                              .ThenInclude(si => si.Product)
                                               .SingleOrDefault(s => s.Id == Id);
         }
 

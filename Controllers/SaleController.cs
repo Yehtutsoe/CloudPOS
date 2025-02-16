@@ -21,7 +21,7 @@ namespace CloudPOS.Controllers
         public IActionResult Entry()
         {
             var prodcuts = _saleItemService.GetActiveProduct();
-            _productService.RetrieveAll();
+            _productService.GetAll();
             return View(prodcuts);
         }
         [HttpPost]
@@ -69,7 +69,7 @@ namespace CloudPOS.Controllers
                 TempData["SaleDate"] = saleView.SaleDate;
             TempData["VoucherNo"] = saleView.VoucherNo;
             decimal total = cart.Sum(item => item.UnitPrice * item.Quantity);
-            TempData["TotalAmount"] = total.ToString();
+            TempData["TotalAmount"] = total.ToString("F2");
             ViewBag.total = total;
             return View(cart);
         }

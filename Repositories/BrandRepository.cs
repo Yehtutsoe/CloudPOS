@@ -11,7 +11,7 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(PhoneModelEntity entity)
+        public void Create(BrandEntity entity)
         {
             _applicationDbContext.PhoneModels.Add(entity);
             _applicationDbContext.SaveChanges();
@@ -27,18 +27,18 @@ namespace CloudPOS.Repositories
             }
         }
 
-        public IEnumerable<PhoneModelEntity> GetById(string Id)
+        public IEnumerable<BrandEntity> GetById(string Id)
         {
             return _applicationDbContext.PhoneModels.Where(w => w.Id == Id).ToList();
         }
 
-        public IEnumerable<PhoneModelEntity> RetrieveAll()
+        public IEnumerable<BrandEntity> RetrieveAll()
         {
 
             return _applicationDbContext.PhoneModels.ToList();
         }
 
-        public void Update(PhoneModelEntity entity)
+        public void Update(BrandEntity entity)
         {
             var existingEntity = _applicationDbContext.PhoneModels.Find(entity.Id);
             if(existingEntity != null)

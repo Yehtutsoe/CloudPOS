@@ -22,6 +22,41 @@ namespace CloudPOS.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CloudPOS.Models.Entities.BrandEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasMaxLength(15)
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Specification")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brand");
+                });
+
             modelBuilder.Entity("CloudPOS.Models.Entities.CategoryEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -82,44 +117,13 @@ namespace CloudPOS.Migrations
                     b.ToTable("Inventory");
                 });
 
-            modelBuilder.Entity("CloudPOS.Models.Entities.PhoneModelEntity", b =>
+            modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Brand")
+                    b.Property<string>("BrandId")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasMaxLength(15)
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Specification")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Model");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>
-                {
-                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
@@ -132,7 +136,7 @@ namespace CloudPOS.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IMEINumber")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(18)
                         .HasColumnType("nvarchar(18)");
@@ -145,9 +149,10 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("PhoneModelId")
+                    b.Property<string>("ProductCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -155,16 +160,11 @@ namespace CloudPOS.Migrations
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("BrandId");
 
-                    b.HasIndex("PhoneModelId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Product");
                 });
@@ -515,21 +515,21 @@ namespace CloudPOS.Migrations
 
             modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>
                 {
+                    b.HasOne("CloudPOS.Models.Entities.BrandEntity", "Brands")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CloudPOS.Models.Entities.CategoryEntity", "Categories")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CloudPOS.Models.Entities.PhoneModelEntity", "PhoneModels")
-                        .WithMany()
-                        .HasForeignKey("PhoneModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Brands");
 
                     b.Navigation("Categories");
-
-                    b.Navigation("PhoneModels");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.SaleItemEntity", b =>

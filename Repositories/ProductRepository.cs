@@ -1,66 +1,51 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : BaseRepository<ProductEntity>, IProductRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        #region Constructor
-        public ProductRepository(ApplicationDbContext applicationDbContext)
+        public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _applicationDbContext = applicationDbContext;
+            this._dbContext = dbContext;
         }
 
-        #region Create
-        public void Create(ProductViewModel productViewModel)
+        public ProductEntity FindById(string productId)
         {
-            ProductEntity productEntity = new ProductEntity() { 
-                Id = Guid.NewGuid().ToString(),
-                Name= productViewModel.Name,
-                SerialNumber = productViewModel.SerialNumber,
-                IMEINumber = productViewModel.IMEINumber,
-                SalePrice = productViewModel.SalePrice,
-                CostPrice = productViewModel.CostPrice,
-                IsActive = true,
-                Quantity = 1,
-                CategoryId = productViewModel.CategoryId,
-                PhoneModelId = productViewModel.PhoneModelId,
-                
-            };
-            _applicationDbContext.Products.Add(productEntity);
-            _applicationDbContext.SaveChanges();
+            return _dbContext.Products.FirstOrDefault(product => product.Id == productId);
         }
 
-        #region Delete
-        public void Delete(string Id)
+        public string GetNextProductCode()
         {
-            var existingProduct = _applicationDbContext.Products.Where(w => w.Id == Id).SingleOrDefault();
-            if (existingProduct != null) {
-                _applicationDbContext.Remove(existingProduct);
-                _applicationDbContext.SaveChanges();
-            }
+           var lastProduct = _dbContext.Products.OrderByDescending(product => product.ProductCode).FirstOrDefault();
+            return lastProduct != null ? lastProduct.ProductCode : null;
         }
 
-        #region GetById
-        public ProductViewModel GetById(string Id)
+        public IEnumerable<ProductViewModel> GetProductByCategory(string categoryId)
         {
-            var products = _applicationDbContext.Products.Where(w => w.Id == Id)
-                                                         .Select(s => new ProductViewModel
-                                                                    {
-                                                                        Id = s.Id,
-                                                                        Name=s.Name,
-                                                                        SalePrice = s.SalePrice,
-                                                                        CostPrice = s.CostPrice,
-                                                                        IMEINumber = s.IMEINumber,
-                                                                        SerialNumber = s.SerialNumber,
-                                                                        CategoryId = s.CategoryId,
-                                                                        PhoneModelId = s.PhoneModelId
-                                                                    }).SingleOrDefault();
+            return _dbContext.Products.Where(p => p.CategoryId == categoryId).Select(s => new ProductViewModel
+            {
+                Id = s.Id,
+                Name = s.Name
+            }).ToList();
+        }
 
-            return products;
+        public IEnumerable<ProductViewModel> GetProducts()
+        {
+            return _dbContext.Products.Select(p => new ProductViewModel
+            {
+                Id = p.Id,
+                Name = p.Name
+            }).ToList();
+        }
+
+        public bool IsAlreadyExist(string productName, string productCode)
+        {
+            return _dbContext.Products.Where(w => w.ProductCode == productCode && w.Name == productName).Any();
         }
     }
 }

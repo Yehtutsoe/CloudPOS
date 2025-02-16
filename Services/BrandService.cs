@@ -15,7 +15,7 @@ namespace CloudPOS.Services
         }
         public void Create(BrandViewModel modelViewModel)
         {
-            var entity = new PhoneModelEntity()
+            var entity = new BrandEntity()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = modelViewModel.Name,
@@ -62,7 +62,7 @@ namespace CloudPOS.Services
 
         public void Update(BrandViewModel modelViewModel)
         {
-            var entities = new PhoneModelEntity()
+            var entities = new BrandEntity()
             {
                 Id = modelViewModel.Id,
                 Name = modelViewModel.Name,

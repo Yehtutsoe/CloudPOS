@@ -11,10 +11,10 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(SaleItemEntity saleItemEntity)
+        public async Task Create(SaleItemEntity saleItemEntity)
         {
-            _applicationDbContext.SaleItems.Add(saleItemEntity);
-            _applicationDbContext.SaveChanges();
+           await _applicationDbContext.SaleItems.AddAsync(saleItemEntity);
+           await _applicationDbContext.SaveChangesAsync();
         }
 
         public void Delete(string Id)

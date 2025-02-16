@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CloudPOS.Models.Entities
 {
-    [Table("Model")]
-    public class PhoneModelEntity:BaseEntity
+    [Table("Brand")]
+    public class BrandEntity:BaseEntity
     {
       
         [MaxLength(20)]

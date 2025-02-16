@@ -1,4 +1,4 @@
-﻿@model RoleViewModel
+﻿@model IList<RoleViewModel>
 @{
     ViewData["Title"] = "Role Management";
 }
@@ -40,8 +40,9 @@
                         <a href="/role/delete?id=@role.Id" class="btn btn-danger" onclick="return cofirm('Are you sure want to delete this role')"><i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
+                i++;
             }
-        i++;
+
          }
         else
         {

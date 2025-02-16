@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudPOS.Controllers
 {
@@ -62,24 +63,28 @@ namespace CloudPOS.Controllers
                 Text = r.Name
             }).ToList();
             ViewBag.Roles = role;
-            return View();
+            return RedirectToAction("List");
         }
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
-            var users = _userManager.Users.Select(user => new
+            var users = await _userManager.Users.ToListAsync();
+
+            var model = new List<UserListViewModel>();
+            foreach (var user in users)
             {
-                User = user,
-                Roles = _userManager.GetRolesAsync(user).Result
-            }).ToList();
-            var model = users.Select(m => new UserListViewModel
-            {
-                UserId = m.User.Id,
-                UserName = m.User.UserName,
-                Email = m.User.Email,
-                Roles = string.Join(",",m.Roles)
-            }).ToList();
+                var roles = await _userManager.GetRolesAsync(user);
+                model.Add(new UserListViewModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Roles = string.Join(",", roles)
+                });
+            }
+
             return View(model);
         }
+
         public async Task<IActionResult> Delete(string Id)
         {
             if (string.IsNullOrEmpty(Id))
@@ -109,7 +114,7 @@ namespace CloudPOS.Controllers
             if (string.IsNullOrEmpty(id))
             {
                 TempData["ErrorMessage"] = "Invalid user ID.";
-                return RedirectToAction("UserList");
+                return RedirectToAction("List");
             }
 
 
@@ -117,7 +122,7 @@ namespace CloudPOS.Controllers
             if (user == null)
             {
                 TempData["ErrorMessage"] = "User not found.";
-                return RedirectToAction("UserList");
+                return RedirectToAction("List");
             }
 
 

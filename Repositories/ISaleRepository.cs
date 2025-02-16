@@ -7,7 +7,7 @@ namespace CloudPOS.Repositories
         IEnumerable<SaleEntity> GetAll();
         SaleEntity GetById(string Id);
         Task Create(SaleEntity entity);
-        void Delete(SaleEntity entity);
+        Task Delete(SaleEntity entity);
 
     }
 }

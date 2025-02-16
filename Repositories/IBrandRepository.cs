@@ -4,10 +4,10 @@ namespace CloudPOS.Repositories
 {
     public interface IBrandRepository
     {
-        void Create(PhoneModelEntity entity);
-        IEnumerable<PhoneModelEntity> GetById(string Id);
-        IEnumerable<PhoneModelEntity> RetrieveAll();
+        void Create(BrandEntity entity);
+        IEnumerable<BrandEntity> GetById(string Id);
+        IEnumerable<BrandEntity> RetrieveAll();
         void Delete(string Id);
-        void Update(PhoneModelEntity entity);
+        void Update(BrandEntity entity);
     }
 }
