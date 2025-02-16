@@ -70,7 +70,7 @@ namespace CloudPOS.Services
                                                           CostPrice = p.CostPrice,
                                                           SalePrice = p.SalePrice,
                                                           Description = p.Description,
-                                                          
+
                                                       });
             return products;
         }
@@ -79,31 +79,31 @@ namespace CloudPOS.Services
         {
             return _unitOfWork.Products.GetBy(w => w.Id == Id)
                                         .Select(s => new ProductViewModel
-                                            {
-                                                Id = s.Id,
-                                                BrandId= s.BrandId,
-                                                CategoryId = s.CategoryId,
-                                                Description = s.Description,
-                                                ProductCode = s.ProductCode,
-                                                Name = s.Name,
-                                                Quantity = s.Quantity,
-                                                CostPrice = s.CostPrice,
-                                                SalePrice = s.SalePrice,
-                                                
-                                            }).FirstOrDefault();
+                                        {
+                                            Id = s.Id,
+                                            BrandId = s.BrandId,
+                                            CategoryId = s.CategoryId,
+                                            Description = s.Description,
+                                            ProductCode = s.ProductCode,
+                                            Name = s.Name,
+                                            Quantity = s.Quantity,
+                                            CostPrice = s.CostPrice,
+                                            SalePrice = s.SalePrice,
+
+                                        }).FirstOrDefault();
         }
 
         public string GetNextProductCode()
         {
             var lastCode = _unitOfWork.Products.GetNextProductCode();
-            if(lastCode != null)
+            if (lastCode != null)
             {
                 int newCode = int.Parse(lastCode) + 1;
                 return newCode.ToString("D4");
             }
             else
             {
-               return "P001";
+                return "P001";
             }
         }
 
@@ -119,13 +119,13 @@ namespace CloudPOS.Services
 
         public bool IsAlreadyExist(ProductViewModel productViewModel)
         {
-            return _unitOfWork.Products.IsAlreadyExist(productViewModel.ProductCode,productViewModel.Name);
+            return _unitOfWork.Products.IsAlreadyExist(productViewModel.ProductCode, productViewModel.Name);
         }
 
         public void Update(ProductViewModel productViewModel)
         {
             var existingProduct = _unitOfWork.Products.GetBy(p => p.Id == productViewModel.Id).FirstOrDefault();
-            if(existingProduct == null)
+            if (existingProduct == null)
             {
                 throw new Exception("Product not found");
             }

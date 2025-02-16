@@ -21,7 +21,7 @@ namespace CloudPOS.Controllers
         public IActionResult Entry()
         {
             var prodcuts = _saleItemService.GetActiveProduct();
-            _productService.GetAll();
+            _productService.RetrieveAll();
             return View(prodcuts);
         }
         [HttpPost]

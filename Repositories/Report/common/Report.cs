@@ -13,7 +13,7 @@ namespace CloudPOS.Repositories.Report.common
         }
         public IList<ProductReport> GetProductReportBy(string productName, string categoryId, string modelId)
         {
-            var query = _productService.GetAll().AsQueryable();
+            var query = _productService.RetrieveAll().AsQueryable();
 
             // Filter by product name
             if (!string.IsNullOrEmpty(productName))

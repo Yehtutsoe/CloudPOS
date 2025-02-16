@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.ViewModels;
+﻿
+using CloudPOS.Models.ViewModels;
 
 namespace CloudPOS.Services
 {

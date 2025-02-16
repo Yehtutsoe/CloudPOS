@@ -64,7 +64,7 @@ namespace CloudPOS.Controllers
 
         public IActionResult List()
         {
-            return View(_productService.GetAll());
+            return View(_productService.RetrieveAll());
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
