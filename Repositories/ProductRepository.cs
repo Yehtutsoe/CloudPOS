@@ -13,7 +13,6 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        #endregion
 
         #region Create
         public void Create(ProductViewModel productViewModel)
@@ -34,7 +33,6 @@ namespace CloudPOS.Repositories
             _applicationDbContext.Products.Add(productEntity);
             _applicationDbContext.SaveChanges();
         }
-        #endregion
 
         #region Delete
         public void Delete(string Id)
@@ -45,7 +43,6 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.SaveChanges();
             }
         }
-        #endregion
 
         #region GetById
         public ProductViewModel GetById(string Id)
@@ -65,69 +62,5 @@ namespace CloudPOS.Repositories
 
             return products;
         }
-        #endregion
-
-        #region GetForCategoryAndModel
-        public IList<CategoryViewModel> GetCategories()
-        {
-            IList<CategoryViewModel> categories = _applicationDbContext.Categories.Select(s => new CategoryViewModel
-            {
-                Id = s.Id,
-                Name= s.Name + "|" + s.Description
-            }).ToList();
-            
-            return categories;
-        }
-
-        public IList<BrandViewModel> GetPhonesModels()
-        {
-            IList<BrandViewModel> phoneModels = _applicationDbContext.PhoneModels.Select(s => new BrandViewModel
-            {
-                Id = s.Id,
-                Name = s.Name + "|" + s.Brand
-            }).ToList();
-
-            return phoneModels;
-        }
-        #endregion
-
-        #region RetrieveAll
-        public IList<ProductViewModel> RetrieveAll()
-        {
-            IList<ProductViewModel> product =(from p in _applicationDbContext.Products
-                                                join c in _applicationDbContext.Categories
-                                                on p.CategoryId equals c.Id
-                                                join phm in _applicationDbContext.PhoneModels
-                                                on p.PhoneModelId equals phm.Id
-                                                select new  ProductViewModel
-                                                {
-                                                    Id = p.Id,
-                                                    Name = p.Name,
-                                                    CostPrice = p.CostPrice,
-                                                    SalePrice = p.SalePrice,
-                                                    IMEINumber = p.IMEINumber,
-                                                    SerialNumber = p.SerialNumber,
-                                                    CategoryId = p.CategoryId,
-                                                    PhoneModelId = p.PhoneModelId,
-                                                    CategoryInfo = c.Name,
-                                                    PhoneModelInfo = phm.Name,
-                                                    
-
-                                                }).ToList();
-            return product;
-        }
-        #endregion
-
-        #region Update
-        public void Update(ProductEntity productEntity)
-        {
-            var existingEntity = _applicationDbContext.Products.Find(productEntity.Id);
-            if(existingEntity != null)
-            {
-                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(productEntity);
-                _applicationDbContext.SaveChanges();
-            }
-        }
-        #endregion
     }
 }

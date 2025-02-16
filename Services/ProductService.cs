@@ -12,58 +12,6 @@ namespace CloudPOS.Services
         {
             _productRepository = productRepository;
         }
-        public void Create(ProductViewModel productViewModel)
-        {
-            _productRepository.Create(productViewModel);
-        }
 
-        public void Delete(string Id)
-        {
-            _productRepository.Delete(Id);
-        }
-
-        public ProductViewModel GetById(string Id)
-        {
-            var product = _productRepository.GetById(Id);
-            if(product == null)
-            {
-                return null;
-            }
-            product.CategoryViewModels = _productRepository.GetCategories();
-            product.PhoneModelViewModels = _productRepository.GetPhonesModels();
-            return product;
-        }
-
-        public ProductViewModel GetCategoryAndModel()
-        {
-            var products = new ProductViewModel()
-            {
-                CategoryViewModels = _productRepository.GetCategories(),
-                PhoneModelViewModels = _productRepository.GetPhonesModels()
-            };
-            return products;
-        }
-
-        public IList<ProductViewModel> RetrieveAll()
-        {
-            return _productRepository.RetrieveAll();
-        }
-
-        public void Update(ProductViewModel productViewModel)
-        {
-            var entity = new ProductEntity()
-            {
-                Id = productViewModel.Id,
-                Name = productViewModel.Name,
-                CategoryId = productViewModel.CategoryId,
-                PhoneModelId = productViewModel.PhoneModelId,
-                IMEINumber = productViewModel.IMEINumber,
-                SerialNumber = productViewModel.SerialNumber,
-                CostPrice = productViewModel.CostPrice,
-                SalePrice = productViewModel.SalePrice                
-            };
-            entity.IsActive = true;
-            _productRepository.Update(entity);
-        }
     }
 }
