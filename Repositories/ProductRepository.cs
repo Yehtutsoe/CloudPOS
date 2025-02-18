@@ -45,7 +45,7 @@ namespace CloudPOS.Repositories
 
         public bool IsAlreadyExist(string productName, string productCode)
         {
-            return _dbContext.Products.Where(w => w.ProductCode == productCode && w.Name == productName).Any();
+            return _dbContext.Products.Where(w => w.ProductCode != productCode && w.Name == productName).Any();
         }
     }
 }

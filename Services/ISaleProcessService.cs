@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CloudPOS.Services
 {
-    public interface ISaleService
+    public interface ISaleProcessService
     {
         Task CreateSale(SaleViewModel saleViewModel, List<SaleItemViewModel> saleItemViewModels);
         void DeleteSale(string saleId);

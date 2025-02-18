@@ -1,10 +1,20 @@
 ﻿@model BrandViewModel
 @{
-    if (TempData["ErrorViewModel"] != null)
-    {
-        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
-        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
-            @error.Message
+    ViewData["Title"] = "Brand";
+}
+@{
+    var info = ViewData["Info"];
+}
+@if(info != null)
+{
+    if(Convert.ToBoolean(ViewData["Status"])){
+        <div class="alert alert-success">
+            @info
+        </div>
+    }
+    else{
+        <div class="alert alert-danger">
+            @info
         </div>
     }
 }
@@ -12,20 +22,26 @@
 <form action="/brand/update" method="post">
     <input type="text" name="Id" value="@Model.Id" class="form-control" hidden />
     <div class="col-6 mb-3">
+        <label for="Code" class="form-label">Code</label>
+        <input type="text" name="Code" value="@Model.Code" class="form-control" required />
+    </div>
+    <div class="col-6 mb-3">
         <label for="Name" class="form-label">Name</label>
-        <input type="text" name="Name" value="@Model.Name" class="form-control" placeholder="Enter Model Name" required />
+        <input type="text" name="Name" value="@Model.Name" class="form-control"  required />
     </div>
     <div class="col-6 mb-3">
-        <label for="Brand" class="form-label">Brand</label>
-        <input type="text" name="Brand" value="@Model.Brand" class="form-control" placeholder="Enter Brand" required />
-    </div>
-    <div class="col-6 mb-3">
-        <label for="Specification" class="form-label">Specification</label>
-        <input type="text" name="Specification" value="@Model.Specification" class="form-control" placeholder="Enter Specification" required />
-    </div>
-    <div class="col-6 mb-3">
-        <label for="ReleaseDate" class="form-label">Release Date</label>
-        <input type="date" name="ReleaseDate" value="@Model.ReleaseDate?.ToString("yyyy-MM-dd")" class="form-control" placeholder="Enter Date" />
+        <label class="form-label">Category</label>
+        <select class="form-select" name="CategoryId">
+            @foreach (var Category in ViewBag.Categories)
+                @if (Category.Id == Model.CategoryId)
+                {
+                    <option value="@Category.Id" selected>@Category.Code</option>
+                }
+                else
+                {
+                    <option value="@Category.Id">@Category.Code</option>
+                }
+        </select>
     </div>
     <button type="submit" class="btn btn-success"><i class="fa-solid fa-pencil"></i>Update</button>
     <a href="/brand/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>

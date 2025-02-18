@@ -3,6 +3,7 @@ using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories;
 using CloudPOS.UnitOfWork;
 
+
 namespace CloudPOS.Services
 {
     public class BrandService : IBrandService
@@ -17,13 +18,12 @@ namespace CloudPOS.Services
         {
             var entity = new BrandEntity()
             {
-                Id = brandViewModel.Id,
+                Id = Guid.NewGuid().ToString(),
                 Name = brandViewModel.Name,
                 CreatedAt = DateTime.Now,
                 IsActive = true,
-                ReleaseDate = brandViewModel.ReleaseDate,
-                Specification = brandViewModel.Specification,
-                
+                Code = brandViewModel.Code,
+                CategoryId = brandViewModel.CategoryId   
             };
             _unitOfWork.Brands.Create(entity);
             _unitOfWork.Commit();
@@ -49,37 +49,76 @@ namespace CloudPOS.Services
 
         public IEnumerable<BrandViewModel> GetAll()
         {
-            throw new NotImplementedException();
+            var brands = (from b in _unitOfWork.Brands.GetAll()
+                          join c in _unitOfWork.Categorys.GetAll()
+                          on b.CategoryId equals c.Id
+                          select new BrandViewModel 
+                          { 
+                             Id = b.Id,
+                             CategoryId = b.Id,
+                             Name = b.Name,
+                             Code = b.Code,
+                             CategoryName = c.Name
+
+                          }).ToList();
+            return brands;
         }
 
         public IEnumerable<BrandViewModel> GetBrands()
         {
-            throw new NotImplementedException();
+            return _unitOfWork.Brands.GetBrands();
         }
 
         public IEnumerable<BrandViewModel> GetBrandsByCategory(string categoryId)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.Brands.GetBrandByCategory(categoryId);
         }
 
         public BrandViewModel GetById(string id)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.Brands.GetBy(w => w.Id == id).Select(s => new BrandViewModel
+            {
+                Id = s.Id,
+                CategoryId = s.CategoryId,
+                Code = s.Code,
+                Name = s.Name,
+                
+            }).FirstOrDefault();
         }
 
         public string GetLastBrandCode()
         {
-            throw new NotImplementedException();
+            var lastCode = _unitOfWork.Brands.GetLastBrandCode();
+            
+            if (lastCode != null)
+            {
+                int newCode = int.Parse(lastCode) + 1;
+                return newCode.ToString("D4");
+            }
+            else
+            {
+                return "C001";
+            }
         }
 
         public bool IsAlreadyExist(BrandViewModel brandViewModel)
         {
-            throw new NotImplementedException();
+            return _unitOfWork.Brands.IsAlreadyExist(brandViewModel.Code,brandViewModel.Name);
         }
 
         public void Update(BrandViewModel brandViewModel)
         {
-            throw new NotImplementedException();
+            BrandEntity entity = new BrandEntity()
+            {
+                Id = brandViewModel.Id,
+                Code = brandViewModel.Code,
+                Name = brandViewModel.Name,
+                CategoryId = brandViewModel.CategoryId,
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            };
+            _unitOfWork.Brands.Update(entity);
+            _unitOfWork.Commit();
         }
     }
 }

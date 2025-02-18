@@ -6,16 +6,12 @@ namespace CloudPOS.Models.Entities
     [Table("Brand")]
     public class BrandEntity:BaseEntity
     {
-      
+        public string Code { get; set; }
         [MaxLength(20)]
         public string Name { get; set; }
-       
-        [MaxLength(25)]
-        public string Brand { get; set; }
-        
-        [MaxLength(50)]
-        public string? Specification { get; set; }
-        [MaxLength(15)]
-        public DateTime? ReleaseDate { get; set; }
+
+        public string CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public virtual CategoryEntity Categorys { get; set; }
     }
 }

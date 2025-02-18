@@ -21,7 +21,7 @@ namespace CloudPOS.Controllers
         public IActionResult Entry()
         {
             var prodcuts = _saleItemService.GetActiveProduct();
-            _productService.RetrieveAll();
+            _productService.GetAll();
             return View(prodcuts);
         }
         [HttpPost]
@@ -74,14 +74,14 @@ namespace CloudPOS.Controllers
             return View(cart);
         }
         [HttpPost]
-        public IActionResult Paid(SaleViewModel sale)
+        public IActionResult Paid(SaleViewModel sale,List<SaleItemViewModel> saleItem)
         {
             try
             {
                 var cart = SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart");
                 foreach (var saleItems in cart)
                 {
-                    _saleService.Create(sale, saleItems);
+                    _saleService.CreateSale(sale,saleItem);
                 }
                 SessionHelper.ClearSession(HttpContext.Session);
             }
@@ -105,13 +105,13 @@ namespace CloudPOS.Controllers
         }
         public IActionResult List()
         {
-            var sale = _saleService.GetAll();
+            var sale = _saleService.GetAllSales();
             return View(sale);
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
         {
-            _saleService.Delete(Id);
+            _saleService.DeleteSale(Id);
             return Json(new {success = true});
         }
         

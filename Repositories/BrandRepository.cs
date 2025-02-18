@@ -1,45 +1,47 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
+using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories
 {
-    public class BrandRepository : IBrandRepository
+    public class BrandRepository : BaseRepository<BrandEntity>, IBrandRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public BrandRepository(ApplicationDbContext applicationDbContext)
+        public BrandRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _applicationDbContext = applicationDbContext;
+            this._dbContext = dbContext;
         }
 
-        public void Delete(string Id)
+        public IEnumerable<BrandViewModel> GetBrandByCategory(string CategoryId)
         {
-            var entity = _applicationDbContext.PhoneModels.Find(Id);
-            if(entity != null)
+            return _dbContext.Brands.Where(w => w.CategoryId == CategoryId)
+                                    .Select(s => new BrandViewModel
+                                            {
+                                                Id = s.Id,
+                                                Name = s.Name
+                                            }).ToList();
+        }
+
+        public IEnumerable<BrandViewModel> GetBrands()
+        {
+            return _dbContext.Brands.Select(s => new BrandViewModel
             {
-                _applicationDbContext.PhoneModels.Remove(entity);
-                _applicationDbContext.SaveChanges();
-            }
-
-        public IEnumerable<BrandEntity> GetById(string Id)
-        {
-            return _applicationDbContext.PhoneModels.Where(w => w.Id == Id).ToList();
+                Id = s.Id,
+                Name = s.Name
+            }).ToList();
         }
 
-        public IEnumerable<BrandEntity> RetrieveAll()
+        public string GetLastBrandCode()
         {
-
-            return _applicationDbContext.PhoneModels.ToList();
+            var lastBrand = _dbContext.Brands.OrderByDescending(s => s.Code).FirstOrDefault();
+            return lastBrand != null ? lastBrand.Code : null;
         }
 
-        public void Update(BrandEntity entity)
+        public bool IsAlreadyExist(string Code, string Name)
         {
-            var existingEntity = _applicationDbContext.PhoneModels.Find(entity.Id);
-            if(existingEntity != null)
-            {
-                _applicationDbContext.PhoneModels.Entry(existingEntity).CurrentValues.SetValues(entity);
-                _applicationDbContext.SaveChanges();
-            }
+            return _dbContext.Brands.Where(w => w.Name == Name && w.Code != Code).Any();
         }
     }
 }

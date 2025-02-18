@@ -1,5 +1,5 @@
 ﻿
-@model IList<BrandViewModel>
+@model IEnumerable<BrandViewModel>
 
 <h2>Model List Information</h2>
 <div class="mb-3">
@@ -10,29 +10,34 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">No</th>
+            <th scope="col">Code</th>
             <th scope="col">Name</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Specification</th>
-            <th scope="col">Release Date</th>
+            <th scope="col">Category</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
-    @{
-        int i = 1;
-        @foreach (var data in Model)
+
+    <tbody>
+        @if(Model.Any()){
+            int i = 1;
+            @foreach (var data in Model)
         {
             <tr>
                 <td scope="row">@i</td>
+                <td>@data.Code</td>
                 <td>@data.Name</td>
-                <td>@data.Brand</td>
-                <td>@data.Specification</td>
-                <td>@data.ReleaseDate?.ToString("dd-MM-yyyy")</td>
+                <td>@data.CategoryName</td>
                 <td>
                     <a href="/brand/Edit?id=@data.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
                     <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/brand/Delete?id=@data.Id" data-name="@data.Name"><i class="fa-solid fa-trash"></i></a>
                 </td>
             </tr>
             i++;
+        }
+        }else{
+            <tr>
+                <td colspan="5" class="text-center">There is no data to Display</td>
+            </tr>
         }
     </tbody>
 </table>

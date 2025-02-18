@@ -23,7 +23,17 @@ namespace CloudPOS.Controllers
         [Authorize(Roles ="Admin")]
         public IActionResult Entry()
         {
-            return View();
+            string nextCode = _categoryService.GetNextCategoryCode();
+            var category = new CategoryViewModel()
+            {
+               Code = nextCode,
+               Name = string.Empty,
+               Description = string.Empty,
+
+            };
+            ViewData["Info"] = null;
+            ViewData["Status"] = null;
+            return View(category);
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -31,34 +41,25 @@ namespace CloudPOS.Controllers
 
             try
             {
-                if (!ModelState.IsValid)
+                var isAlreadyExist = _categoryService.IsAlreadyExist(ui);
+                if (isAlreadyExist)
                 {
-                    _categoryService.Create(ui);
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Successfully save the record to the system",
-                        IsOccurError = false
-                    });
+                    ViewData["Info"] = "Already exist this category";
+                    ViewData["Status"] = false;
+                    return View(ui);
                 }
-                else
-                {
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Error occour, can not save to the system",
-                        IsOccurError = true
-                    });
-                }
-            }
-            catch (Exception ex)
+                _categoryService.Create(ui);
+                ViewData["Info"] = "Successful save the record";
+                ViewData["Status"] = true;
+                return RedirectToAction("List");
+    }
+            catch (Exception e)
             {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                });
-                
-            }
-           
+
+                ViewData["Info"] = "Unsuccessful the recode to save";
+                ViewData["Status"] = false;
+            };
+
             return RedirectToAction("List");
         }
 
@@ -67,7 +68,7 @@ namespace CloudPOS.Controllers
         #region Retrieve
         public IActionResult List()
         {
-            return View(_categoryService.RetrieveAll());
+            return View(_categoryService.GetAll());
         }
         #endregion
 
@@ -85,21 +86,14 @@ namespace CloudPOS.Controllers
         {
             try
             {
-                    _categoryService.Delete(Id);
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Successfully delete the record from the system",
-                        IsOccurError = false
-                    });
+                _categoryService.Delete(Id);
+                ViewData["Info"] = "Deleted the record";
+                ViewData["Status"] = true;
             }
             catch (Exception ex)
             {
-
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                });
+                ViewData["Info"] = "Error occour to Delete the record";
+                ViewData["Status"] = true;
             }
             return RedirectToAction("List");
         }
@@ -123,19 +117,13 @@ namespace CloudPOS.Controllers
             try
             {
                 _categoryService.Update(ui);
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = "Successful update to the system",
-                    IsOccurError = false
-                });
+                ViewData["Info"] = "Update the successfully";
+                ViewData["Status"] = true;
             }
             catch (Exception ex)
             {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                });
+                ViewData["Info"] = "error occour to update the record" + ex.Message;
+                ViewData["Status"] = false;
             }
             return RedirectToAction("List");
         }

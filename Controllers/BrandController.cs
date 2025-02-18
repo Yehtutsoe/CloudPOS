@@ -8,12 +8,14 @@ namespace CloudPOS.Controllers
 {
     public class BrandController : Controller
     {
-        private readonly IBrandService _modelService;
+        private readonly IBrandService _brandService;
+        private readonly ICategoryService _categoryService;
 
         #region Constructor
-        public BrandController(IBrandService modelService)
+        public BrandController(IBrandService modelService,ICategoryService categoryService)
         {
-            _modelService = modelService;
+            _brandService = modelService;
+            _categoryService = categoryService;
         }
         #endregion
 
@@ -21,40 +23,44 @@ namespace CloudPOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Entry()
         {
-            return View();
+            var nextCode = _brandService.GetLastBrandCode();
+            var brand = new BrandViewModel()
+            {
+                Code = nextCode,
+                Name = string.Empty,
+                CategoryId = string.Empty
+            };
+            BindCategory();
+            return View(brand);
+        }
+
+        private void BindCategory()
+        {
+           var categorys = _categoryService.GetCategories();
+            ViewBag.Categorys = categorys;
         }
     
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Entry(BrandViewModel modelViewModel)
+        public IActionResult Entry(BrandViewModel brandViewModel)
         {
             try
             {
-                if (!ModelState.IsValid)
+                var isExist = _brandService.IsAlreadyExist(brandViewModel);
+                if (isExist)
                 {
-                    _modelService.Create(modelViewModel);
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Successful save the record to the system",
-                        IsOccurError = false
-                    });
+                    ViewData["Info"] = "This Brand Name is already exist";
+                    ViewData["Status"] = false;
+                    return View(brandViewModel);
                 }
-                else
-                {
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Error Occour, can not save the record",
-                        IsOccurError = true
-                    });
-                }
+                _brandService.Create(brandViewModel);
+                ViewData["Info"] = "Create successfully";
+                ViewData["Status"] = true;
             }
             catch(Exception ex)
             {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                });
+                ViewData["Info"] = "This Brand is not saved to system" + ex.Message;
+                ViewData["Status"] = false;
             }
             
             return RedirectToAction("List");
@@ -64,7 +70,7 @@ namespace CloudPOS.Controllers
         #region Retrieve
         public IActionResult List()
         {
-            return View(_modelService.RetrieveAll());
+            return View(_brandService.GetAll());
         }
         #endregion
 
@@ -72,7 +78,7 @@ namespace CloudPOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
-            return View(_modelService.GetById(Id));
+            return View(_brandService.GetById(Id));
         }
         #endregion
 
@@ -81,29 +87,15 @@ namespace CloudPOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Update(BrandViewModel model) {
 
-                if (!ModelState.IsValid)
-                {
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Successful update the record to the system",
-                        IsOccurError = true
-                    });
-                }
                 try {
-                    _modelService.Update(model);
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Successful update the record to the system",
-                        IsOccurError = false
-                    });
+                    _brandService.Update(model);
+                ViewData["Info"] = "Successfully update the data";
+                ViewData["Status"] = true;
                 }
                 catch (Exception ex)
                 {
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = $"Error : {ex.Message}",
-                        IsOccurError = true
-                    });
+                ViewData["Info"] = "Can not update the data" + ex.Message;
+                ViewData["Status"] = false;
                 }
             return RedirectToAction("List");
         }
@@ -115,20 +107,14 @@ namespace CloudPOS.Controllers
         {
             try
             {
-                    _modelService.Delete(Id);
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Successful delete the record to the system",
-                        IsOccurError = false
-                    });
+                    _brandService.Delete(Id);
+                ViewData["Info"] = "Deleted the record";
+                ViewData["Status"] = true;
             }
             catch (Exception ex)
             {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                });
+                ViewData["Info"] = "Can not Delete the record";
+                ViewData["Status"] = false;
             }
             return RedirectToAction("List");
         }

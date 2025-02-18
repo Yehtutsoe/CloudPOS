@@ -1,7 +1,7 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.UnitOfWork;
-using NuGet.Protocol.Plugins;
+
 
 namespace CloudPOS.Services
 {
@@ -54,9 +54,9 @@ namespace CloudPOS.Services
         public IEnumerable<ProductViewModel> GetAll()
         {
             IEnumerable<ProductViewModel> products = (from p in _unitOfWork.Products.GetAll()
-                                                      join b in _unitOfWork.Brands.RetrieveAll()
+                                                      join b in _unitOfWork.Brands.GetAll()
                                                       on p.BrandId equals b.Id
-                                                      join c in _unitOfWork.Categorys.RetrieveAll()
+                                                      join c in _unitOfWork.Categorys.GetAll()
                                                       on p.CategoryId equals c.Id
                                                       select new ProductViewModel
                                                       {

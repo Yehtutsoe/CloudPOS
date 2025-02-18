@@ -1,4 +1,4 @@
-using CloudPOS.Models.ViewModels;
+﻿using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Report.common;
 using CloudPOS.Repositories.Report.ReportDataSet;
 using CloudPOS.Services;
@@ -22,16 +22,76 @@ namespace CloudPOS.Controllers
             _brandService = modelService;
             _report = report;
         }
+        [HttpGet]
+        public ActionResult GetBrand(string CategoryId)
+        {
+            var brands = _brandService.GetBrandsByCategory(CategoryId);
+            return Json(brands);
+        }
         [Authorize(Roles = "Admin")]
         public IActionResult Entry()
         {
-            return View();
+            string nextCode = _productService.GetNextProductCode();
+            var productViewModel = new ProductViewModel
+            {
+                ProductCode = nextCode,
+                Name =string.Empty,
+                CategoryId =string.Empty,
+                BrandId =string.Empty,
+                CostPrice = 0.00m,
+                SalePrice = 0.00m,
+                Description =string.Empty,
+                Quantity = 0,
+                BrandInfo = string.Empty,
+                CategoryInfo = string.Empty
+            };
+            BindBrandData();
+            BindCategroyData();
+            return View(productViewModel);
         }
+        private void BindBrandData()
+        {
+           var brands = _brandService.GetBrands();
+            ViewBag.Brands = brands;
+        }
+        private void BindCategroyData()
+        {
+            var category = _categoryService.GetCategories();
+            ViewBag.Categories = category;
+        }
+        [HttpPost]
+        [Authorize(Roles ="Admin")]
+        public IActionResult Entry(ProductViewModel productViewModel)
+        {
+            try
+            {
+                var alreadyExist = _productService.IsAlreadyExist(productViewModel);
+                if (alreadyExist)
+                {
+                    ViewData["Info"] = "Product is Already exist in Database";
+                    ViewData["Status"] = false;
+                    BindBrandData();
+                    BindCategroyData();
+                    return View(productViewModel);
+                }
+                _productService.Create(productViewModel);
+                ViewData["Info"] = "Successfull save the record";
+                ViewData["Status"] = true;
+            }
+            catch (Exception e)
+            {
 
+                ViewData["Info"] = "Error occour when saving the data" + e.Message;
+                ViewData["Status"] = false;
+            }
+            BindBrandData();
+            BindCategroyData();
+            return RedirectToAction("List");
+        }
         public IActionResult Report()
         {
-            ViewBag.Category = _categoryService.RetrieveAll();
-            ViewBag.PhoneModel = _brandService.RetrieveAll();
+            ViewBag.Category = _categoryService.GetAll();
+            ViewBag.PhoneModel = _brandService.GetAll();
             return View();
         }
         [HttpPost]
@@ -51,10 +111,58 @@ namespace CloudPOS.Controllers
             else
             {
                 ViewBag.Info = "There is no data to export";
-                ViewBag.Category = _categoryService.RetrieveAll();
-                ViewBag.PhoneModel = _brandService.RetrieveAll();
+                ViewBag.Category = _categoryService.GetAll();
+                ViewBag.PhoneModel = _brandService.GetAll();
                 return View();
             }
+        }
+        public IActionResult List()
+        {
+            var products = _productService.GetAll();
+            return View(products);
+        }
+        [Authorize(Roles ="Admin")]
+        public IActionResult Edit(string Id)
+        {
+            var itemView = _productService.GetById(Id);
+            BindBrandData();
+            BindCategroyData();
+            return View(itemView);
+        }
+        [HttpPost]
+        [Authorize(Roles ="Admin")]
+        public IActionResult Update(ProductViewModel productViewModel)
+        {
+            try
+            {
+                _productService.Update(productViewModel);
+                TempData["Info"] = "Successfully update the data ";
+                TempData["Status"] = true;
+            }
+            catch (Exception e)
+            {
+
+                TempData["Info"] = "Error occour when update the data " + e.Message;
+                TempData["Status"] = false;
+            }
+            return RedirectToAction("List");
+        }
+        [Authorize(Roles ="Admin")]
+        public IActionResult Delete(string Id)
+        {
+            try
+            {
+                _productService.Delete(Id);
+                TempData["Info"] = "Successfully delete the data";
+                TempData["Status"] = true;
+            }
+            catch (Exception e)
+            {
+
+                TempData["Info"] = "Error occour when delete the data";
+                TempData["Satatus"] = false;
+            }
+            return RedirectToAction("List");
         }
     }
 }

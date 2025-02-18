@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CloudPOS.Services
 {
-    public class SaleService : ISaleService
+    public class SaleService : ISaleProcessService
     {
         private readonly IUnitOfWork _unitOfWork;
 

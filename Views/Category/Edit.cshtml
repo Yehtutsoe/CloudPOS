@@ -1,10 +1,23 @@
 ﻿@model CategoryViewModel
 @{
-    if (TempData["ErrorViewModel"] != null)
+    ViewData["Title"] = "Category";
+}
+<h3>Category Edit</h3>
+@{
+    var info = TempData["info"];
+}
+@if (info != null)
+{
+    if (Convert.ToBoolean(TempData["status"]))
     {
-        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
-        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
-            @error.Message
+        <div class="alert alert-success" role="alert">
+            @info
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @info
         </div>
     }
 }
@@ -12,6 +25,10 @@
 <form action="/category/update" method="post">
     <div class="mb-3 col-6">
         <input type="text" name="Id" value="@Model.Id" class="form-control" hidden />
+    </div>
+    <div class="mb-3 col-6">
+        <label for="Name" class="form-label">Name</label>
+        <input type="text" name="Name" value="@Model.Code" class="form-control"/>
     </div>
     <div class="mb-3 col-6">
         <label for="Name" class="form-label">Name</label>

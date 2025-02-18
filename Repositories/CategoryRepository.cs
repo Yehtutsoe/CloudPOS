@@ -1,47 +1,38 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
-using Humanizer;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : BaseRepository<CategoryEntity>, ICategoryRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public CategoryRepository(ApplicationDbContext applicationDbContext)
+        public CategoryRepository(ApplicationDbContext dbContext):base(dbContext) 
         {
-            _applicationDbContext = applicationDbContext;
+            this._dbContext = dbContext;
         }
 
-        }
-
-        public void Delete(string Id)
+        public IEnumerable<CategoryViewModel> GetCategorys()
         {
-            var entity = _applicationDbContext.Categories.Find(Id);
-            if(entity != null)
+            return _dbContext.Categories.Select(c => new CategoryViewModel()
             {
-                _applicationDbContext.Categories.Remove(entity);
-                _applicationDbContext.SaveChanges();
-            }
+                Id = c.Id,
+                Name = c.Name,
+            }).ToList();
+            
         }
 
-        }
-
-        public IEnumerable<CategoryEntity> RetrieveAll()
+        public string GetLastCategoryCode()
         {
-            return _applicationDbContext.Categories.ToList();
+            var lastCode = _dbContext.Categories.OrderByDescending(c => c.Code).FirstOrDefault();
+            return lastCode != null ? lastCode.Code : null;
         }
 
-        public void Update(CategoryEntity categoryEntity)
+        public bool IsAlreadyExist(string Code, string Name)
         {
-            var existingEntity = _applicationDbContext.Categories.Find(categoryEntity.Id);
-            if(existingEntity != null)
-            {
-                _applicationDbContext.Entry(existingEntity).CurrentValues.SetValues(categoryEntity);
-                _applicationDbContext.SaveChanges();
-            }
-
+            return _dbContext.Categories.Where(w => w.Code != Code && w.Name == Name).Any();
         }
     }
 }
