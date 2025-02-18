@@ -52,7 +52,7 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<ISupplierService, SupplierService>();
 builder.Services.AddTransient<IStockIncomeService, StockIncomeService>();
 builder.Services.AddScoped<IStockIncomeRepository, StockIncomeRepository>();
-builder.Services.AddTransient<ISaleProcessService, SaleProcessService>();
+builder.Services.AddTransient<ISaleProcessService,SaleService>();
 builder.Services.AddScoped<ISaleRepository, SaleRepository>();
 builder.Services.AddTransient<ISaleItemService, SaleItemService>();
 builder.Services.AddScoped<ISaleItemRepository, SaleItemRepository>();

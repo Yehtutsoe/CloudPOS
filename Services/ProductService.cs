@@ -22,6 +22,7 @@ namespace CloudPOS.Services
                 Name = productViewModel.Name,
                 ProductCode = productViewModel.ProductCode,
                 CostPrice = productViewModel.CostPrice,
+                DiscountPrice = productViewModel.DiscountPrice,
                 SalePrice = productViewModel.SalePrice,
                 BrandId = productViewModel.BrandId,
                 CategoryId = productViewModel.CategoryId,
@@ -66,10 +67,12 @@ namespace CloudPOS.Services
                                                           CategoryId = c.Id,
                                                           BrandId = b.Id,
                                                           Quantity = p.Quantity,
+                                                          DiscountPrice = p.DiscountPrice,
                                                           CostPrice = p.CostPrice,
                                                           SalePrice = p.SalePrice,
                                                           Description = p.Description,
-
+                                                          CategoryInfo = c.Name,
+                                                          BrandInfo = b.Name
                                                       });
             return products;
         }
@@ -88,6 +91,7 @@ namespace CloudPOS.Services
                                             Quantity = s.Quantity,
                                             CostPrice = s.CostPrice,
                                             SalePrice = s.SalePrice,
+                                            DiscountPrice = s.DiscountPrice
 
                                         }).FirstOrDefault();
         }
@@ -133,6 +137,7 @@ namespace CloudPOS.Services
             existingProduct.ProductCode = productViewModel.ProductCode;
             existingProduct.CostPrice = productViewModel.CostPrice;
             existingProduct.SalePrice = productViewModel.SalePrice;
+            existingProduct.DiscountPrice = productViewModel.DiscountPrice;
             existingProduct.BrandId = productViewModel.BrandId;
             existingProduct.CategoryId = productViewModel.CategoryId;
             existingProduct.CreatedAt = DateTime.Now;

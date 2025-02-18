@@ -15,6 +15,7 @@ namespace CloudPOS.UnitOfWork
         public ICategoryRepository Categorys { get; }
 
         public IBrandRepository Brands { get; }
+        public ISupplierRepository Suppliers { get; set; }
 
         public UnitOfWork(ApplicationDbContext context,
                           IProductRepository productRepository,
@@ -22,7 +23,8 @@ namespace CloudPOS.UnitOfWork
                           ISaleItemRepository saleItemRepository,
                           IStockIncomeRepository stockIncomeRepository,
                           ICategoryRepository categoryRepository,
-                          IBrandRepository brands)
+                          IBrandRepository brands,
+                          ISupplierRepository suppliers)
         {
             _context = context;
             Products = productRepository;
@@ -31,6 +33,7 @@ namespace CloudPOS.UnitOfWork
             StockIncomes = stockIncomeRepository;
             Categorys = categoryRepository;
             Brands = brands;
+            Suppliers = suppliers;
         }
 
         public int Commit()

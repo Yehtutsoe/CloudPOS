@@ -13,7 +13,7 @@ namespace CloudPOS.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateSale(SaleViewModel saleViewModel, List<SaleItemViewModel> saleItemsViewModel)
+        public void CreateSale(SaleViewModel saleViewModel, List<SaleItemViewModel> saleItemsViewModel)
         {
             var sale = new SaleEntity
             {
@@ -29,7 +29,13 @@ namespace CloudPOS.Services
 
             foreach (var itemViewModel in saleItemsViewModel)
             {
-                var product = _unitOfWork.ProductRepository.GetById(itemViewModel.ProductId);
+                var product = _unitOfWork.Products.GetBy(w => w.Id == itemViewModel.ProductId)
+                                                   .Select(s =>new ProductEntity()
+                                                   {
+                                                       Id = s.Id,
+                                                       Name = s.Name,
+                                                       Quantity = s.Quantity
+                                                   }).SingleOrDefault();
                 if (product == null)
                 {
                     throw new Exception($"Product with ID {itemViewModel.ProductId} not found.");
@@ -40,7 +46,7 @@ namespace CloudPOS.Services
                 }
 
                 product.Quantity -= itemViewModel.Quantity;
-                _unitOfWork.ProductRepository.Update(product);
+                _unitOfWork.Products.Update(product);
 
                 saleItems.Add(new SaleItemEntity
                 {
@@ -53,27 +59,27 @@ namespace CloudPOS.Services
                 });
             }
 
-            await _unitOfWork.SaleRepository.Create(sale);
-            await _unitOfWork.SaleItemRepository.CreateRange(saleItems);
+             _unitOfWork.Sales.Create(sale);
+             _unitOfWork.SaleItems.Create(saleItems);
 
-            await _unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         public void DeleteSale(string saleId)
         {
-            var sale = _unitOfWork.SaleRepository.GetById(saleId);
+            var sale = _unitOfWork.Sales.GetById(saleId);
             if (sale != null)
             {
-                _unitOfWork.SaleRepository.Delete(sale);
+                _unitOfWork.Sales.Delete(sale);
                 _unitOfWork.Commit();
             }
         }
 
         public IList<SaleItemViewModel> GetAllSales()
         {
-            var sales = _unitOfWork.SaleRepository.GetAll();
-            var saleItems = _unitOfWork.SaleItemRepository.RetrieveAll();
-            var products = _unitOfWork.ProductRepository.RetrieveAll();
+            var sales = _unitOfWork.Sales.GetAll();
+            var saleItems = _unitOfWork.SaleItems.RetrieveAll();
+            var products = _unitOfWork.Products.GetAll();
 
             var saleItemViewModels = saleItems.Select(item =>
             {

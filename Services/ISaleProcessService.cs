@@ -6,7 +6,7 @@ namespace CloudPOS.Services
 {
     public interface ISaleProcessService
     {
-        Task CreateSale(SaleViewModel saleViewModel, List<SaleItemViewModel> saleItemViewModels);
+        void CreateSale(SaleViewModel saleViewModel, List<SaleItemViewModel> saleItemViewModels);
         void DeleteSale(string saleId);
         IList<SaleItemViewModel> GetAllSales();
     }

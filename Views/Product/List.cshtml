@@ -1,20 +1,26 @@
-﻿@model IList<ProductViewModel>
+﻿@model IEnumerable<ProductViewModel>
 @{
-    if (TempData["Msg"] != null)
+    ViewData["Title"] = "Product";
+}
+<h3>Item</h3>
+@{
+    var info = ViewData["info"];
+}
+@if (info != null)
+{
+    if (Convert.ToBoolean(ViewData["status"]))
     {
-        if (Convert.ToBoolean(TempData["IsOccourError"]))
-        {
-                <div class="alert alert-danger col-6">
-                    @TempData["Msg"]
-                </div>
-        }
-        else
-        {
-                <div class="alert alert-success col-6">
-                    @TempData["Msg"]
-                </div>
-        }
+        <div class="alert alert-success" role="alert">
+            @info
+        </div>
     }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @info
+        </div>
+    }
+}
 <h2 class="mb-3">Prdouct Information List</h2>
 <div class="mb-3">
     <a href="/product/entry" class="btn btn-primary"><i class="fa fa-plus"></i>Create</a>
@@ -23,13 +29,14 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">No</th>
+            <th scope="col">Code</th>
             <th scope="col">Category</th>
-            <th scope="col">Model</th>
-            <th scope="col">Type</th>
-            <th scope="col">Serial Number</th>
-            <th scope="col">IMEI Number</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
             <th scope="col">Cost Price</th>
             <th scope="col">Sale Price</th>
+            <th scope="col">Disount Price</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -42,15 +49,16 @@
             <tr>
                 <td scope="row">@i</td>
                 <td>@prodcut.CategoryInfo</td>
-                <td>@prodcut.PhoneModelInfo</td>
+                <td>@prodcut.BrandInfo</td>
+                <td>@prodcut.ProductCode</td>
                 <td>@prodcut.Name</td>
-                <td>@prodcut.SerialNumber</td>
-                <td>@prodcut.IMEINumber</td>
+                <td>@prodcut.Quantity</td>
                 <td>@prodcut.CostPrice</td>
                 <td>@prodcut.SalePrice</td>
+                <td>@prodcut.DiscountPrice</td>
                 <td>
                     <a href="/product/edit?id=@prodcut.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@prodcut.Id" data-name="@prodcut.PhoneModelId"><i class="fa-solid fa-trash"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@prodcut.Id" data-name="@prodcut.Name"><i class="fa-solid fa-trash"></i></a>
                 </td>
         </tr>
         i++;

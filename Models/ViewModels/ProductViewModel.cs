@@ -13,6 +13,7 @@ namespace CloudPOS.Models.ViewModels
         public string Description { get; set; }
         [Range(0,double.MaxValue,ErrorMessage = "Sale Price must be positive number")]
         public Decimal SalePrice { get; set; }
+        public Decimal DiscountPrice { get; set; }
         [Range(0, double.MaxValue, ErrorMessage = "Cost Price must be positive number")]
         public int Quantity { get; set; }
         public Decimal CostPrice { get; set; }

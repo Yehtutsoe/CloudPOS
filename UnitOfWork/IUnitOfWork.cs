@@ -10,6 +10,7 @@ namespace CloudPOS.UnitOfWork
         ISaleRepository Sales { get; }
         ISaleItemRepository SaleItems { get; }
         IStockIncomeRepository StockIncomes { get; }
+        ISupplierRepository Suppliers { get; }
         int Commit(); // Save changes to the databases
     }
 }

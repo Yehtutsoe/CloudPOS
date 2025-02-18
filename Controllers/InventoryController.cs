@@ -21,7 +21,7 @@ namespace CloudPOS.Controllers
                 Id = s.Id,
                 Quantity = s.Quantity,
                 CreateAt = s.CreatedAt,
-                ProductInfo = _productRepository.GetById(s.ProductId).Name
+                
             }).ToList();
             return View(inventoryBalance);
         }

@@ -32,9 +32,9 @@
         <label for="PhoneModel" class="form-label">Model</label>
         <select name="PhoneModelId" id="PhoneModel" class="form-select">
             
-            @foreach(var phoneModel in Model.PhoneModelViewModels)
+            @foreach(var phoneModel in Model.BrandViewModels)
             {
-                if(phoneModel.Id == Model.PhoneModelId)
+                if(phoneModel.Id == Model.BrandId)
                 {
                     <option value="@phoneModel.Id" selected>@phoneModel.Name</option>
                 }
@@ -52,11 +52,11 @@
 
     <div class="mb-3">
         <label class="form-label" for="SerialNumber">SerialNumber</label>
-        <input type="text" name="SerialNumber" value="@Model.SerialNumber" class="form-control"/>
+        <input type="text" name="SerialNumber" value="" class="form-control"/>
     </div>
     <div class="mb-3">
         <label class="form-label" for="IMEINumber">IMEI Number</label>
-        <input type="text" name="IMEINumber" value="@Model.IMEINumber" class="form-control" />
+        <input type="text" name="IMEINumber" value="" class="form-control" />
     </div>
     <div class="mb-3">
         <label class="form-label" for="CostPrice">CostPrice</label>

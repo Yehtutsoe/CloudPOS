@@ -13,7 +13,7 @@ namespace CloudPOS.Repositories.Report.common
         }
         public IList<ProductReport> GetProductReportBy(string productName, string categoryId, string modelId)
         {
-            var query = _productService.RetrieveAll().AsQueryable();
+            var query = _productService.GetAll().AsQueryable();
 
             // Filter by product name
             if (!string.IsNullOrEmpty(productName))
@@ -28,7 +28,7 @@ namespace CloudPOS.Repositories.Report.common
             }
             if (!string.IsNullOrEmpty(modelId) && modelId != "a")
             {
-                query = query.Where(w => w.PhoneModelId.Trim() == modelId.Trim());
+                query = query.Where(w => w.BrandId.Trim() == modelId.Trim());
             }
 
             var products = query.Select(s => new ProductReport
@@ -37,9 +37,10 @@ namespace CloudPOS.Repositories.Report.common
                 CostPrice = s.CostPrice,
                 Quantity = s.Quantity,
                 SalePrice = s.SalePrice,
-                IMEINumber = s.IMEINumber,
-                SerialNumber = s.SerialNumber,
-                ModelInfo = s.PhoneModelInfo,
+                Description= s.Description,
+                ProductCode = s.ProductCode,
+                TotalAmount = s.SalePrice,
+                BrandInfo = s.BrandInfo,
                 CategoryInfo = s.CategoryInfo,
                 ReportedAt = DateTime.Now
             }).ToList();

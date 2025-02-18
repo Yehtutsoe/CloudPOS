@@ -1,44 +1,45 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories
 {
-    public class SaleItemRepository : ISaleItemRepository
+    public class SaleItemRepository :BaseRepository<SaleItemEntity>, ISaleItemRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public SaleItemRepository(ApplicationDbContext applicationDbContext)
+        public SaleItemRepository(ApplicationDbContext dbContext):base(dbContext)
         {
-            _applicationDbContext = applicationDbContext;
+            _dbContext = dbContext;
         }
-        public async Task Create(SaleItemEntity saleItemEntity)
+        public void Create(IList<SaleItemEntity> saleItemEntity)
         {
-           await _applicationDbContext.SaleItems.AddAsync(saleItemEntity);
-           await _applicationDbContext.SaveChangesAsync();
+           _dbContext.SaleItems.Add((SaleItemEntity)saleItemEntity);
+           _dbContext.SaveChanges();
         }
 
         public void Delete(string Id)
         {
-           var existingEntity =  _applicationDbContext.SaleItems.Select(s=> s.Id).FirstOrDefault();
+           var existingEntity =  _dbContext.SaleItems.Select(s=> s.Id).FirstOrDefault();
             if (existingEntity != null) {
-                _applicationDbContext.Remove(existingEntity);
-                _applicationDbContext.SaveChanges();
+                _dbContext.Remove(existingEntity);
+                _dbContext.SaveChanges();
             }
         }
 
         public IEnumerable<SaleItemEntity> GetById(string Id)
         {
-            return _applicationDbContext.SaleItems.Where(s => s.SaleId == Id).ToList();
+            return _dbContext.SaleItems.Where(s => s.SaleId == Id).ToList();
         }
 
         public IEnumerable<ProductEntity> GetProducts()
         {
-            return _applicationDbContext.Products.ToList();
+            return _dbContext.Products.ToList();
         }
 
         public IEnumerable<SaleItemEntity> RetrieveAll()
         {
-            return _applicationDbContext.SaleItems.ToList();
+            return _dbContext.SaleItems.ToList();
         }
     }
 }

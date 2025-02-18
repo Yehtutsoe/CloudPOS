@@ -1,10 +1,11 @@
 ﻿using CloudPOS.Models.Entities;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories
 {
-    public interface ISaleItemRepository
+    public interface ISaleItemRepository:IBaseRepository<SaleItemEntity>
     {
-        Task Create(SaleItemEntity saleItemEntity);
+        void Create(IList<SaleItemEntity> saleItemEntity);
         IEnumerable<SaleItemEntity> RetrieveAll();
         IEnumerable<SaleItemEntity> GetById(string SaleId);
         void Delete(string Id);
