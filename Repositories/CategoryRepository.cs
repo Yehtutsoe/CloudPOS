@@ -13,10 +13,6 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(CategoryEntity categoryEntity)
-        {
-            _applicationDbContext.Categories.Add(categoryEntity);
-            _applicationDbContext.SaveChanges();
 
         }
 
@@ -30,9 +26,6 @@ namespace CloudPOS.Repositories
             }
         }
 
-        public IEnumerable<CategoryEntity> GetById(string Id)
-        {
-            return _applicationDbContext.Categories.Where(w => w.Id == Id).ToList();
         }
 
         public IEnumerable<CategoryEntity> RetrieveAll()

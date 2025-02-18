@@ -36,19 +36,9 @@ namespace CloudPOS.Services
             {
                 return null;
             }
-            return new CategoryViewModel() { 
-                Id = entity.Id,
-                Name = entity.Name,
-                Description = entity.Description,
-            };
-        }
 
         public IEnumerable<CategoryViewModel> RetrieveAll()
         {
-            var entity = _categoryRepository.RetrieveAll();
-
-            return entity.Where(w =>w.IsActive).Select(s => new CategoryViewModel { 
-                
                 Id = s.Id,
                 Name = s.Name,
                 Description = s.Description

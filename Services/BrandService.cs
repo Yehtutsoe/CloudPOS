@@ -2,7 +2,6 @@
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories;
 using CloudPOS.UnitOfWork;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace CloudPOS.Services
 {
@@ -20,7 +19,6 @@ namespace CloudPOS.Services
             {
                 Id = brandViewModel.Id,
                 Name = brandViewModel.Name,
-                Brand = brandViewModel.Brand,
                 CreatedAt = DateTime.Now,
                 IsActive = true,
                 ReleaseDate = brandViewModel.ReleaseDate,

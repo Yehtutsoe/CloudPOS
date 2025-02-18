@@ -11,11 +11,6 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(BrandEntity entity)
-        {
-            _applicationDbContext.PhoneModels.Add(entity);
-            _applicationDbContext.SaveChanges();
-        }
 
         public void Delete(string Id)
         {
@@ -25,7 +20,6 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.PhoneModels.Remove(entity);
                 _applicationDbContext.SaveChanges();
             }
-        }
 
         public IEnumerable<BrandEntity> GetById(string Id)
         {

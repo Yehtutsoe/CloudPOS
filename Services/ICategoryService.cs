@@ -7,7 +7,6 @@ namespace CloudPOS.Services
         void Create(CategoryViewModel categoryViewModel);
         IEnumerable<CategoryViewModel> RetrieveAll();
         CategoryViewModel GetById(string Id);
-
         void Delete(string Id);
         void Update(CategoryViewModel categoryViewModel);
     }

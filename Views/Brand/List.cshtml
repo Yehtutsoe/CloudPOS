@@ -1,16 +1,6 @@
 ﻿
 @model IList<BrandViewModel>
 
-@{
-    if (TempData["ErrorViewModel"] != null)
-    {
-        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
-        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
-            @error.Message
-        </div>
-    }
-}
-
 <h2>Model List Information</h2>
 <div class="mb-3">
     <a href="/brand/entry" class="btn btn-primary"><i class="fa fa-plus"></i>Create</a>
@@ -29,8 +19,6 @@
     </thead>
     @{
         int i = 1;
-    }
-    <tbody>
         @foreach (var data in Model)
         {
             <tr>
