@@ -15,7 +15,7 @@ namespace CloudPOS.Services
         }
         public void Create(SupplierViewModel supplierViewModel)
         {
-            var entity = new SupplierEntity()
+            SupplierEntity entity = new SupplierEntity()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = supplierViewModel.Name,
@@ -60,7 +60,7 @@ namespace CloudPOS.Services
 
         public void Update(SupplierViewModel supplierViewModel)
         {
-            var entity = new SupplierEntity()
+            SupplierEntity entity = new SupplierEntity()
             {
                 Id = supplierViewModel.Id,
                 Name = supplierViewModel.Name,

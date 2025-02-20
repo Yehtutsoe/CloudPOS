@@ -15,7 +15,7 @@ namespace CloudPOS.Services
         }
         public void Create(BrandViewModel brandViewModel)
         {
-            var entity = new BrandEntity()
+            BrandEntity entity = new BrandEntity()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = brandViewModel.Name,
@@ -49,7 +49,7 @@ namespace CloudPOS.Services
         public IEnumerable<BrandViewModel> GetAll()
         {
             var brands = (from b in _unitOfWork.Brands.GetAll()
-                          join c in _unitOfWork.Categorys.GetAll()
+                          join c in _unitOfWork.Categories.GetAll()
                           on b.CategoryId equals c.Id
                           select new BrandViewModel 
                           { 
@@ -92,11 +92,11 @@ namespace CloudPOS.Services
             if (lastCode != null)
             {
                 int newCode = int.Parse(lastCode) + 1;
-                return newCode.ToString("D4");
+                return newCode.ToString("D3");
             }
             else
             {
-                return "C001";
+                return "001";
             }
         }
 
@@ -107,16 +107,18 @@ namespace CloudPOS.Services
 
         public void Update(BrandViewModel brandViewModel)
         {
-            BrandEntity entity = new BrandEntity()
+            var existingEntity = _unitOfWork.Brands.GetBy(w => w.Id ==  brandViewModel.Id).FirstOrDefault();
+            if(existingEntity == null)
             {
-                Id = brandViewModel.Id,
-                Code = brandViewModel.Code,
-                Name = brandViewModel.Name,
-                CategoryId = brandViewModel.CategoryId,
-                IsActive = true,
-                CreatedAt = DateTime.Now
-            };
-            _unitOfWork.Brands.Update(entity);
+                throw new Exception("Brand not found to update");
+            }
+            existingEntity.Id = brandViewModel.Id;
+            existingEntity.Code = brandViewModel.Code;
+            existingEntity.Name = brandViewModel.Name;
+            existingEntity.CategoryId = brandViewModel.CategoryId;
+            existingEntity.CreatedAt = DateTime.Now;
+            existingEntity.IsActive = true;
+            _unitOfWork.Brands.Update(existingEntity);
             _unitOfWork.Commit();
         }
     }

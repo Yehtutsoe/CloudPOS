@@ -57,7 +57,7 @@ namespace CloudPOS.Services
             IEnumerable<ProductViewModel> products = (from p in _unitOfWork.Products.GetAll()
                                                       join b in _unitOfWork.Brands.GetAll()
                                                       on p.BrandId equals b.Id
-                                                      join c in _unitOfWork.Categorys.GetAll()
+                                                      join c in _unitOfWork.Categories.GetAll()
                                                       on p.CategoryId equals c.Id
                                                       select new ProductViewModel
                                                       {

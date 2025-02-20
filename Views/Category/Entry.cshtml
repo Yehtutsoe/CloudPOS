@@ -21,20 +21,21 @@
         </div>
     }
 }
-}
 <form action="/category/entry" method="post">
 
     <div class="mb-3 col-6">
-        <label for="Name" class="form-label">Code</label>
-        <input type="text" name="Name" class="form-control" value="@Model?.Code" readonly/>
+        <label asp-for="Code" class="form-label">Code</label>
+        <input type="text" asp-for="Code" class="form-control" readonly/>
     </div>
     <div class="mb-3 col-6">
-        <label for="Name" class="form-label">Name</label>
-        <input type="text" name="Name" class="form-control" placeholder="Enter Name" require />
+        <label asp-for="Name" class="form-label">Name</label>
+        <input type="text" asp-for="Name" class="form-control" placeholder="Enter Name" require />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="mb-3 col-6">
-        <label for="Description" class="form-label">Description</label>
-        <input type="text" name="Description" class="form-control" placeholder="Enter Name" requrie />
+        <label asp-for="Description" class="form-label">Description</label>
+        <input type="text" asp-for="Description" class="form-control" placeholder="Enter Name" requrie />
+        <span class="text-danger" asp-validation-for="Description"></span>
     </div>
 
     <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i>Save</button>

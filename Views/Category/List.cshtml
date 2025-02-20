@@ -1,4 +1,4 @@
-﻿@model IList<CategoryViewModel>
+﻿@model IEnumerable<CategoryViewModel>
 
 <h3>Category List</h3>
 
@@ -17,8 +17,6 @@
         <div class="alert alert-danger" role="alert">@info</div>
     }
 }
-
-<h1 class="mb-3">Category List Information</h1>
 <a href="/category/entry" class="btn btn-primary"><i class="fa fa-plus"></i>Create</a>
 <table class="table table-hover" id="CategoryTable">
     <thead class="table-dark">

@@ -2,6 +2,7 @@ using CloudPOS.DAO;
 using CloudPOS.Repositories;
 using CloudPOS.Repositories.Report.common;
 using CloudPOS.Services;
+using CloudPOS.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,7 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<IEmailSender,EmailSender>();
 builder.Services.AddTransient<IReport, Report>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var app = builder.Build();

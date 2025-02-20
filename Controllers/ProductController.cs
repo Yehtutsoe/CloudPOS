@@ -5,6 +5,7 @@ using CloudPOS.Services;
 using CloudPOS.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CloudPOS.Controllers
 {
@@ -51,7 +52,7 @@ namespace CloudPOS.Controllers
         }
         private void BindBrandData()
         {
-           var brands = _brandService.GetBrands();
+            var brands = _brandService.GetBrands().Select(b => new SelectListItem() { Value = b.Id,Text=b.Name}).ToList();
             ViewBag.Brands = brands;
         }
         private void BindCategroyData()

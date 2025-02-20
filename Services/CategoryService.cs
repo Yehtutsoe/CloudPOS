@@ -1,6 +1,5 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories;
 using CloudPOS.UnitOfWork;
 
 namespace CloudPOS.Services
@@ -15,16 +14,17 @@ namespace CloudPOS.Services
         }
         public void Create(CategoryViewModel categoryViewModel)
         {
-            var entity = new CategoryEntity()
+            
+            CategoryEntity entity = new CategoryEntity()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id =Guid.NewGuid().ToString(),
                 Name = categoryViewModel.Name,
                 Code = categoryViewModel.Code,
                 CreatedAt = DateTime.Now,
                 Description = categoryViewModel.Description,
                 IsActive = true
             };
-            _unitOfWork.Categorys.Create(entity);
+            _unitOfWork.Categories.Create(entity);
             _unitOfWork.Commit();
         }
 
@@ -32,10 +32,10 @@ namespace CloudPOS.Services
         {
             try
             {
-                var entity = _unitOfWork.Categorys.GetBy(w => w.Id == Id).SingleOrDefault();
+                var entity = _unitOfWork.Categories.GetBy(w => w.Id == Id).SingleOrDefault();
                 if (entity != null)
                 {
-                    _unitOfWork.Categorys.Delete(entity);
+                    _unitOfWork.Categories.Delete(entity);
                     _unitOfWork.Commit();
                 }
             }
@@ -48,19 +48,18 @@ namespace CloudPOS.Services
 
         public CategoryViewModel GetById(string Id)
         {
-            return _unitOfWork.Categorys.GetBy(w => w.Id == Id).Select(s => new CategoryViewModel
+            return _unitOfWork.Categories.GetBy(w => w.Id == Id).Select(s => new CategoryViewModel
             {
                 Id = s.Id,
                 Name = s.Name,
                 Code = s.Code,
-                Description = s.Description,
-                
+                Description = s.Description    
             }).FirstOrDefault();
         }
 
         public IEnumerable<CategoryViewModel> GetAll()
         {
-            return _unitOfWork.Categorys.GetAll().Select(s => new CategoryViewModel
+            return _unitOfWork.Categories.GetAll().Select(s => new CategoryViewModel
             {
                 Id = s.Id,
                 Code = s.Code,
@@ -71,31 +70,34 @@ namespace CloudPOS.Services
 
         public void Update(CategoryViewModel categoryViewModel)
         {
-            var entity = new CategoryEntity()
+            var existingEntity = _unitOfWork.Categories.GetBy(w => w.Id == categoryViewModel.Id).FirstOrDefault();
+            if(existingEntity == null)
             {
-                Id = categoryViewModel.Id,
-                Code = categoryViewModel.Code,
-                Name = categoryViewModel.Name,
-                Description = categoryViewModel.Description
-            };
-            entity.IsActive = true;
-            _unitOfWork.Categorys.Update(entity);
+                throw new Exception("Category not found to update");
+            }
+            existingEntity.Id = categoryViewModel.Id;
+            existingEntity.Code = categoryViewModel.Code;
+            existingEntity.Name = categoryViewModel.Name;
+            existingEntity.Description = categoryViewModel.Description;
+            existingEntity.CreatedAt = DateTime.Now;
+            existingEntity.IsActive = true;
+            _unitOfWork.Categories.Update(existingEntity);
             _unitOfWork.Commit();
         }
 
         public IEnumerable<CategoryViewModel> GetCategories()
         {
-            return _unitOfWork.Categorys.GetCategorys();
+            return _unitOfWork.Categories.GetCategorys();
         }
 
         public bool IsAlreadyExist(CategoryViewModel categoryViewModel)
         {
-            return _unitOfWork.Categorys.IsAlreadyExist(categoryViewModel.Code, categoryViewModel.Name);
+            return _unitOfWork.Categories.IsAlreadyExist(categoryViewModel.Code, categoryViewModel.Name);
         }
 
         public string GetNextCategoryCode()
         {
-            var lastCode = _unitOfWork.Categorys.GetLastCategoryCode();
+            var lastCode = _unitOfWork.Categories.GetLastCategoryCode();
             if (lastCode != null) 
             {
                 int newCode = int.Parse(lastCode) + 1;

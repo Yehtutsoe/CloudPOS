@@ -89,13 +89,13 @@ namespace CloudPOS.Controllers
 
                 try {
                     _brandService.Update(model);
-                ViewData["Info"] = "Successfully update the data";
-                ViewData["Status"] = true;
+                    ViewData["Info"] = "Successfully update the data";
+                    ViewData["Status"] = true;
                 }
                 catch (Exception ex)
                 {
-                ViewData["Info"] = "Can not update the data" + ex.Message;
-                ViewData["Status"] = false;
+                    ViewData["Info"] = "Can not update the data" + ex.Message;
+                    ViewData["Status"] = false;
                 }
             return RedirectToAction("List");
         }
@@ -107,13 +107,13 @@ namespace CloudPOS.Controllers
         {
             try
             {
-                    _brandService.Delete(Id);
+                _brandService.Delete(Id);
                 ViewData["Info"] = "Deleted the record";
                 ViewData["Status"] = true;
             }
             catch (Exception ex)
             {
-                ViewData["Info"] = "Can not Delete the record";
+                ViewData["Info"] = "Can not Delete the record" + ex.Message;
                 ViewData["Status"] = false;
             }
             return RedirectToAction("List");

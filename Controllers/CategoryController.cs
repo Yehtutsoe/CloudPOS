@@ -104,16 +104,6 @@ namespace CloudPOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Update(CategoryViewModel ui)
         {
-          
-                if (!ModelState.IsValid)
-                {
-                    TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                    {
-                        Message = "Validation Error occour, please check input field",
-                        IsOccurError = true
-                    });
-                return View(ui);
-                }
             try
             {
                 _categoryService.Update(ui);

@@ -1,6 +1,7 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Repositories;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CloudPOS.UnitOfWork
 {
@@ -12,9 +13,9 @@ namespace CloudPOS.UnitOfWork
         public ISaleRepository Sales { get; }
         public ISaleItemRepository SaleItems { get; }
         public IStockIncomeRepository StockIncomes { get; }
-        public ICategoryRepository Categorys { get; }
+        public ICategoryRepository Categories { get; } // ✅ Fixed name (Categories)
         public IBrandRepository Brands { get; }
-        public ISupplierRepository Suppliers { get; set; }
+        public ISupplierRepository Suppliers { get; } // ✅ Fixed to readonly
 
         public UnitOfWork(ApplicationDbContext context,
                           IProductRepository productRepository,
@@ -30,19 +31,30 @@ namespace CloudPOS.UnitOfWork
             Sales = saleRepository;
             SaleItems = saleItemRepository;
             StockIncomes = stockIncomeRepository;
-            Categorys = categoryRepository;
+            Categories = categoryRepository; // ✅ Corrected assignment
             Brands = brands;
             Suppliers = suppliers;
         }
 
-        public int Commit()
+        public void Commit()
         {
-            return _context.SaveChanges(); // Transaction ကို Commit လုပ်မယ်
+            _context.SaveChanges(); // ✅ Commit transaction
         }
 
         public void Dispose()
         {
-            _context.Dispose(); // Memory Leak မဖြစ်အောင် Dispose
+            _context.Dispose(); // ✅ Dispose context to avoid memory leak
+        }
+
+        public void Rollback()
+        {
+            // ✅ Rollback transaction (Not disposing here)
+            _context.Database.CurrentTransaction?.Rollback();
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
         }
     }
 }

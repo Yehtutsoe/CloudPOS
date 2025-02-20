@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250216042747_Initial")]
+    [Migration("20250218150201_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -30,10 +30,13 @@ namespace CloudPOS.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Brand")
+                    b.Property<string>("CategoryId")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -46,16 +49,9 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasMaxLength(15)
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Specification")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Brand");
                 });
@@ -64,6 +60,10 @@ namespace CloudPOS.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -143,6 +143,9 @@ namespace CloudPOS.Migrations
                         .IsRequired()
                         .HasMaxLength(18)
                         .HasColumnType("nvarchar(18)");
+
+                    b.Property<decimal>("DiscountPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -505,6 +508,17 @@ namespace CloudPOS.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CloudPOS.Models.Entities.BrandEntity", b =>
+                {
+                    b.HasOne("CloudPOS.Models.Entities.CategoryEntity", "Categorys")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categorys");
+                });
+
             modelBuilder.Entity("CloudPOS.Models.Entities.InventoryEntity", b =>
                 {
                     b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Products")
@@ -537,7 +551,7 @@ namespace CloudPOS.Migrations
 
             modelBuilder.Entity("CloudPOS.Models.Entities.SaleItemEntity", b =>
                 {
-                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Products")
+                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -549,7 +563,7 @@ namespace CloudPOS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Products");
+                    b.Navigation("Product");
 
                     b.Navigation("Sales");
                 });
