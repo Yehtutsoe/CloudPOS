@@ -27,7 +27,6 @@ namespace CloudPOS.DAO
                 .HasForeignKey(si => si.SaleId)
                 .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete if necessary
         }
-
     }
 }
     

@@ -13,7 +13,6 @@ namespace CloudPOS.UnitOfWork
         public ISaleItemRepository SaleItems { get; }
         public IStockIncomeRepository StockIncomes { get; }
         public ICategoryRepository Categorys { get; }
-
         public IBrandRepository Brands { get; }
         public ISupplierRepository Suppliers { get; set; }
 

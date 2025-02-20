@@ -1,6 +1,5 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories;
 using CloudPOS.UnitOfWork;
 
 
