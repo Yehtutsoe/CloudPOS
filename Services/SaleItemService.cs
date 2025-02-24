@@ -1,6 +1,6 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories;
+using CloudPOS.Repositories.Domain;
 using Humanizer;
 
 namespace CloudPOS.Services

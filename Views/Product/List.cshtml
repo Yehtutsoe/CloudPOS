@@ -21,7 +21,7 @@
         </div>
     }
 }
-<h2 class="mb-3">Prdouct Information List</h2>
+
 <div class="mb-3">
     <a href="/product/entry" class="btn btn-primary"><i class="fa fa-plus"></i>Create</a>
 </div>
@@ -33,10 +33,11 @@
             <th scope="col">Category</th>
             <th scope="col">Brand</th>
             <th scope="col">Name</th>
-            <th scope="col">Description</th>
+            <th scope="col">Quantity</th>
             <th scope="col">Cost Price</th>
             <th scope="col">Sale Price</th>
             <th scope="col">Disount Price</th>
+            <th scope="col">Description</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -44,21 +45,22 @@
         int i = 1;
     }
     <tbody>
-        @foreach (var prodcut in Model)
+        @foreach (var product in Model)
         {
             <tr>
                 <td scope="row">@i</td>
-                <td>@prodcut.CategoryInfo</td>
-                <td>@prodcut.BrandInfo</td>
-                <td>@prodcut.ProductCode</td>
-                <td>@prodcut.Name</td>
-                <td>@prodcut.Quantity</td>
-                <td>@prodcut.CostPrice</td>
-                <td>@prodcut.SalePrice</td>
-                <td>@prodcut.DiscountPrice</td>
+                <td>@product.CategoryInfo</td>
+                <td>@product.BrandInfo</td>
+                <td>@product.Code</td>
+                <td>@product.Name</td>
+                <td>@product.Quantity</td>
+                <td>@product.CostPrice</td>
+                <td>@product.SalePrice</td>
+                <td>@product.DiscountPrice</td>
+                <td>@product.Description</td>
                 <td>
-                    <a href="/product/edit?id=@prodcut.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
-                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@prodcut.Id" data-name="@prodcut.Name"><i class="fa-solid fa-trash"></i></a>
+                    <a href="/product/edit?id=@product.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/product/delete?id=@product.Id" data-name="@product.Name"><i class="fa-solid fa-trash"></i></a>
                 </td>
         </tr>
         i++;

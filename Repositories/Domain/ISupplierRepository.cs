@@ -1,6 +1,6 @@
 ﻿using CloudPOS.Models.Entities;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
     public interface ISupplierRepository
     {

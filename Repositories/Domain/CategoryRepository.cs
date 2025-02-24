@@ -3,15 +3,15 @@ using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
     public class CategoryRepository : BaseRepository<CategoryEntity>, ICategoryRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public CategoryRepository(ApplicationDbContext dbContext):base(dbContext) 
+        public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<CategoryViewModel> GetCategorys()
@@ -21,7 +21,7 @@ namespace CloudPOS.Repositories
                 Id = c.Id,
                 Name = c.Name,
             }).ToList();
-            
+
         }
 
         public string GetLastCategoryCode()

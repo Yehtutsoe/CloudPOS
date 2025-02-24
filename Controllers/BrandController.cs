@@ -3,6 +3,7 @@ using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CloudPOS.Controllers
 {
@@ -36,8 +37,8 @@ namespace CloudPOS.Controllers
 
         private void BindCategory()
         {
-           var categorys = _categoryService.GetCategories();
-            ViewBag.Categorys = categorys;
+            var categorys = _categoryService.GetCategories().Select(c => new SelectListItem() { Value = c.Id, Text = c.Name }).ToList();
+           ViewBag.Categorys = categorys;
         }
     
         [HttpPost]
@@ -78,7 +79,14 @@ namespace CloudPOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
-            return View(_brandService.GetById(Id));
+            var brand = _brandService.GetById(Id);
+            if(brand == null)
+            {
+                TempData["Error"] = "Brand not found";
+                return RedirectToAction("List");
+            }
+            BindCategory();
+            return View(brand);
         }
         #endregion
 

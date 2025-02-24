@@ -16,5 +16,8 @@ namespace CloudPOS.Models.Entities
         public string ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public ProductEntity Products { get; set; }
+        public string CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public CategoryEntity Categorys { get; set; }
     }
 }

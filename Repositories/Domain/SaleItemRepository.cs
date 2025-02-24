@@ -2,26 +2,27 @@
 using CloudPOS.Models.Entities;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
-    public class SaleItemRepository :BaseRepository<SaleItemEntity>, ISaleItemRepository
+    public class SaleItemRepository : BaseRepository<SaleItemEntity>, ISaleItemRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public SaleItemRepository(ApplicationDbContext dbContext):base(dbContext)
+        public SaleItemRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
         public void Create(IList<SaleItemEntity> saleItemEntity)
         {
-           _dbContext.SaleItems.Add((SaleItemEntity)saleItemEntity);
-           _dbContext.SaveChanges();
+            _dbContext.SaleItems.Add((SaleItemEntity)saleItemEntity);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(string Id)
         {
-           var existingEntity =  _dbContext.SaleItems.Select(s=> s.Id).FirstOrDefault();
-            if (existingEntity != null) {
+            var existingEntity = _dbContext.SaleItems.Select(s => s.Id).FirstOrDefault();
+            if (existingEntity != null)
+            {
                 _dbContext.Remove(existingEntity);
                 _dbContext.SaveChanges();
             }

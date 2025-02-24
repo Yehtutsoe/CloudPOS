@@ -16,7 +16,7 @@ namespace CloudPOS.Controllers
         public IActionResult Entry()
         {
 
-            return View(_stockIncomeService.GetActiveSuppliersAndProducts());
+            return View(_stockIncomeService.GetStockIncomes());
         }
         [HttpPost]
         public IActionResult Entry(StockIncomeViewModel stockIncomeViewModel) {
@@ -26,7 +26,7 @@ namespace CloudPOS.Controllers
         }
         public IActionResult List()
         {
-            return View(_stockIncomeService.RetrieveAll());
+            return View(_stockIncomeService.GetAll());
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
@@ -37,15 +37,13 @@ namespace CloudPOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(string Id)
         {
-            var purchaseEdit = _stockIncomeService.GetById(Id);
-            // supplier and product  ViewModel are populated dropdown list
-            // some code
-            return View(purchaseEdit);
+           
+            return View();
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public IActionResult Update(StockIncomeViewModel purchaseViewModel) {
-            _stockIncomeService.Update(purchaseViewModel);
+            
             return RedirectToAction("List");
         }
 

@@ -3,7 +3,7 @@ using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
     public class ProductRepository : BaseRepository<ProductEntity>, IProductRepository
     {
@@ -11,7 +11,7 @@ namespace CloudPOS.Repositories
 
         public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public ProductEntity FindById(string productId)
@@ -21,8 +21,8 @@ namespace CloudPOS.Repositories
 
         public string GetNextProductCode()
         {
-           var lastProduct = _dbContext.Products.OrderByDescending(product => product.ProductCode).FirstOrDefault();
-            return lastProduct != null ? lastProduct.ProductCode : null;
+            var lastProduct = _dbContext.Products.OrderByDescending(product => product.Code).FirstOrDefault();
+            return lastProduct != null ? lastProduct.Code : null;
         }
 
         public IEnumerable<ProductViewModel> GetProductByCategory(string categoryId)
@@ -45,7 +45,7 @@ namespace CloudPOS.Repositories
 
         public bool IsAlreadyExist(string productName, string productCode)
         {
-            return _dbContext.Products.Where(w => w.ProductCode != productCode && w.Name == productName).Any();
+            return _dbContext.Products.Where(w => w.Code != productCode && w.Name == productName).Any();
         }
     }
 }

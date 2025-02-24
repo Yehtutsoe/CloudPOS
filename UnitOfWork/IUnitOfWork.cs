@@ -1,4 +1,4 @@
-﻿using CloudPOS.Repositories;
+﻿using CloudPOS.Repositories.Domain;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CloudPOS.UnitOfWork
@@ -10,8 +10,10 @@ namespace CloudPOS.UnitOfWork
         IProductRepository Products { get; }
         ISaleRepository Sales { get; }
         ISaleItemRepository SaleItems { get; }
-        IStockIncomeRepository StockIncomes { get; }
+        IPurchaseRepository Purchases { get; }
+        IPurchaseDetailRepository PurchaseDetails { get; }
         ISupplierRepository Suppliers { get; }
+        IInventoryRepository Inventories { get; }
         void Commit(); // Save changes to the databases
         void Rollback();
         IDbContextTransaction BeginTransaction();

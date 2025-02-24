@@ -1,12 +1,12 @@
 ﻿
 @model IEnumerable<BrandViewModel>
 
-<h2>Model List Information</h2>
+<h2>Brand List Information</h2>
 <div class="mb-3">
     <a href="/brand/entry" class="btn btn-primary"><i class="fa fa-plus"></i>Create</a>
 </div>
 
-<table class="table table-hover" id="PhoneModelTable">
+<table class="table table-hover" id="BrandTable">
     <thead class="table-dark">
         <tr>
             <th scope="col">No</th>
@@ -18,9 +18,11 @@
     </thead>
 
     <tbody>
-        @if(Model.Any()){
+        @{
             int i = 1;
-            @foreach (var data in Model)
+        }
+        @foreach (var data in Model)
+
         {
             <tr>
                 <td scope="row">@i</td>
@@ -34,18 +36,13 @@
             </tr>
             i++;
         }
-        }else{
-            <tr>
-                <td colspan="5" class="text-center">There is no data to Display</td>
-            </tr>
-        }
     </tbody>
 </table>
 
 <script type="text/javascript">
     $(document).ready(function () {
         // Initialize DataTable
-        $("#PhoneModelTable").DataTable();
+        $("#BrandTable").DataTable();
 
         // Handle Delete Button Click
         $(".delete-button").on("click", function (e) {

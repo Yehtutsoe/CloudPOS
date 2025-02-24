@@ -2,12 +2,12 @@
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
-    public interface IBrandRepository:IBaseRepository<BrandEntity>
+    public interface IBrandRepository : IBaseRepository<BrandEntity>
     {
         IEnumerable<BrandViewModel> GetBrands();
-        bool IsAlreadyExist(string Code,string Name);
+        bool IsAlreadyExist(string Code, string Name);
         string GetLastBrandCode();
         IEnumerable<BrandViewModel> GetBrandByCategory(string CategoryId);
 

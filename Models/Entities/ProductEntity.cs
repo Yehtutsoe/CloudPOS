@@ -9,9 +9,9 @@ namespace CloudPOS.Models.Entities
         [MaxLength(50)]      
         public string Name { get; set; }
         [MaxLength(50)]
-        public string ProductCode { get; set; }
-        [MaxLength(18)]      
-        public string Description { get; set; }
+        public string Code { get; set; }
+        [StringLength(450)]      
+        public string? Description { get; set; }
         public int Quantity { get; set; }
         public Decimal CostPrice { get; set; }
         public Decimal SalePrice { get; set; }

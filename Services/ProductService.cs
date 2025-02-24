@@ -16,11 +16,11 @@ namespace CloudPOS.Services
 
         public void Create(ProductViewModel productViewModel)
         {
-            var entity = new ProductEntity()
+            ProductEntity entity = new ProductEntity()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = productViewModel.Name,
-                ProductCode = productViewModel.ProductCode,
+                Code = productViewModel.Code,
                 CostPrice = productViewModel.CostPrice,
                 DiscountPrice = productViewModel.DiscountPrice,
                 SalePrice = productViewModel.SalePrice,
@@ -30,6 +30,7 @@ namespace CloudPOS.Services
                 IsActive = true,
                 Quantity = productViewModel.Quantity
             };
+            Console.WriteLine($"Saving product with code: {entity.Code} and name: {entity.Name}");
             _unitOfWork.Products.Create(entity);
             _unitOfWork.Commit();
         }
@@ -54,16 +55,16 @@ namespace CloudPOS.Services
 
         public IEnumerable<ProductViewModel> GetAll()
         {
-            IEnumerable<ProductViewModel> products = (from p in _unitOfWork.Products.GetAll()
-                                                      join b in _unitOfWork.Brands.GetAll()
+            IEnumerable<ProductViewModel> products = (from p in _unitOfWork.Products.GetAll().ToList()
+                                                      join b in _unitOfWork.Brands.GetAll().ToList()
                                                       on p.BrandId equals b.Id
-                                                      join c in _unitOfWork.Categories.GetAll()
+                                                      join c in _unitOfWork.Categories.GetAll().ToList()
                                                       on p.CategoryId equals c.Id
                                                       select new ProductViewModel
                                                       {
                                                           Id = p.Id,
                                                           Name = p.Name,
-                                                          ProductCode = p.ProductCode,
+                                                          Code = p.Code,
                                                           CategoryId = c.Id,
                                                           BrandId = b.Id,
                                                           Quantity = p.Quantity,
@@ -86,14 +87,14 @@ namespace CloudPOS.Services
                                             BrandId = s.BrandId,
                                             CategoryId = s.CategoryId,
                                             Description = s.Description,
-                                            ProductCode = s.ProductCode,
+                                            Code = s.Code,
                                             Name = s.Name,
                                             Quantity = s.Quantity,
                                             CostPrice = s.CostPrice,
                                             SalePrice = s.SalePrice,
                                             DiscountPrice = s.DiscountPrice
 
-                                        }).FirstOrDefault();
+                                        }).SingleOrDefault();
         }
 
         public string GetNextProductCode()
@@ -102,11 +103,11 @@ namespace CloudPOS.Services
             if (lastCode != null)
             {
                 int newCode = int.Parse(lastCode) + 1;
-                return newCode.ToString("D4");
+                return newCode.ToString("D3");
             }
             else
             {
-                return "P001";
+                return "001";
             }
         }
 
@@ -122,7 +123,7 @@ namespace CloudPOS.Services
 
         public bool IsAlreadyExist(ProductViewModel productViewModel)
         {
-            return _unitOfWork.Products.IsAlreadyExist(productViewModel.ProductCode, productViewModel.Name);
+            return _unitOfWork.Products.IsAlreadyExist(productViewModel.Code, productViewModel.Name);
         }
 
         public void Update(ProductViewModel productViewModel)
@@ -134,7 +135,7 @@ namespace CloudPOS.Services
             }
             existingProduct.Id = productViewModel.Id;
             existingProduct.Name = productViewModel.Name;
-            existingProduct.ProductCode = productViewModel.ProductCode;
+            existingProduct.Code = productViewModel.Code;
             existingProduct.CostPrice = productViewModel.CostPrice;
             existingProduct.SalePrice = productViewModel.SalePrice;
             existingProduct.DiscountPrice = productViewModel.DiscountPrice;

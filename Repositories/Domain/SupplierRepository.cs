@@ -1,13 +1,13 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
     public class SupplierRepository : ISupplierRepository
     {
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public SupplierRepository(ApplicationDbContext applicationDbContext) 
+        public SupplierRepository(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
         }
@@ -19,8 +19,9 @@ namespace CloudPOS.Repositories
 
         public void Delete(string Id)
         {
-           var entity = _applicationDbContext.Suppliers.Find(Id);
-            if (entity != null) {
+            var entity = _applicationDbContext.Suppliers.Find(Id);
+            if (entity != null)
+            {
                 _applicationDbContext.Suppliers.Remove(entity);
                 _applicationDbContext.SaveChanges();
             }
@@ -33,13 +34,13 @@ namespace CloudPOS.Repositories
 
         public IEnumerable<SupplierEntity> RetrieveAll()
         {
-           return _applicationDbContext.Suppliers.ToList();
+            return _applicationDbContext.Suppliers.ToList();
         }
 
         public void Update(SupplierEntity supplier)
         {
             var existingEnity = _applicationDbContext.Suppliers.Find(supplier.Id);
-            if(existingEnity != null)
+            if (existingEnity != null)
             {
                 _applicationDbContext.Entry(existingEnity).CurrentValues.SetValues(supplier);
                 _applicationDbContext.SaveChanges();

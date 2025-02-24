@@ -29,19 +29,18 @@
         <input type="text" name="Code" class="form-control" value="@Model.Code" readonly/>
     </div>
     <div class="col-6 mb-3">
-        <label for="Name" class="form-label">Name</label>
-        <input type="text" name="Name" class="form-control" placeholder="Enter Brand Name" required/>
+        <label class="form-label" asp-for="CategoryId">Category</label>
+        <select class="form-select" asp-items="@(new SelectList(ViewBag.Categorys,"Value","Text"))" asp-for="CategoryId">
+            <option value="">[ Select One ]</option>
+        </select>
+        <span class="text-danger" asp-validation-for="CategoryId"></span>
     </div>
     <div class="col-6 mb-3">
-        <label class="form-label" for="Category">Category</label>
-        <select class="form-select" name="CategoryId">
-            <option value="" selected>[ Select One ]</option>
-            @foreach(var category in ViewBag.Categorys)
-            {
-                <option value="@category.Id">@category.Code</option>
-            }
-        </select>
+        <label asp-for="Name" class="form-label">Name</label>
+        <input type="text" asp-for="Name" class="form-control" placeholder="Enter Brand Name" required/>
+        <span class="text-danger" asp-validation-for="Name"></span>
     </div>
+
     <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i>Save</button>
     <a href="/brand/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>

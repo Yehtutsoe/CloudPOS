@@ -3,6 +3,7 @@ using CloudPOS.Repositories.Report.common;
 using CloudPOS.Repositories.Report.ReportDataSet;
 using CloudPOS.Services;
 using CloudPOS.Utils;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,9 +34,9 @@ namespace CloudPOS.Controllers
         public IActionResult Entry()
         {
             string nextCode = _productService.GetNextProductCode();
-            var productViewModel = new ProductViewModel
+            ProductViewModel productViewModel = new ProductViewModel
             {
-                ProductCode = nextCode,
+                Code = nextCode,
                 Name =string.Empty,
                 CategoryId =string.Empty,
                 BrandId =string.Empty,
@@ -52,13 +53,13 @@ namespace CloudPOS.Controllers
         }
         private void BindBrandData()
         {
-            var brands = _brandService.GetBrands().Select(b => new SelectListItem() { Value = b.Id,Text=b.Name}).ToList();
-            ViewBag.Brands = brands;
+            var brands = _brandService.GetBrands().Select(b => new SelectListItem() { Value = b.Id, Text = b.Name }).ToList();
+            ViewBag.Brands = brands ?? new List<SelectListItem>();
         }
         private void BindCategroyData()
         {
-            var category = _categoryService.GetCategories();
-            ViewBag.Categories = category;
+            var category = _categoryService.GetCategories().Select(c => new SelectListItem() { Value = c.Id, Text = c.Name }).ToList();
+            ViewBag.Categorys = category ?? new List<SelectListItem>();
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
@@ -164,6 +165,12 @@ namespace CloudPOS.Controllers
                 TempData["Satatus"] = false;
             }
             return RedirectToAction("List");
+        }
+        public IActionResult GetBrandByCategory(string categoryId)
+        {
+            var brands = _brandService.GetBrandsByCategory(categoryId)
+                                      .Select(s => new SelectListItem() { Value = s.Id, Text = s.Name }).ToList();
+            return Json(brands);
         }
     }
 }

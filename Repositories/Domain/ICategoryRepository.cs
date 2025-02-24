@@ -2,9 +2,9 @@
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
-    public interface ICategoryRepository: IBaseRepository<CategoryEntity>
+    public interface ICategoryRepository : IBaseRepository<CategoryEntity>
     {
         IEnumerable<CategoryViewModel> GetCategorys();
         bool IsAlreadyExist(string Code, string Name);

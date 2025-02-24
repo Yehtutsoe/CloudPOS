@@ -1,5 +1,5 @@
 ﻿using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories;
+using CloudPOS.Repositories.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
@@ -16,7 +16,7 @@ namespace CloudPOS.Controllers
         }
         public IActionResult List()
         {
-            var inventoryBalance = _inventoryRepository.RetrieveAll().Select(s => new InventoryViewModel
+            var inventoryBalance = _inventoryRepository.GetAll().Select(s => new InventoryViewModel
             {
                 Id = s.Id,
                 Quantity = s.Quantity,

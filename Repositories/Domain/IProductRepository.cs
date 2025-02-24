@@ -2,9 +2,9 @@
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
-    public interface IProductRepository:IBaseRepository<ProductEntity>
+    public interface IProductRepository : IBaseRepository<ProductEntity>
     {
         IEnumerable<ProductViewModel> GetProducts();
         bool IsAlreadyExist(string productName, string productCode);

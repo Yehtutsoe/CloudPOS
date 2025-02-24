@@ -38,7 +38,7 @@ namespace CloudPOS.Repositories.Report.common
                 Quantity = s.Quantity,
                 SalePrice = s.SalePrice,
                 Description= s.Description,
-                ProductCode = s.ProductCode,
+                ProductCode = s.Code,
                 TotalAmount = s.SalePrice,
                 BrandInfo = s.BrandInfo,
                 CategoryInfo = s.CategoryInfo,

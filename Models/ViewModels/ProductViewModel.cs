@@ -8,9 +8,8 @@ namespace CloudPOS.Models.ViewModels
         [Required(ErrorMessage ="Requried Type")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Requried Serial Number")]
-        public string ProductCode { get; set; }
-        [Required(ErrorMessage = "IMEI Number is Requried")]
-        public string Description { get; set; }
+        public string Code { get; set; }
+        public string? Description { get; set; }
         [Range(0,double.MaxValue,ErrorMessage = "Sale Price must be positive number")]
         public Decimal SalePrice { get; set; }
         public Decimal DiscountPrice { get; set; }

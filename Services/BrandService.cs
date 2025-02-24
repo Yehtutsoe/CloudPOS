@@ -48,8 +48,8 @@ namespace CloudPOS.Services
 
         public IEnumerable<BrandViewModel> GetAll()
         {
-            var brands = (from b in _unitOfWork.Brands.GetAll()
-                          join c in _unitOfWork.Categories.GetAll()
+            var brands = (from b in _unitOfWork.Brands.GetAll().ToList()
+                          join c in _unitOfWork.Categories.GetAll().ToList()
                           on b.CategoryId equals c.Id
                           select new BrandViewModel 
                           { 
@@ -80,7 +80,7 @@ namespace CloudPOS.Services
                 Id = s.Id,
                 CategoryId = s.CategoryId,
                 Code = s.Code,
-                Name = s.Name,
+                Name = s.Name
                 
             }).FirstOrDefault();
         }

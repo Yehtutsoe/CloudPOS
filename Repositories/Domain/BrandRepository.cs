@@ -3,7 +3,7 @@ using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
 
-namespace CloudPOS.Repositories
+namespace CloudPOS.Repositories.Domain
 {
     public class BrandRepository : BaseRepository<BrandEntity>, IBrandRepository
     {
@@ -11,17 +11,17 @@ namespace CloudPOS.Repositories
 
         public BrandRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public IEnumerable<BrandViewModel> GetBrandByCategory(string CategoryId)
         {
             return _dbContext.Brands.Where(w => w.CategoryId == CategoryId)
                                     .Select(s => new BrandViewModel
-                                            {
-                                                Id = s.Id,
-                                                Name = s.Name
-                                            }).ToList();
+                                    {
+                                        Id = s.Id,
+                                        Name = s.Name
+                                    }).ToList();
         }
 
         public IEnumerable<BrandViewModel> GetBrands()

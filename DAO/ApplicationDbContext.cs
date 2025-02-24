@@ -12,11 +12,12 @@ namespace CloudPOS.DAO
 
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<BrandEntity> Brands { get; set; }
-        public DbSet<CategoryEntity> Categories { get; set; } // ✅ Corrected name here
+        public DbSet<CategoryEntity> Categories { get; set; } 
         public DbSet<SupplierEntity> Suppliers { get; set; }
         public DbSet<SaleEntity> Sales { get; set; }
         public DbSet<SaleItemEntity> SaleItems { get; set; }
-        public DbSet<StockIncomeEntity> StockIncomes { get; set; }
+        public DbSet<PurchaseEntity> Purchases { get; set; }
+        public DbSet<PurchaseDetailEntity> PurchaseDetails { get; set; }
         public DbSet<InventoryEntity> Inventories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

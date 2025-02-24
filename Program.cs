@@ -1,5 +1,5 @@
 using CloudPOS.DAO;
-using CloudPOS.Repositories;
+using CloudPOS.Repositories.Domain;
 using CloudPOS.Repositories.Report.common;
 using CloudPOS.Services;
 using CloudPOS.UnitOfWork;

@@ -1,21 +1,113 @@
 ﻿@model ProductViewModel
 
-<h2>Product Entry Form</h2>
+<h2 class="mt-1">Product Entry Form</h2>
 <form action="/product/entry" method="post">
     <div class="col-6">
-       <div class="form-group mb-3">
-            <label class="form-label" asp-for="ProductCode">Code</label>
-            <input type="text" asp-for="ProductCode" class="form-control" readonly />
-            <span asp-validation-for="ProductCode" class="text-danger"></span>
+       <div class="form-group mb-1">
+            <label class="form-label" asp-for="Code">Code</label>
+            <input type="text" asp-for="Code" class="form-control" readonly />
+            <span asp-validation-for="Code" class="text-danger"></span>
        </div>
-        <div class="form-group">
+        
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="CategoryId">Category</label>
+            <select asp-items="@(new SelectList(ViewBag.Categorys,"Value","Text"))" class="form-control" asp-for="CategoryId" id="CategoryId">
+                <option value=""> [ Select One ]</option>
+            </select>
+            <span class="text-danger" asp-validation-for="CategoryId"></span>
+        </div>
+        <div class="form-group mb-1">
             <label class="form-label" asp-for="BrandId">Brand</label>
-            <select asp-items="@(new SelectList(ViewBag.Brands,"Value","Text"))" class="form-control">
+            <select asp-items="@(new SelectList(ViewBag.Brands,"Value","Text"))" class="form-control" asp-for="BrandId" id="BrandId">
                 <option value="x"> [ Select One ]</option>
             </select>
             <span class="text-danger" asp-validation-for="BrandId"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Name">
+                Name
+            </label>
+            <input type="text" asp-for="Name" class="form-control" />
+            <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Quantity">
+                Quantity
+            </label>
+            <input type="text" asp-for="Quantity" class="form-control" />
+            <span class="text-danger" asp-validation-for="Quantity"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="CostPrice">
+                Cost Price
+            </label>
+            <input type="number" asp-for="CostPrice" class="form-control" />
+            <span class="text-danger" asp-validation-for="CostPrice"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="SalePrice">
+                Sale Price
+            </label>
+            <input type="number" asp-for="SalePrice" class="form-control" />
+            <span class="text-danger" asp-validation-for="SalePrice"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="DiscountPrice">
+                Discount Price
+            </label>
+            <input type="number" asp-for="DiscountPrice" class="form-control" />
+            <span class="text-danger" asp-validation-for="DiscountPrice"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Description">
+                Description
+            </label>
+            <textarea type="text" rows="2" asp-for="Description" class="form-control" ></textarea>
+            <span class="text-danger" asp-validation-for="Description"></span>
         </div>
     </div>
     <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Save</button>
     <a href="/product/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@section Scripts{
+
+    <script>
+                $(document).ready(function() {
+            // When the Category dropdown changes
+            $('#CategoryId').change(function() {
+                var categoryId = $(this).val(); // Get selected Category ID
+                if (categoryId) {
+                    $.ajax({
+                        url: '/product/GetBrandByCategory',
+                        type: 'GET',
+                        data: { categoryId: categoryId },
+                        success: function(data) {
+                            console.log("Brands data: ", data);  // Debugging the received data
+
+                            var brandSelect = $('#BrandId');
+                            brandSelect.empty();  // Clear existing brands
+                            brandSelect.append('<option value=""> [ Select One ]</option>');  // Default option
+
+                            // Check if the data is not empty and populate the dropdown
+                            if (data.length > 0) {
+                                $.each(data, function(index, brand) {
+                                    brandSelect.append('<option value="' + brand.value + '">' + brand.text + '</option>');
+                                });
+                            } else {
+                                brandSelect.append('<option value="">No Brands Available</option>');
+                            }
+                        },
+                        error: function() {
+                            alert('Failed to load brands.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
+
+
+
