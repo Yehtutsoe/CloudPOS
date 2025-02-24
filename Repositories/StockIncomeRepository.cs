@@ -12,11 +12,6 @@ namespace CloudPOS.Repositories
         {
             _applicationDbContext = applicationDbContext;
         }
-        public void Create(StockIncomeEntity stockIncome)
-        {
-            _applicationDbContext.StockIncomes.Add(stockIncome);
-            _applicationDbContext.SaveChanges();
-        }
 
         public void Delete(string Id)
         {
@@ -26,7 +21,6 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.StockIncomes.Remove(entity);
                 _applicationDbContext.SaveChanges();
             }
-        }
 
         public IEnumerable<ProductEntity> GetActiveProducts()
         {
@@ -60,6 +54,5 @@ namespace CloudPOS.Repositories
                 _applicationDbContext.SaveChanges();
             }
         }
-
     }
 }

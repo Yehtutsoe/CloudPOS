@@ -8,9 +8,6 @@ namespace CloudPOS.Services
         IEnumerable<StockIncomeViewModel> RetrieveAll();
         void Delete(string Id);
         StockIncomeViewModel GetById(string Id);
-        void Update(StockIncomeViewModel purchaseViewModel);
-        StockIncomeViewModel GetActiveSuppliersAndProducts ();
-        
 
     }
 }
