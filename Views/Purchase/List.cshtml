@@ -1,0 +1,173 @@
+﻿@model IEnumerable<PurchaseViewModel>
+
+<h3 class="mb-4 text-primary">Purchase List</h3>
+
+@{
+    var info = TempData["Info"];
+}
+@if (info != null)
+{
+    <div class="alert @(Convert.ToBoolean(TempData["Status"]) ? "alert-info" : "alert-danger")">
+        @info
+    </div>
+}
+
+<div class="card p-4 shadow-sm">
+    <form id="filterForm" method="get">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">From Date</label>
+                    <input type="date" class="form-control" name="fromDate" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">To Date</label>
+                    <input type="date" class="form-control" name="toDate" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Voucher No</label>
+                    <select class="form-select" name="PurchaseId">
+                        <option value="">[ Select Voucher NO ]</option>
+                        @if (ViewBag.Purchases != null)
+                        {
+                            @foreach (var purchase in ViewBag.Purchases)
+                            {
+                                <option value="@purchase.Id">@purchase.VoucherNo</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>No Voucher NO available</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Supplier</label>
+                    <select class="form-select" name="SupplierId">
+                        <option value="">[ Select Supplier ]</option>
+                        @if (ViewBag.Suppliers != null)
+                        {
+                            foreach (var supplier in ViewBag.Suppliers)
+                            {
+                                <option value="@supplier.Id">@supplier.Name</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>No Supplier available</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-search"></i> Search</button>
+            <a href="/Purchase/entry" class="btn btn-success"><i class="fa-solid fa-plus"></i> New Purchase</a>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive mt-4">
+    <table class="table table-hover table-bordered" id="PurchaseDataTable">
+        <thead class="table-dark">
+            <tr>
+                <th>No</th>
+                <th>Purchase Date</th>
+                <th>Supplier</th>
+                <th>Voucher</th>
+                <th>Total Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                int i = 1;
+                decimal totalAmountSum = 0;
+                @foreach (var item in Model)
+                {
+                    totalAmountSum += item.TotalAmount;
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.PurchaseDate.ToString("dd-MM-yyyy")</td>
+                        <td>@item.SupplierInfo</td>
+                        <td>@item.VoucherNo</td>
+                        <td class="text-end">@item.TotalAmount.ToString("C")</td>
+                        <td>
+                            <button class="btn btn-danger delete-button" data-url="/brand/Delete?id=@item.Id" data-name="@item.VoucherNo">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    i++;
+                }
+                <tr class="fw-bold">
+                    <td colspan="4" class="text-end">Total</td>
+                    <td class="text-end">@totalAmountSum.ToString("C")</td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No data available!</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        try {
+            $("#PurchaseDataTable").DataTable();
+        } catch (error) {
+            Swal.fire('Error', 'DataTables initialization failed: ' + error.message, 'error');
+        }
+
+        $(".delete-button").on("click", function (e) {
+            e.preventDefault();
+            let url = $(this).data("url");
+            let name = $(this).data("name");
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You are about to delete "${name}". This action cannot be undone.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: `"${name}" has been deleted.`,
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = url;
+                    });
+                }
+            });
+        });
+
+        $('#filterForm').on('submit', function (event) {
+            const fromDate = $('[name="fromDate"]').val();
+            const toDate = $('[name="toDate"]').val();
+            const purchaseId = $('[name="PurchaseId"]').val();
+            const supplierId = $('[name="Supplierid"]').val();
+
+            if (!(fromDate && toDate) && !purchaseId && !supplierId) {
+                Swal.fire('Warning', 'Please select a date range or filter criteria!', 'warning');
+                event.preventDefault();
+            }
+        });
+    });
+</script>

@@ -1,13 +1,15 @@
 ﻿using CloudPOS.Models.Entities;
+using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories.Domain
 {
-    public interface ISupplierRepository
+    public interface ISupplierRepository:IBaseRepository<SupplierEntity>
     {
-        void Create(SupplierEntity supplier);
-        IEnumerable<SupplierEntity> RetrieveAll();
-        IEnumerable<SupplierEntity> GetById(string Id);
-        void Delete(string Id);
-        void Update(SupplierEntity supplier);
+        SupplierEntity FindById(string Id);
+        IEnumerable<SupplierViewModel> GetSupplier();
+        bool IsAlreadyExist(string code, string name);
+        string GetNextSupplierCode();
+
     }
 }

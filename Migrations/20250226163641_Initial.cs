@@ -67,6 +67,24 @@ namespace CloudPOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Purchase",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VoucherNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SupplierId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Deliverystatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Purchase", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sale",
                 columns: table => new
                 {
@@ -89,6 +107,7 @@ namespace CloudPOS.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactInformation = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -233,8 +252,8 @@ namespace CloudPOS.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ProductCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -252,7 +271,7 @@ namespace CloudPOS.Migrations
                         column: x => x.BrandId,
                         principalTable: "Brand",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
@@ -270,6 +289,7 @@ namespace CloudPOS.Migrations
                     AdjustmentDate = table.Column<DateTime>(type: "datetime2", maxLength: 15, nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(35)", maxLength: 35, nullable: true),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -277,9 +297,45 @@ namespace CloudPOS.Migrations
                 {
                     table.PrimaryKey("PK_Inventory", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Inventory_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Inventory_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PurchaseDetail",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    PurchaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseDetail_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PurchaseDetail_Purchase_PurchaseId",
+                        column: x => x.PurchaseId,
+                        principalTable: "Purchase",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -314,31 +370,24 @@ namespace CloudPOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StockIncome",
+                name: "StockLedger",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    DeliveryStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LedgerDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StockIncome", x => x.Id);
+                    table.PrimaryKey("PK_StockLedger", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StockIncome_Product_ProductId",
+                        name: "FK_StockLedger_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_StockIncome_Supplier_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Supplier",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -388,6 +437,11 @@ namespace CloudPOS.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Inventory_CategoryId",
+                table: "Inventory",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inventory_ProductId",
                 table: "Inventory",
                 column: "ProductId");
@@ -403,6 +457,16 @@ namespace CloudPOS.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PurchaseDetail_ProductId",
+                table: "PurchaseDetail",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseDetail_PurchaseId",
+                table: "PurchaseDetail",
+                column: "PurchaseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SaleItem_ProductId",
                 table: "SaleItem",
                 column: "ProductId");
@@ -413,14 +477,9 @@ namespace CloudPOS.Migrations
                 column: "SaleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StockIncome_ProductId",
-                table: "StockIncome",
+                name: "IX_StockLedger_ProductId",
+                table: "StockLedger",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StockIncome_SupplierId",
-                table: "StockIncome",
-                column: "SupplierId");
         }
 
         /// <inheritdoc />
@@ -445,10 +504,16 @@ namespace CloudPOS.Migrations
                 name: "Inventory");
 
             migrationBuilder.DropTable(
+                name: "PurchaseDetail");
+
+            migrationBuilder.DropTable(
                 name: "SaleItem");
 
             migrationBuilder.DropTable(
-                name: "StockIncome");
+                name: "StockLedger");
+
+            migrationBuilder.DropTable(
+                name: "Supplier");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -457,13 +522,13 @@ namespace CloudPOS.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Purchase");
+
+            migrationBuilder.DropTable(
                 name: "Sale");
 
             migrationBuilder.DropTable(
                 name: "Product");
-
-            migrationBuilder.DropTable(
-                name: "Supplier");
 
             migrationBuilder.DropTable(
                 name: "Brand");

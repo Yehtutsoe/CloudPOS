@@ -42,7 +42,7 @@ namespace CloudPOS.Repositories.Domain
             return true;
         }
 
-        public void UpdateInventoryBalanceByProduct(string productId, string categoryId, int quantity)
+        public void UpdateInventoryBalanceByProduct(string productId, int quantity, string categoryId)
         {
             var inventoryEntity = _dbContext.Inventories.FirstOrDefault(v => v.ProductId == productId && v.CategoryId == categoryId);
             if (inventoryEntity != null)

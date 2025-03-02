@@ -4,6 +4,7 @@ using CloudPOS.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudPOS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226163641_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,40 +315,6 @@ namespace CloudPOS.Migrations
                     b.HasIndex("SaleId");
 
                     b.ToTable("SaleItem");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.StockBalanceEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("StockBalance");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.StockLedgerEntity", b =>
@@ -698,25 +667,6 @@ namespace CloudPOS.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Sales");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.StockBalanceEntity", b =>
-                {
-                    b.HasOne("CloudPOS.Models.Entities.CategoryEntity", "Categorys")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Prodcuts")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categorys");
-
-                    b.Navigation("Prodcuts");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.StockLedgerEntity", b =>

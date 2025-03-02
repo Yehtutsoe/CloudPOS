@@ -1,6 +1,6 @@
 ﻿namespace CloudPOS.Services
 {
-    public class PurchaseDetailService
+    public class PurchaseDetailService:IPurchaseDetailService
     {
     }
 }

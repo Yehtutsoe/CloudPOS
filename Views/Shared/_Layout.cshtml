@@ -4,127 +4,97 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CloudPOS</title>
+
+    <!-- Bootstrap & Custom Styles -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-    <!--Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="~/CloudPOS.styles.css" asp-append-version="true" />
-    <!-- For Sweetalert-->
+
+    <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow-lg mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-lg p-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CloudPOS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">CloudPOS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Brand</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/brand/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Brand
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/brand/List">List</a></li>
-                                </ul>
-                            </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Category</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/category/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Category
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/category/List">List</a></li>
-                                </ul>
-                            </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Product</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/product/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Product
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/product/List">List</a></li>
-                                </ul>
-                            </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Supplier</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/supplier/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Supplier
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/supplier/List">List</a></li>
-                                </ul>
-                            </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Purchase</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/purchase/entry">Entry</a></li>
+                                <li><a class="dropdown-item" href="/purchase/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    StockIncome
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/stockIncome/List">List</a></li>
-                                </ul>
-                            </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sale</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/sale/entry">Sale Process</a></li>
+                                <li><a class="dropdown-item" href="/sale/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Sale
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/sale/entry">Sale Process</a></li>
-                                    <li><a class="dropdown-item" href="/sale/List">List</a></li>
-                                </ul>
-                            </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Inventory</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/inventory/List">List</a></li>
+                            </ul>
                         </li>
-                        <li>
-                            <div class="dropdown me-1">
-                                <button class="btn btn-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Inventory
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-white">
-                                    <li><a class="dropdown-item" href="/inventory/List">List</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <partial name="_LoginPartial"></partial>
-                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><partial name="_LoginPartial"></partial></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container my-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer bg-light text-center py-3">
         <div class="container">
-            &copy; 2024 - CloudPOS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 CloudPOS - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <!--for Datatables.NET Plugin-->
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-    <!-- for sweetAlert-->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

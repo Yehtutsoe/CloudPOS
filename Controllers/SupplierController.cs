@@ -14,7 +14,17 @@ namespace CloudPOS.Controllers
         }
         public IActionResult Entry()
         {
-            return View();
+            var nextCode = _supplierService.GetNextSupplierCode();
+            var supplier = new SupplierViewModel()
+            {
+                Code = nextCode,
+                Name = string.Empty,
+                Address = string.Empty,
+                ContactInformation = string.Empty
+            };
+            ViewData["Info"] = null;
+            ViewData["Status"] = null;
+            return View(supplier);
         }
         #region Create
         [HttpPost]
@@ -54,26 +64,20 @@ namespace CloudPOS.Controllers
         #endregion
 
         public IActionResult List() {
-            return View(_supplierService.RetrieveAll()); 
+            return View(_supplierService.GetAll()); 
         }
         public IActionResult Delete(string Id)
         {
             try
             {
                 _supplierService.Delete(Id);
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = "Successfully delete the record to the System",
-                    IsOccurError = false
-                });
+                ViewData["Info"] = "Successfully save the record";
+                ViewData["Status"] = true;
             }
             catch (Exception ex)
             {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message} ",
-                    IsOccurError = true
-                });
+                ViewData["Info"] = "Occour error to save the record" + ex.Message;
+                ViewData["Status"] = false;
             }
             return RedirectToAction("List");
         }
@@ -86,30 +90,17 @@ namespace CloudPOS.Controllers
         [HttpPost]
         public IActionResult Update(SupplierViewModel ui)
         {
-            if (!ModelState.IsValid)
-            {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = "Can not update the record to the System",
-                    IsOccurError = true
-                });
-            }
+            
             try
             {
                 _supplierService.Update(ui);
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = "Successfully update the record to the System",
-                    IsOccurError = false
-                });
+                ViewData["Info"] = "Successfully update the record";
+                ViewData["Status"] = true;
             }
             catch (Exception ex)
             {
-                TempData["ErrorViewModel"] = Newtonsoft.Json.JsonConvert.SerializeObject(new ErrorViewModel
-                {
-                    Message = $"Error : {ex.Message}",
-                    IsOccurError = true
-                });
+                ViewData["Info"] = "Unsuccessfully update the record" + ex.Message;
+                ViewData["Status"] = false;
             }
             return RedirectToAction("List");
         }

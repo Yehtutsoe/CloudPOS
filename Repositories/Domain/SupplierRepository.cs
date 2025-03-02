@@ -1,50 +1,44 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
+using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories.Domain
 {
-    public class SupplierRepository : ISupplierRepository
+    public class SupplierRepository : BaseRepository<SupplierEntity> , ISupplierRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public SupplierRepository(ApplicationDbContext applicationDbContext)
+        public SupplierRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _applicationDbContext = applicationDbContext;
-        }
-        public void Create(SupplierEntity supplier)
-        {
-            _applicationDbContext.Suppliers.Add(supplier);
-            _applicationDbContext.SaveChanges();
+            _dbContext = dbContext;
         }
 
-        public void Delete(string Id)
+        public SupplierEntity FindById(string Id)
         {
-            var entity = _applicationDbContext.Suppliers.Find(Id);
-            if (entity != null)
+            return _dbContext.Suppliers.FirstOrDefault(s => s.Id == Id);
+        }
+
+        public IEnumerable<SupplierViewModel> GetSupplier()
+        {
+            return _dbContext.Suppliers.Select(s => new SupplierViewModel
             {
-                _applicationDbContext.Suppliers.Remove(entity);
-                _applicationDbContext.SaveChanges();
-            }
+                Id = s.Id,
+                Name = s.Name
+            }).ToList();
         }
 
-        public IEnumerable<SupplierEntity> GetById(string Id)
+        public bool IsAlreadyExist(string code, string name)
         {
-            return _applicationDbContext.Suppliers.Where(w => w.Id == Id).ToList();
+            return _dbContext.Suppliers.Where(s => s.Code != code && s.Name != name).Any();
         }
 
-        public IEnumerable<SupplierEntity> RetrieveAll()
+        public string GetNextSupplierCode()
         {
-            return _applicationDbContext.Suppliers.ToList();
-        }
-
-        public void Update(SupplierEntity supplier)
-        {
-            var existingEnity = _applicationDbContext.Suppliers.Find(supplier.Id);
-            if (existingEnity != null)
-            {
-                _applicationDbContext.Entry(existingEnity).CurrentValues.SetValues(supplier);
-                _applicationDbContext.SaveChanges();
-            }
+            var lastSupplier = _dbContext.Suppliers
+                  .OrderByDescending(s => s.Code)
+                  .FirstOrDefault();
+            return lastSupplier != null ? lastSupplier.Code : null;
         }
     }
 }

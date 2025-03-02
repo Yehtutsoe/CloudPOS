@@ -17,6 +17,7 @@ namespace CloudPOS.UnitOfWork
         public IInventoryRepository Inventories { get; }
         public IPurchaseRepository Purchases { get; }
         public IPurchaseDetailRepository PurchaseDetails { get; }
+        public IStockledgerRepository StockLedgers { get; }
 
         public UnitOfWork(ApplicationDbContext context,
                           IProductRepository productRepository,
@@ -27,7 +28,8 @@ namespace CloudPOS.UnitOfWork
                           ISupplierRepository suppliers,
                           IInventoryRepository inventories,
                           IPurchaseDetailRepository purchaseDetails,
-                          IPurchaseRepository purchases
+                          IPurchaseRepository purchases,
+                          IStockledgerRepository stockledger
                           )
         {
             _context = context;
@@ -40,6 +42,7 @@ namespace CloudPOS.UnitOfWork
             Inventories = inventories;
             PurchaseDetails = purchaseDetails;
             Purchases = purchases;
+            StockLedgers = stockledger;
         }
 
         public void Commit()

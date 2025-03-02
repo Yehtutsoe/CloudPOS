@@ -7,5 +7,6 @@ namespace CloudPOS.Repositories.Domain
     public interface IPurchaseRepository : IBaseRepository<PurchaseEntity>
     {
         IEnumerable<PurchaseViewModel> GetPurchase();
+        PurchaseEntity FindById(string Id);
     }
 }

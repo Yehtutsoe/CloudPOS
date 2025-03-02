@@ -14,6 +14,7 @@ namespace CloudPOS.UnitOfWork
         IPurchaseDetailRepository PurchaseDetails { get; }
         ISupplierRepository Suppliers { get; }
         IInventoryRepository Inventories { get; }
+        IStockledgerRepository StockLedgers { get; }
         void Commit(); // Save changes to the databases
         void Rollback();
         IDbContextTransaction BeginTransaction();
