@@ -29,7 +29,7 @@ namespace CloudPOS.Controllers
 
         private void BindPurchaseData()
         {
-           var purchases =  _purchaseService.GetPurchase();
+           var purchases =  _purchaseService.GetAll();
             ViewBag.Purchases = purchases;
         }
 

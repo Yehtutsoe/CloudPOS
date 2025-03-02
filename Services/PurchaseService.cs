@@ -109,8 +109,8 @@ namespace CloudPOS.Services
 
         public IEnumerable<PurchaseViewModel> GetAll(DateTime? fromDate = null, DateTime? toDate = null, string? supplierId = null, string? purchaseId = null)
         {
-            var purchase = from p in _unitOfWork.Purchases.GetAll().ToList()
-                            join s in _unitOfWork.Suppliers.GetAll().ToList()
+            var purchase = (from p in _unitOfWork.Purchases.GetAll()
+                            join s in _unitOfWork.Suppliers.GetAll()
                             on p.SupplierId equals s.Id
                             select new PurchaseViewModel()
                             {
@@ -121,20 +121,20 @@ namespace CloudPOS.Services
                                 VoucherNo = p.VoucherNo,
                                 SupplierInfo = s.Name,
                                 TotalAmount = p.TotalCost
-                            };
+                            });
             if (fromDate.HasValue)
             {
-                purchase = purchase.Where(s => s.PurchaseDate >= fromDate.Value);
+                purchase = purchase.Where(s =>s.PurchaseDate != null && s.PurchaseDate >= fromDate.Value);
             }
             if (toDate.HasValue)
             {
-                purchase = purchase.Where(s => s.PurchaseDate <= toDate.Value);
+                purchase = purchase.Where(s => s.PurchaseDate != null && s.PurchaseDate <= toDate.Value);
             }
             if(!string.IsNullOrEmpty(supplierId) && supplierId != "Select an Supplier")
             {
                 purchase = purchase.Where(s => s.SupplierId == supplierId);
             }
-            if(string.IsNullOrEmpty(purchaseId) && purchaseId !="Select an VoucherNo")
+            if(!string.IsNullOrEmpty(purchaseId) && purchaseId !="Select an VoucherNo")
             {
                 purchase = purchase.Where(s =>s.Id == purchaseId);
             }

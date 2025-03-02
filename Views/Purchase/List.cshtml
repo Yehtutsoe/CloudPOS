@@ -100,7 +100,7 @@
                         <td>@item.VoucherNo</td>
                         <td class="text-end">@item.TotalAmount.ToString("C")</td>
                         <td>
-                            <button class="btn btn-danger delete-button" data-url="/brand/Delete?id=@item.Id" data-name="@item.VoucherNo">
+                            <button class="btn btn-danger delete-button" data-url="/purchase/Delete?id=@item.Id" data-name="@item.VoucherNo">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </td>
@@ -147,12 +147,21 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: `"${name}" has been deleted.`,
-                        icon: 'success'
-                    }).then(() => {
-                        window.location.href = url;
+                    $.ajax({
+                        url: url,
+                        type: 'POST', // Ensure your Delete action supports POST
+                        success: function (response) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: `"${name}" has been deleted.`,
+                                icon: 'success'
+                            }).then(() => {
+                                location.reload(); // Refresh page after deletion
+                            });
+                        },
+                        error: function () {
+                            Swal.fire('Error', 'Failed to delete. Try again!', 'error');
+                        }
                     });
                 }
             });
@@ -162,7 +171,7 @@
             const fromDate = $('[name="fromDate"]').val();
             const toDate = $('[name="toDate"]').val();
             const purchaseId = $('[name="PurchaseId"]').val();
-            const supplierId = $('[name="Supplierid"]').val();
+            const supplierId = $('[name="SupplierId"]').val();
 
             if (!(fromDate && toDate) && !purchaseId && !supplierId) {
                 Swal.fire('Warning', 'Please select a date range or filter criteria!', 'warning');
@@ -171,3 +180,4 @@
         });
     });
 </script>
+

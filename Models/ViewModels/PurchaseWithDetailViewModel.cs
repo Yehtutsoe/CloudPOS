@@ -20,7 +20,7 @@
         public string VoucherNo { get; set; }
         public string SupplierId { get; set; }
         public string SupplierInfo { get; set; }
-        public Decimal TotalAmount { get; set; }
+        public Decimal TotalAmount { get; set; } = 0;
         public string? Deliverystatus { get; set; }
 
         public PurchaseViewModel() { }

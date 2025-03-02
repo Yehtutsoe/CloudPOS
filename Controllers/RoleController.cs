@@ -16,7 +16,7 @@ namespace CloudPOS.Controllers
         {
             var roles = await _roleService.GetAllRoles();
             ViewData["Roles"] = roles;
-            return View(new RoleViewModel());
+            return View(roles);
         }
         [HttpPost]
         public async Task<IActionResult> Role(RoleViewModel roleViewModel)
