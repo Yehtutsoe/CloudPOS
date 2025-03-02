@@ -38,14 +38,6 @@ namespace CloudPOS.Services
             {
                 return null;
             }
-            return new SupplierViewModel()
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                ContactInformation = entity.ContactInformation,
-                Address = entity.Address
-            };
-        }
 
         public IEnumerable<SupplierViewModel> RetrieveAll()
         {
