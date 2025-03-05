@@ -21,6 +21,7 @@ namespace CloudPOS.Services
                 Id = Guid.NewGuid().ToString(),
                 Name = productViewModel.Name,
                 Code = productViewModel.Code,
+                BarCode = productViewModel.BarCode,
                 CostPrice = productViewModel.CostPrice,
                 DiscountPrice = productViewModel.DiscountPrice,
                 SalePrice = productViewModel.SalePrice,
@@ -73,7 +74,8 @@ namespace CloudPOS.Services
                                                           SalePrice = p.SalePrice,
                                                           Description = p.Description,
                                                           CategoryInfo = c.Name,
-                                                          BrandInfo = b.Name
+                                                          BrandInfo = b.Name,
+                                                          BarCode = p.BarCode
                                                       });
             return products;
         }
@@ -92,7 +94,8 @@ namespace CloudPOS.Services
                                             Quantity = s.Quantity,
                                             CostPrice = s.CostPrice,
                                             SalePrice = s.SalePrice,
-                                            DiscountPrice = s.DiscountPrice
+                                            DiscountPrice = s.DiscountPrice,
+                                            BarCode = s.BarCode
 
                                         }).SingleOrDefault();
         }
@@ -144,6 +147,7 @@ namespace CloudPOS.Services
             existingProduct.CreatedAt = DateTime.Now;
             existingProduct.IsActive = true;
             existingProduct.Quantity = productViewModel.Quantity;
+            existingProduct.BarCode = productViewModel.BarCode;
             _unitOfWork.Products.Update(existingProduct);
             _unitOfWork.Commit();
         }

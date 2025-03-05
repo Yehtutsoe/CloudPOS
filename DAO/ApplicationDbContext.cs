@@ -20,17 +20,7 @@ namespace CloudPOS.DAO
         public DbSet<PurchaseDetailEntity> PurchaseDetails { get; set; }
         public DbSet<InventoryEntity> Inventories { get; set; }
         public DbSet<StockLedgerEntity> StockLedgers { get; set; }
-        public DbSet<StockBalanceEntity> StockBalances { get; set; }
+        public DbSet<PriceEntity> Prices { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder); // Use the identity framework (not use custom User entity)
-
-            modelBuilder.Entity<SaleEntity>()
-                .HasMany(s => s.SaleItems)
-                .WithOne(si => si.Sales)
-                .HasForeignKey(si => si.SaleId)
-                .OnDelete(DeleteBehavior.Cascade); // Optional: Cascade delete if necessary
-        }
     }
 }

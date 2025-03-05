@@ -1,8 +1,6 @@
 ﻿using CloudPOS.DAO;
 using CloudPOS.Models.Entities;
-using CloudPOS.Models.ViewModels;
 using CloudPOS.Repositories.Common;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Repositories.Domain
 {
@@ -25,22 +23,47 @@ namespace CloudPOS.Repositories.Domain
             return _dbContext.Inventories.FirstOrDefault(iv => iv.ProductId == productId);
         }
 
-        public bool ReduceForSale(string productId, int quantity)
+        public List<(string? ProductId, int QuantityUsed)> ReduceForSale(string productId, int quantity)
         {
+            if (string.IsNullOrWhiteSpace(productId))
+            {
+                throw new ArgumentException("Product ID cannot be null or empty.", nameof(productId));
+            }
+
+            if (quantity <= 0)
+            {
+                throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
+            }
+
+            // Fetch inventory record
             var inventory = _dbContext.Inventories.FirstOrDefault(v => v.ProductId == productId);
             if (inventory == null)
             {
-                throw new Exception("Not found the product in Inventory");
+                throw new KeyNotFoundException("Product not found in inventory.");
             }
+
             if (inventory.Quantity < quantity)
             {
-                throw new Exception("Not enought quantity of product");
+                throw new InvalidOperationException("Not enough stock available.");
             }
-            inventory.Quantity -= quantity;
-            inventory.AdjustmentDate = DateTime.Now;
+
+            // Track used quantities
+            var usedQuantities = new List<(string? ProductId, int QuantityUsed)>();
+
+            // Deduct stock and record usage
+            int usedQuantity = Math.Min(inventory.Quantity, quantity);
+            inventory.Quantity -= usedQuantity;
+            inventory.AdjustmentDate = DateTime.UtcNow;
+
+            usedQuantities.Add((productId, usedQuantity));
+
             _dbContext.SaveChanges();
-            return true;
+
+            return usedQuantities;
         }
+
+
+
 
         public void UpdateInventoryBalanceByProduct(string productId, int quantity, string categoryId)
         {

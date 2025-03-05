@@ -30,7 +30,13 @@
             <input type="text" asp-for="Name" class="form-control" />
             <span class="text-danger" asp-validation-for="Name"></span>
         </div>
-
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="BarCode">
+                BarCode
+            </label>
+            <input type="text" asp-for="BarCode" class="form-control" />
+            <span class="text-danger" asp-validation-for="BarCode"></span>
+        </div>
         <div class="form-group mb-1">
             <label class="form-label" asp-for="Quantity">
                 Quantity

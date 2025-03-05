@@ -1,30 +1,34 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories.Domain;
-using Humanizer;
+using CloudPOS.UnitOfWork;
 
 namespace CloudPOS.Services
 {
     public class SaleItemService : ISaleItemService
     {
-        private readonly ISaleItemRepository _saleItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SaleItemService(ISaleItemRepository saleItemRepository)
+        public SaleItemService(IUnitOfWork unitOfWork)
         {
-            _saleItemRepository = saleItemRepository;
+            _unitOfWork = unitOfWork;
         }
 
-        public SaleItemViewModel GetActiveProduct()
+        public void Create(SaleItemViewModel saleItemViewModel)
         {
-            IList<ProductViewModel> products = _saleItemRepository.GetProducts().Select(s => new ProductViewModel
+            SaleItemEntity entity = new SaleItemEntity()
             {
-                Id = s.Id,
-                Name = s.Name,
-            }).ToList();
-            return new SaleItemViewModel()
-            {
-               ProductViewModels = products
+                Id = saleItemViewModel.SaleOrderId,
+                CreatedAt = DateTime.Now,
+                IsActive  = true,
+                ProductId = saleItemViewModel.ProductId,
+                Price = saleItemViewModel.Price,
+                DiscountAmount = saleItemViewModel.DiscountAmount,
+                Quantity = saleItemViewModel.Quantity,
+                TotalPrice = saleItemViewModel.Total,
+                SaleAmount = saleItemViewModel.Amount,
+                
             };
+            _unitOfWork.SaleItems.Create(entity);
         }
     }
 }

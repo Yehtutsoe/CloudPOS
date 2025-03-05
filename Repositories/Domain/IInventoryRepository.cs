@@ -8,7 +8,7 @@ namespace CloudPOS.Repositories.Domain
     {
         InventoryEntity GetInventoryByProduct(string productId);
         void UpdateInventoryBalanceByProduct(string productId, int quantity,string categoryId);
-        bool ReduceForSale(string productId, int quantity);
+        List<(string? ProductId,int QuantityUsed)> ReduceForSale(string productId, int quantity);
         int GetAvaliableStock(string productId);
 
     }

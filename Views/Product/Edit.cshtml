@@ -1,71 +1,119 @@
 ﻿@model ProductViewModel
-@{
-    if (TempData["ErrorViewModel"] != null)
-    {
-        var error = Newtonsoft.Json.JsonConvert.DeserializeObject<ErrorViewModel>((string)TempData["ErrorViewModel"]);
-        <div class="alert @(error.IsOccurError ? "alert-danger" : "alert-success")">
-            @error.Message
+
+<h2 class="mt-1">Product Entry Form</h2>
+<form action="/product/entry" method="post">
+    <div class="col-6">
+            
+            <input type="hidden" asp-for="@Model.Id" class="form-control"/>
+
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Code">Code</label>
+            <input type="text" asp-for="@Model.Code" class="form-control" readonly />
+            <span asp-validation-for="Code" class="text-danger"></span>
         </div>
-    }
-}
-<h2>Product Edit Form</h2>
-<form action="/product/update" method="post">
 
-    <input type="text" value="@Model.Id" hidden name="Id"/>
-    <div class="mb-3">
-        <label for="Category" class="form-label">Category</label>
-        <select name="CategoryId" id="Category" class="form-select">
-            
-            @foreach(var category in Model.CategoryViewModels)
-            {
-                if(category.Id == Model.CategoryId){
-                    <option value="@category.Id" selected>@category.Name</option>
-                }
-                else
-                {
-                    <option value="@category.Id">@category.Name</option>
-                }
-            }
-        </select>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="CategoryId">Category</label>
+            <select asp-items="@(new SelectList(ViewBag.Categorys,"Value","Text"))" class="form-control" asp-for="CategoryId" id="CategoryId">
+                <option value=""> [ Select One ]</option>
+            </select>
+            <span class="text-danger" asp-validation-for="CategoryId"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="BrandId">Brand</label>
+            <select asp-items="@(new SelectList(ViewBag.Brands,"Value","Text"))" class="form-control" asp-for="BrandId" id="BrandId">
+                <option value="x"> [ Select One ]</option>
+            </select>
+            <span class="text-danger" asp-validation-for="BrandId"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Name">
+                Name
+            </label>
+            <input type="text" value="@Model.Name" class="form-control" />
+            <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="BarCode">
+                BarCode
+            </label>
+            <input type="text" asp-for="@Model.BarCode" class="form-control" />
+            <span class="text-danger" asp-validation-for="BarCode"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Quantity">
+                Quantity
+            </label>
+            <input type="text" asp-for="@Model.Quantity" class="form-control" />
+            <span class="text-danger" asp-validation-for="Quantity"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="CostPrice">
+                Cost Price
+            </label>
+            <input type="number" asp-for="@Model.CostPrice" class="form-control" />
+            <span class="text-danger" asp-validation-for="CostPrice"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="SalePrice">
+                Sale Price
+            </label>
+            <input type="number" asp-for="@Model.SalePrice" class="form-control" />
+            <span class="text-danger" asp-validation-for="SalePrice"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="DiscountPrice">
+                Discount Price
+            </label>
+            <input type="number" asp-for="@Model.DiscountPrice" class="form-control" />
+            <span class="text-danger" asp-validation-for="DiscountPrice"></span>
+        </div>
+        <div class="form-group mb-1">
+            <label class="form-label" asp-for="Description">
+                Description
+            </label>
+            <textarea type="text" rows="2" asp-for="@Model.Description" class="form-control"></textarea>
+            <span class="text-danger" asp-validation-for="Description"></span>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="PhoneModel" class="form-label">Model</label>
-        <select name="PhoneModelId" id="PhoneModel" class="form-select">
-            
-            @foreach(var phoneModel in Model.BrandViewModels)
-            {
-                if(phoneModel.Id == Model.BrandId)
-                {
-                    <option value="@phoneModel.Id" selected>@phoneModel.Name</option>
-                }
-                else
-                {
-                    <option value="@phoneModel.Id">@phoneModel.Name</option>
-                }
-            }
-        </select>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="Type">Type</label>
-        <input type="text" name="Type" value="@Model.Name" class="form-control" placeholder="Enter Type" />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label" for="SerialNumber">SerialNumber</label>
-        <input type="text" name="SerialNumber" value="" class="form-control"/>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="IMEINumber">IMEI Number</label>
-        <input type="text" name="IMEINumber" value="" class="form-control" />
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="CostPrice">CostPrice</label>
-        <input type="number" name="CostPrice" value="@Model.CostPrice" class="form-control"/>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="SalePrice">SalePrice</label>
-        <input type="number" name="SalePrice" value="@Model.SalePrice" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-success"><i class="fa-solid fa-pencil"></i>Update</button>
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Update</button>
     <a href="/product/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@section Scripts {
+
+    <script>
+                $(document).ready(function() {
+            // When the Category dropdown changes
+            $('#CategoryId').change(function() {
+                var categoryId = $(this).val(); // Get selected Category ID
+                if (categoryId) {
+                    $.ajax({
+                        url: '/product/GetBrandByCategory',
+                        type: 'GET',
+                        data: { categoryId: categoryId },
+                        success: function(data) {
+                            console.log("Brands data: ", data);  // Debugging the received data
+
+                            var brandSelect = $('#BrandId');
+                            brandSelect.empty();  // Clear existing brands
+                            brandSelect.append('<option value=""> [ Select One ]</option>');  // Default option
+
+                            // Check if the data is not empty and populate the dropdown
+                            if (data.length > 0) {
+                                $.each(data, function(index, brand) {
+                                    brandSelect.append('<option value="' + brand.value + '">' + brand.text + '</option>');
+                                });
+                            } else {
+                                brandSelect.append('<option value="">No Brands Available</option>');
+                            }
+                        },
+                        error: function() {
+                            alert('Failed to load brands.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

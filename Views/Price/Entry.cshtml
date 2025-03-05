@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Price";
+}
+<h3>Price</h3>
+@{
+    var info = ViewData["info"];
+}
+@if (info != null)
+{
+    if (Convert.ToBoolean(ViewData["status"]))
+    {
+        <div class="alert alert-success" role="alert">
+            @info
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @info
+        </div>
+    }
+}
+<form action="/Price/entry" method="post">
+    <div class="mb-3">
+        <label class="form-label">Product</label>
+        <select class="form-select" name="ProductId">
+            <option selected> [ Select One ]</option>
+            @foreach (var item in ViewBag.Products)
+            {
+                <option value="@item.id">@item.Name</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Pricing Date</label>
+        <input type="date" class="form-control" name="PricingDate" required>
+
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Purchace Price</label>
+        <input type="number" class="form-control" name="PurchasePrice" required>
+
+    </div>
+    <div class="mb-3">
+        <label class="form-label">WholeSale Price</label>
+        <input type="number" class="form-control" name="WholeSalePrice" required>
+
+    </div>
+    <div class="mb-3">
+        <label class="form-label">RetailSale Price</label>
+        <input type="number" class="form-control" name="RetailSalePrice" required>
+
+    </div>
+
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Save</button>
+    <a href="/price/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
+
+</form> 

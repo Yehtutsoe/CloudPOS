@@ -14,6 +14,7 @@ namespace CloudPOS.Models.ViewModels
         public Decimal CostPrice { get; set; }
         public string BrandId { get; set; }
         public string BrandInfo { get; set; }
+        public string BarCode { get; set; }
         public IList<BrandViewModel> BrandViewModels { get; set; } //List for UI Binding
         public string CategoryId { get; set; }
         public string CategoryInfo { get; set; }

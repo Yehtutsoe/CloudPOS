@@ -4,6 +4,6 @@ namespace CloudPOS.Services
 {
     public interface ISaleItemService
     {
-        SaleItemViewModel GetActiveProduct();
+        void Create(SaleItemViewModel saleItemViewModel);
     }
 }

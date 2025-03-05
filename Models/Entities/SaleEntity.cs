@@ -11,7 +11,12 @@ namespace CloudPOS.Models.Entities
         public DateTime SaleDate { get; set; }
         public string VoucherNo { get; set; }
         public Decimal TotalAmount { get; set; }
-        public IList<SaleItemEntity> SaleItems { get; set; } = new List<SaleItemEntity>();
+        public Decimal SubTotal { get; set; }
+        public Decimal NetTotal { get; set; }
+        public Decimal CashAmount { get; set; }
+        public Decimal DiscountAmount { get; set; }
+        public Decimal Balance { get; set; }
+        public string SaleType { get; set; }
         public string UserId { get; set; }
 
     }

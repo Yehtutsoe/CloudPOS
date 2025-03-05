@@ -22,13 +22,13 @@
         @foreach(var sale in Model){
         <tr>
             <td>@i</td>
-            <td>@sale.ProductInfo</td>
-            <td>@sale.UnitPrice  MMK</td>
+            <td>@sale.ProductName</td>
+            <td>@sale.Price  MMK</td>
             <td>@sale.Quantity</td>
-            <td>@sale.Remark</td>
+            <td></td>
             <td>@sale.SaleDate.ToString("dd-MM-yyyy")</td>
             <td>
-                    <a href="javascript:void(0)" data-url="/sale/delete?id=@sale.Id" data-name="Sale" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></a>
+                    <a href="javascript:void(0)" data-url="/sale/delete?id=" data-name="Sale" class="btn btn-danger delete-button"><i class="fa-solid fa-trash"></i></a>
             </td>
         </tr>
         i++;

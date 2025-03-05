@@ -9,7 +9,7 @@ namespace CloudPOS.UnitOfWork
         private readonly ApplicationDbContext _context;
 
         public IProductRepository Products { get; }
-        public ISaleRepository Sales { get; }
+        public ISaleOrderRepository Sales { get; }
         public ISaleItemRepository SaleItems { get; }
         public ICategoryRepository Categories { get; } 
         public IBrandRepository Brands { get; }
@@ -18,10 +18,11 @@ namespace CloudPOS.UnitOfWork
         public IPurchaseRepository Purchases { get; }
         public IPurchaseDetailRepository PurchaseDetails { get; }
         public IStockledgerRepository StockLedgers { get; }
+        public IPriceRepository Prices { get; }
 
         public UnitOfWork(ApplicationDbContext context,
                           IProductRepository productRepository,
-                          ISaleRepository saleRepository,
+                          ISaleOrderRepository saleRepository,
                           ISaleItemRepository saleItemRepository,
                           ICategoryRepository categoryRepository,
                           IBrandRepository brands,
@@ -29,7 +30,8 @@ namespace CloudPOS.UnitOfWork
                           IInventoryRepository inventories,
                           IPurchaseDetailRepository purchaseDetails,
                           IPurchaseRepository purchases,
-                          IStockledgerRepository stockledger
+                          IStockledgerRepository stockledger,
+                          IPriceRepository prices
                           )
         {
             _context = context;
@@ -43,6 +45,7 @@ namespace CloudPOS.UnitOfWork
             PurchaseDetails = purchaseDetails;
             Purchases = purchases;
             StockLedgers = stockledger;
+            Prices = prices;
         }
 
         public void Commit()

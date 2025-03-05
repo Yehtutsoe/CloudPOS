@@ -8,11 +8,11 @@ namespace CloudPOS.Controllers
 {
     public class SaleController : Controller
     {
-        private readonly ISaleProcessService _saleService;
+        private readonly ISaleOrderService _saleService;
         private readonly IProductService _productService;
         private readonly ISaleItemService _saleItemService;
 
-        public SaleController(ISaleProcessService saleService, IProductService productService,ISaleItemService saleItemService)
+        public SaleController(ISaleOrderService saleService, IProductService productService,ISaleItemService saleItemService)
         {
             _saleService = saleService;
             _productService = productService;
@@ -20,17 +20,17 @@ namespace CloudPOS.Controllers
         }
         public IActionResult Entry()
         {
-            var prodcuts = _saleItemService.GetActiveProduct();
+      //      var prodcuts = _saleItemService.GetActiveProduct();
             _productService.GetAll();
-            return View(prodcuts);
+            return View();
         }
         [HttpPost]
         public IActionResult AddToCart(SaleItemViewModel saleItem)
         {
             ViewBag.Info = "Adding an sale item to cart";
             var products = _productService.GetById(saleItem.ProductId);
-            saleItem.ProductInfo = products.Name;
-            saleItem.UnitPrice = products.SalePrice;
+            saleItem.ProductName = products.Name;
+            saleItem.Price = products.SalePrice;
             if (SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart") == null)
             {
                 var cart = new List<SaleItemViewModel>();
@@ -67,8 +67,8 @@ namespace CloudPOS.Controllers
                 return View(new List<SaleItemViewModel>());
             }
                 TempData["SaleDate"] = saleView.SaleDate;
-            TempData["VoucherNo"] = saleView.VoucherNo;
-            decimal total = cart.Sum(item => item.UnitPrice * item.Quantity);
+            //TempData["VoucherNo"] = saleView.
+            decimal total = cart.Sum(item => item.Price * item.Quantity);
             TempData["TotalAmount"] = total.ToString("F2");
             ViewBag.total = total;
             return View(cart);
@@ -81,7 +81,7 @@ namespace CloudPOS.Controllers
                 var cart = SessionHelper.GetDataFromSession<List<SaleItemViewModel>>(HttpContext.Session, "cart");
                 foreach (var saleItems in cart)
                 {
-                    _saleService.CreateSale(sale,saleItem);
+                //    _saleService.CreateSale(sale,saleItem);
                 }
                 SessionHelper.ClearSession(HttpContext.Session);
             }
@@ -105,13 +105,13 @@ namespace CloudPOS.Controllers
         }
         public IActionResult List()
         {
-            var sale = _saleService.GetAllSales();
-            return View(sale);
+       //     var sale = _saleService.GetAllSales();
+            return View();
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Delete(string Id)
         {
-            _saleService.DeleteSale(Id);
+         //   _saleService.DeleteSale(Id);
             return Json(new {success = true});
         }
         

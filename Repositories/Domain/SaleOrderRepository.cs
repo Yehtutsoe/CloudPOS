@@ -4,11 +4,11 @@ using CloudPOS.Repositories.Common;
 
 namespace CloudPOS.Repositories.Domain
 {
-    public class SaleItemRepository : BaseRepository<SaleItemEntity>, ISaleItemRepository
+    public class SaleOrderRepository : BaseRepository<SaleEntity>, ISaleOrderRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public SaleItemRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public SaleOrderRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }

@@ -1,13 +1,57 @@
 ﻿@model IList<SaleItemViewModel>
+@{
+    ViewData["Title"] = "Cart - Sale";
+}
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link href="~/lib/datatables/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        /* Custom CSS for better spacing and padding */
+        .form-label {
+            font-weight: 600;
+        }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .row.mb-3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .fieldset {
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .legend {
+            font-size: 1.5rem;
+            color: #0056b3;
+        }
+    </style>
 </head>
-<h1>Cart Item are as following</h1>
+
+<h1 class="text-center mb-4">Cart Items</h1>
 <hr />
+
 <form action="/sale/paid" method="post">
     <fieldset>
-        <legend style="text-align:center">Sale</legend>
+        <legend class="text-center legend">Sale Information</legend>
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">Voucher No</label>
             <div class="col-sm-10">
@@ -15,7 +59,7 @@
             </div>
         </div>
         <div class="row mb-3">
-            <label class="col-sm-2 col-form-label">Saled date</label>
+            <label class="col-sm-2 col-form-label">Sale Date</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" name="SaledDate" required value="@TempData["SaleDate"]" readonly>
             </div>
@@ -27,48 +71,68 @@
             </div>
         </div>
     </fieldset>
-    <table class="table" id="cartTable">
-        <thead>
-            <tr>
-                <th scope="col">Sr.No</th>
-                <th scope="col">Product</th>
-                <th scope="col">Unit Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Remark</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int i = 1;
-            }
-            @foreach (var c in Model)
-            {
+
+    <!-- Cart Table -->
+    <div class="table-responsive">
+        <table class="table table-hover" id="cartTable">
+            <thead class="thead-dark">
                 <tr>
-                    <th scope="row">@i</th>
-                    <td>@c.ProductInfo</td>
-                    <td>@c.UnitPrice</td>
-                    <td>@c.Quantity</td>
-                    <td>@c.Remark</td>
-                    <td>
-                        <a href="/sale/remove?Id=@c.Id" class="btn btn-danger" role="button" onclick="return confirm('are you sure to remove this record?');"><i class="bi bi-trash"></i>remove</a>
-                    </td>
+                    <th scope="col">Sr. No</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Remark</th>
+                    <th scope="col">Action</th>
                 </tr>
-                i++;
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@c.ProductName</td>
+                        <td>@c.Price</td>
+                        <td>@c.Quantity</td>
+                        <td></td>
+                        <td>
+                            <a href="/sale/remove?Id=" class="btn btn-danger btn-sm" role="button" onclick="return confirm('Are you sure you want to remove this item?');">
+                                <i class="bi bi-trash"></i> Remove
+                            </a>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action Buttons -->
     <div class="row mb-3">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-success"><i class="bi bi-floppy"></i>Paid</button>
-            <a href="/sale/entry" class="btn btn-warning" role="button" onclick="return confirm('are you sure to go to add to cart');"><i class="bi bi-trash"></i>Continue Shopping</a>
+        <div class="col-sm-10 offset-sm-2">
+            <button type="submit" class="btn btn-success btn-lg mb-3">
+                <i class="bi bi-floppy"></i> Paid
+            </button>
+            <a href="/sale/entry" class="btn btn-warning btn-lg" role="button" onclick="return confirm('Are you sure you want to continue shopping?');">
+                <i class="bi bi-cart-plus"></i> Continue Shopping
+            </a>
         </div>
     </div>
 </form>
+
 <script>
     $(document).ready(function () {
-        $("#cartTable").DataTable();
+        $("#cartTable").DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": false
+        });
     });
 </script>
+
 @section Scripts {
     <script src="~/lib/datatables/js/jquery.datatables.min.js"></script>
     <script src="~/lib/datatables/js/datatables.bootstrap4.min.js"></script>

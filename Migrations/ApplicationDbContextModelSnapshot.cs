@@ -123,10 +123,48 @@ namespace CloudPOS.Migrations
                     b.ToTable("Inventory");
                 });
 
+            modelBuilder.Entity("CloudPOS.Models.Entities.PriceEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("PricingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("PurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RetailSalePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("WholeSalePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Price");
+                });
+
             modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BarCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BrandId")
                         .IsRequired()
@@ -252,15 +290,34 @@ namespace CloudPOS.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CashAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("NetTotal")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("SaleDate")
                         .HasMaxLength(50)
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("SaleType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
@@ -286,8 +343,14 @@ namespace CloudPOS.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -297,13 +360,15 @@ namespace CloudPOS.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<string>("Remark")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("SaleAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SaleId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -312,40 +377,6 @@ namespace CloudPOS.Migrations
                     b.HasIndex("SaleId");
 
                     b.ToTable("SaleItem");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.StockBalanceEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CategoryId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("StockBalance");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.StockLedgerEntity", b =>
@@ -643,6 +674,17 @@ namespace CloudPOS.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("CloudPOS.Models.Entities.PriceEntity", b =>
+                {
+                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("CloudPOS.Models.Entities.ProductEntity", b =>
                 {
                     b.HasOne("CloudPOS.Models.Entities.BrandEntity", "Brands")
@@ -690,7 +732,7 @@ namespace CloudPOS.Migrations
                         .IsRequired();
 
                     b.HasOne("CloudPOS.Models.Entities.SaleEntity", "Sales")
-                        .WithMany("SaleItems")
+                        .WithMany()
                         .HasForeignKey("SaleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -698,25 +740,6 @@ namespace CloudPOS.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Sales");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.StockBalanceEntity", b =>
-                {
-                    b.HasOne("CloudPOS.Models.Entities.CategoryEntity", "Categorys")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CloudPOS.Models.Entities.ProductEntity", "Prodcuts")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Categorys");
-
-                    b.Navigation("Prodcuts");
                 });
 
             modelBuilder.Entity("CloudPOS.Models.Entities.StockLedgerEntity", b =>
@@ -784,11 +807,6 @@ namespace CloudPOS.Migrations
             modelBuilder.Entity("CloudPOS.Models.Entities.PurchaseEntity", b =>
                 {
                     b.Navigation("PurchaseDetails");
-                });
-
-            modelBuilder.Entity("CloudPOS.Models.Entities.SaleEntity", b =>
-                {
-                    b.Navigation("SaleItems");
                 });
 #pragma warning restore 612, 618
         }
