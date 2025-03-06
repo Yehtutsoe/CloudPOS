@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Price";
 }
 <h3>Price</h3>
@@ -20,41 +21,48 @@
         </div>
     }
 }
-<form action="/Price/entry" method="post">
+<form action="/Price/update" method="post">
     <div class="col-6">
+        <input type="hidden" name="Id" class="form-control" value="@Model.Id"/>
         <div class="mb-3">
             <label class="form-label">Product</label>
             <select class="form-select" name="ProductId">
-                <option selected> [ Select One ]</option>
+
                 @foreach (var item in ViewBag.Products)
                 {
-                    <option value="@item.Id">@item.Name</option>
+                    if(item.Id == Model.Id)
+                    {
+                        <option value="@item.Id" selected>@item.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id" selected>@item.Code</option>
+                    }
                 }
             </select>
         </div>
         <div class="mb-3">
             <label class="form-label">Pricing Date</label>
-            <input type="date" class="form-control" name="PricingDate" required>
+            <input type="date" class="form-control" name="PricingDate" value="@Model.PricingDate.ToString("yyyy-MM-dd")" required>
 
         </div>
         <div class="mb-3">
             <label class="form-label">Purchace Price</label>
-            <input type="number" class="form-control" name="PurchasePrice" required>
+            <input type="number" class="form-control" name="PurchasePrice" value="@Model.PurchasePrice" required>
 
         </div>
         <div class="mb-3">
             <label class="form-label">WholeSale Price</label>
-            <input type="number" class="form-control" name="WholeSalePrice" required>
+            <input type="number" class="form-control" name="WholeSalePrice" value="@Model.WholeSalePrice" required>
 
         </div>
         <div class="mb-3">
             <label class="form-label">RetailSale Price</label>
-            <input type="number" class="form-control" name="RetailSalePrice" required>
+            <input type="number" class="form-control" name="RetailSalePrice" value="@Model.RetailSalePrice" required>
 
         </div>
     </div>
    
-    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Save</button>
+    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Update</button>
     <a href="/price/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
-
 </form> 

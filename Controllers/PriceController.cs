@@ -41,6 +41,10 @@ namespace CloudPOS.Controllers
             }
             return RedirectToAction("List");
         }
+        public IActionResult List()
+        {
+            return View(_priceService.GetAll());
+        }
         public IActionResult Delete(string Id)
         {
             try

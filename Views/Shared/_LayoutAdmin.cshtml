@@ -18,6 +18,9 @@
     <link rel="stylesheet" href="~/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <!-- Toastr CSS -->
     <link href="~/lib/toastr.js/toastr.min.css" rel="stylesheet" />
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -312,6 +315,27 @@
                                 </li>
                             </ul>
                         </li>
+                        <!-- Pricing -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-dollar-sign"></i>
+                                <p>Pricing <i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/price/entry" class="nav-link">
+                                        <i class="fas fa-plus nav-icon"></i>
+                                        <p>Entry</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/price/list" class="nav-link">
+                                        <i class="fas fa-list-ol nav-icon"></i>
+                                        <p>List</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
                         <!-- Inventory -->
                         <li class="nav-item">
@@ -400,6 +424,9 @@
     <!-- DataTables & Plugins -->
     <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Toastr -->
     <script src="~/lib/toastr.js/toastr.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -59,6 +59,13 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Pricing</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/price/entry">Entry</a></li>
+                                <li><a class="dropdown-item" href="/price/List">List</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sale</a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/sale/entry">Sale Process</a></li>
@@ -95,6 +102,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
