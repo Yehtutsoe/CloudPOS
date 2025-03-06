@@ -17,7 +17,8 @@ namespace CloudPOS.Services
         {
             SaleItemEntity entity = new SaleItemEntity()
             {
-                Id = saleItemViewModel.SaleOrderId,
+                Id = Guid.NewGuid().ToString(),
+                SaleId = saleItemViewModel.SaleId,
                 CreatedAt = DateTime.Now,
                 IsActive  = true,
                 ProductId = saleItemViewModel.ProductId,

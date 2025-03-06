@@ -15,105 +15,110 @@ namespace CloudPOS.Services
 
         public void Create(SaleWithSaleItemViewModel model)
         {
-            SaleEntity saleEntity = new SaleEntity()
+            using (var transaction = _unitOfWork.BeginTransaction())
             {
-                Id = Guid.NewGuid().ToString(),
-                IsActive = true,
-                SaleDate = model.SaleOrder.SaleDate,
-                VoucherNo = model.SaleOrder.VoucherNo,
-                Balance = model.SaleOrder.Balance,
-                CashAmount = model.SaleOrder.CashAmount,
-                CreatedAt = DateTime.Now,
-                DiscountAmount = model.SaleOrder.DiscountAmount,
-                NetTotal = model.SaleOrder.NetTotal,
-                SubTotal = model.SaleOrder.NetTotal,
-                TotalAmount = model.SaleOrder.TotalAmount,
-                SaleType = model.SaleType
-            };
-            _unitOfWork.Sales.Create(saleEntity);
-            foreach(var details in model.SaleDetails)
-            {
-                if (model.StockSwitch)
+                try
                 {
-                    var stockAvailable = _unitOfWork.Inventories.GetAvaliableStock(details.ProductId);
-                    if(stockAvailable < details.Quantity)
+                    // Create Sale Order
+                    SaleEntity saleEntity = new SaleEntity()
                     {
-                        throw new InvalidOperationException($"Stock is not enough for item: {details.ProductId}. Required: {details.Quantity}, Available: {stockAvailable}");
+                        Id = Guid.NewGuid().ToString(),
+                        IsActive = true,
+                        SaleDate = model.SaleOrder.SaleDate,
+                        VoucherNo = model.SaleOrder.VoucherNo,
+                        Balance = model.SaleOrder.Balance,
+                        CashAmount = model.SaleOrder.CashAmount,
+                        CreatedAt = DateTime.Now,
+                        DiscountAmount = model.SaleOrder.DiscountAmount,
+                        NetTotal = model.SaleOrder.NetTotal,
+                        SubTotal = model.SaleOrder.NetTotal,
+                        TotalAmount = model.SaleOrder.TotalAmount,
+                        SaleType = model.SaleType
+                    };
+                    _unitOfWork.Sales.Create(saleEntity);
 
-                    }
-                    var useBatches = _unitOfWork.Inventories.ReduceForSale(details.ProductId,details.Quantity);
-                    foreach (var batch in useBatches) 
+                    foreach (var details in model.SaleDetails)
                     {
-                        StockLedgerEntity stockLedgerEntity = new StockLedgerEntity()
+                        if (model.StockSwitch)
+                        {
+                            var stockAvailable = _unitOfWork.Inventories.GetAvaliableStock(details.ProductId);
+                            if (stockAvailable < details.Quantity)
+                            {
+                                throw new InvalidOperationException($"Stock is not enough for item: {details.ProductId}. Required: {details.Quantity}, Available: {stockAvailable}");
+                            }
+
+                            // Reduce Stock & Add StockLedger at the same time
+                            var stockUsages = _unitOfWork.Inventories.ReduceForSale(details.ProductId, details.Quantity);
+                            foreach (var usage in stockUsages)
+                            {
+                                StockLedgerEntity stockLedgerEntity = new StockLedgerEntity()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    IsActive = true,
+                                    CreatedAt = DateTime.Now,
+                                    ProductId = details.ProductId,
+                                    LedgerDate = DateTime.Now,
+                                    Quantity = usage.QuantityUsed,
+                                    TransactionType = "Sale"
+                                };
+                                _unitOfWork.StockLedgers.Create(stockLedgerEntity);
+                            }
+                        }
+
+                        // Create Sale Item
+                        SaleItemEntity saleItemEntity = new SaleItemEntity()
                         {
                             Id = Guid.NewGuid().ToString(),
-                            IsActive = true,
                             CreatedAt = DateTime.Now,
+                            DiscountAmount = details.DiscountAmount,
+                            IsActive = true,
                             ProductId = details.ProductId,
-                            LedgerDate = DateTime.Now,
-                            Quantity = batch.QuantityUsed,
-                            TransactionType = "Sale"                            
+                            Price = details.Price,
+                            Quantity = details.Quantity,
+                            TotalPrice = details.Total,
+                            SaleAmount = details.Amount,
+                            SaleId = saleEntity.Id
                         };
-                        _unitOfWork.StockLedgers.Create(stockLedgerEntity);
-
+                        _unitOfWork.SaleItems.Create(saleItemEntity);
                     }
+
+                    transaction.Commit(); // ✅ Commit after all operations
                 }
-                SaleItemEntity saleItemEntity = new SaleItemEntity()
+                catch (Exception)
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    CreatedAt= DateTime.Now,
-                    DiscountAmount = details.DiscountAmount,
-                    IsActive = true,
-                    ProductId = details.ProductId,
-                    Price = details.Price,
-                    Quantity = details.Quantity,
-                    TotalPrice = details.Total,
-                    SaleAmount = details.Amount,
-                    SaleId = saleEntity.Id
-                    
-                };
-                _unitOfWork.SaleItems.Create(saleItemEntity);
-                _unitOfWork.Commit();
+                    transaction.Rollback(); // Rollback on error
+                    throw;
+                }
             }
         }
 
         public IEnumerable<SaleOrderViewModel> GetAll(DateTime? fromDate = null, DateTime? toDate = null, string? voucherNo = null)
         {
-            var sales = _unitOfWork.Sales.GetAll(); // Ensure this returns IQueryable<Sale>
+            var query = _unitOfWork.Sales.GetAll().AsQueryable();
 
-            if (sales is IQueryable<SaleEntity>) // Ensure filtering is done at the database level
+            if (fromDate.HasValue)
             {
-                var query = (IQueryable<SaleEntity>)sales;
-
-                if (fromDate.HasValue)
-                {
-                    query = query.Where(s => s.SaleDate >= fromDate.Value);
-                }
-
-                if (toDate.HasValue)
-                {
-                    query = query.Where(s => s.SaleDate <= toDate.Value);
-                }
-
-                if (!string.IsNullOrEmpty(voucherNo))
-                {
-                    query = query.Where(s => s.VoucherNo.ToLower() == voucherNo.ToLower());
-                }
-
-                return query.Select(s => new SaleOrderViewModel
-                {
-                    Id = s.Id,
-                    SaleDate = s.SaleDate,
-                    VoucherNo = s.VoucherNo,
-                    CashAmount = s.CashAmount,
-                    SaleType = s.SaleType,
-                }).ToList(); // Convert to List after filtering
+                query = query.Where(s => s.SaleDate >= fromDate.Value);
             }
-            else
+
+            if (toDate.HasValue)
             {
-                throw new InvalidOperationException("Sales data source must be queryable.");
+                query = query.Where(s => s.SaleDate <= toDate.Value);
             }
+
+            if (!string.IsNullOrEmpty(voucherNo))
+            {
+                query = query.Where(s => s.VoucherNo.ToLower() == voucherNo.ToLower());
+            }
+
+            return query.Select(s => new SaleOrderViewModel
+            {
+                Id = s.Id,
+                SaleDate = s.SaleDate,
+                VoucherNo = s.VoucherNo,
+                CashAmount = s.CashAmount,
+                SaleType = s.SaleType,
+            }).ToList(); // Convert to List after filtering
         }
-
     }
 }

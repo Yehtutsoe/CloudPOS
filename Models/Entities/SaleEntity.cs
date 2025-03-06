@@ -7,7 +7,7 @@ namespace CloudPOS.Models.Entities
     public class SaleEntity:BaseEntity
     {
        
-        [MaxLength(50)]
+        
         public DateTime SaleDate { get; set; }
         public string VoucherNo { get; set; }
         public Decimal TotalAmount { get; set; }
