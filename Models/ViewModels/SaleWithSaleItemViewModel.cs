@@ -24,7 +24,9 @@
         public Decimal SubTotal { get; set; }
         public Decimal NetTotal { get; set; }
         public Decimal TotalAmount { get; set; }
-        public Decimal DiscountAmount { get; set; }
+        public Decimal? DiscountAmount { get; set; }
+        public Decimal? DiscountPercent { get; set; }
+        public Decimal TotalReturnAmount { get; set; }
         public Decimal Balance { get; set; }
         public Decimal CashAmount { get; set; }
         public string SaleType { get; set; }
@@ -39,7 +41,6 @@
     public class SaleItemViewModel
     {
         public string SaleOrderId { get; set; }
-        public DateTime SaleDate { get; set; }
         public int Quantity { get; set; }
         public Decimal Price { get; set; }
         public Decimal Total { get; set; }
@@ -54,4 +55,5 @@
             
         }
     }
+
 }

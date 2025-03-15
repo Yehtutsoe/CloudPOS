@@ -3,7 +3,6 @@
     public class SaleItemsViewModel
     {
         public string Id { get; set; }
-        public DateTime SaleDate { get; set; }
         public int Quantity { get; set; }
         public Decimal Price { get; set; }
         public Decimal Total { get; set; }
@@ -11,6 +10,7 @@
         public string CategoryId { get; set; }
         public string SaleId { get; set; }
         public string ProductId { get; set; }
+        public string ProductName { get; set; }
 
     }
 }

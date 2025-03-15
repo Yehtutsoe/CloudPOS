@@ -33,6 +33,7 @@ namespace CloudPOS.Services
                         NetTotal = model.SaleOrder.NetTotal,
                         SubTotal = model.SaleOrder.NetTotal,
                         TotalAmount = model.SaleOrder.TotalAmount,
+                        TotalReturnAmount = model.SaleOrder.TotalReturnAmount,
                         SaleType = model.SaleType
                     };
                     _unitOfWork.Sales.Create(saleEntity);

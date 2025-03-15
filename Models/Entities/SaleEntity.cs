@@ -14,7 +14,9 @@ namespace CloudPOS.Models.Entities
         public Decimal SubTotal { get; set; }
         public Decimal NetTotal { get; set; }
         public Decimal CashAmount { get; set; }
-        public Decimal DiscountAmount { get; set; }
+        public Decimal? DiscountAmount { get; set; }
+        public Decimal? DiscountPercent { get; set; }
+        public Decimal TotalReturnAmount { get; set; }
         public Decimal Balance { get; set; }
         public string SaleType { get; set; }
         public string UserId { get; set; }

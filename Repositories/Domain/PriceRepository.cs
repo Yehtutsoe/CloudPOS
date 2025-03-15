@@ -24,16 +24,16 @@ namespace CloudPOS.Repositories.Domain
 
         public ProductPriceViewModel GetProductDetailsByBarCode(string barCode)
         {
-            var productDetails = (from pr in _dbContext.Prices
-                                  join po in _dbContext.Products on pr.Id equals po.Id
-                                  where po.BarCode == barCode
-                                  select new ProductPriceViewModel
-                                  {
-                                      ProductName = po.Name,
-                                      RetailSalePrice = pr.RetailSalePrice,
-                                      WholeSalePrice = pr.WholeSalePrice
-                                  }).FirstOrDefault();
-            return productDetails;
+            return _dbContext.Prices
+            .Where(p => p.Products.BarCode == barCode && p.IsActive)
+            .Select(p => new ProductPriceViewModel
+            {
+                ProductId = p.ProductId,
+                RetailSalePrice = p.RetailSalePrice,
+                WholeSalePrice = p.WholeSalePrice,
+                // Add other fields as necessary
+            })
+            .FirstOrDefault();
         }
     }
 }
