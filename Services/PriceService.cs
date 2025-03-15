@@ -1,8 +1,6 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.UnitOfWork;
-using Humanizer;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CloudPOS.Services
 {
