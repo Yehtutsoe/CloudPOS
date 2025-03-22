@@ -34,12 +34,20 @@ namespace CloudPOS.Services
                         SubTotal = model.SaleOrder.NetTotal,
                         TotalAmount = model.SaleOrder.TotalAmount,
                         TotalReturnAmount = model.SaleOrder.TotalReturnAmount,
-                        SaleType = model.SaleType
+                        SaleType = model.SaleType,
+                        UserId = model.UserId
                     };
                     _unitOfWork.Sales.Create(saleEntity);
 
                     foreach (var details in model.SaleDetails)
                     {
+                        if (string.IsNullOrEmpty(details.ProductId))
+                        {
+                            Console.WriteLine("ProductId is null or empty for one of the sale items!");
+                            throw new InvalidOperationException("ProductId is missing for one of the sale items.");
+                        }
+
+                        Console.WriteLine($"✅ ProductId: {details.ProductId}, Quantity: {details.Quantity}");
                         if (model.StockSwitch)
                         {
                             var stockAvailable = _unitOfWork.Inventories.GetAvaliableStock(details.ProductId);
@@ -79,10 +87,11 @@ namespace CloudPOS.Services
                             TotalPrice = details.Total,
                             SaleAmount = details.Amount,
                             SaleId = saleEntity.Id
+                            
                         };
                         _unitOfWork.SaleItems.Create(saleItemEntity);
                     }
-
+                    _unitOfWork.Commit();
                     transaction.Commit(); // ✅ Commit after all operations
                 }
                 catch (Exception)

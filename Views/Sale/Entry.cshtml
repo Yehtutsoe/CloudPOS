@@ -50,13 +50,14 @@
                     <input type="radio" id="wholesale" name="saleType" value="Wholesale" class="form-check-input">
                     <label for="wholesale" class="form-check-label">WholeSale</label>
                 </div>
-
-                <!-- Stock Switch -->
+                
+                <!-- Stock Switch 
                 <div class="form-check form-switch">
                     <input type="checkbox" id="stockSwitch" class="form-check-input">
                     <label for="stockSwitch" class="form-check-label">Stock On/Off</label>
                     <input type="hidden" id="stockSwitchHidden" name="StockSwitch" />
                 </div>
+                -->
             </div>
         </div>
     </div>
@@ -205,7 +206,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-       
+
 
         // Barcode input handler
 
@@ -220,9 +221,10 @@
                     data: { barCode: barcode },
                     success: function (data) {
                         if (data) {
+                            console.log(data);
                             // Assuming data contains ProductId, Price, and ProductName
-                            $('#itemId').val(data.ProductId);
-                            $('#price').val(data.RetailSalePrice); // or data.WholeSalePrice based on your logic
+                            $('#itemId').val(data.productId);
+                            $('#price').val(data.retailSalePrice); // or data.WholeSalePrice based on your logic
                         } else {
                             alert('Product not found.');
                         }
@@ -236,6 +238,7 @@
         // Add button handler
         $('#addButton').on('click', function () {
             var itemId = $('#itemId').val();
+            console.log(itemId);
             var itemName = $('#itemId option:selected').text();
             var price = parseFloat($('#price').val()) || 0;
             var quantity = parseInt($('#quantity').val()) || 0;
@@ -271,7 +274,7 @@
 
             // Add hidden inputs for form submission
             $('#hiddenSaleDetails').append(`
-                <input type="hidden" name="SaleDetails[${itemIndex}].ItemId" value="${itemId}" />
+                <input type="hidden" name="SaleDetails[${itemIndex}].ProductId" value="${itemId}" />
                 <input type="hidden" name="SaleDetails[${itemIndex}].Price" value="${price.toFixed(2)}" />
                 <input type="hidden" name="SaleDetails[${itemIndex}].Quantity" value="${quantity}" />
                 <input type="hidden" name="SaleDetails[${itemIndex}].DiscountAmount" value="${discountAmount.toFixed(2)}" />

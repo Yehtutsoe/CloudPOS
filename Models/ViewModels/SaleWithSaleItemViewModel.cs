@@ -6,6 +6,7 @@
         public List<SaleItemViewModel> SaleDetails { get; set; }
         public bool StockSwitch { get; set; }
         public string SaleType { get; set; }
+        public string UserId { get; set; }
         public SaleWithSaleItemViewModel()
         {
             SaleOrder = new SaleOrderViewModel();

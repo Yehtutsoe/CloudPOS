@@ -3,7 +3,6 @@ using CloudPOS.Repositories.Report.common;
 using CloudPOS.Repositories.Report.ReportDataSet;
 using CloudPOS.Services;
 using CloudPOS.Utils;
-using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

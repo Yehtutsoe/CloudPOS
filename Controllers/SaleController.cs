@@ -1,8 +1,7 @@
 ﻿using CloudPOS.Models.ViewModels;
 using CloudPOS.Services;
-using CloudPOS.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CloudPOS.Controllers
 {
@@ -56,7 +55,6 @@ namespace CloudPOS.Controllers
                     ProductId = details.ProductId,
                     RetailSalePrice = details.RetailSalePrice,
                     WholeSalePrice = details.WholeSalePrice
-                    // Add other fields as necessary
                 });
             }
 
@@ -67,6 +65,8 @@ namespace CloudPOS.Controllers
         {
             try
             {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                model.UserId = userId;
                 _saleOrderService.Create(model);
                 ViewData["Info"] = "Successfully saved data to the system.";
                 ViewData["status"] = true;

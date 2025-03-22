@@ -37,7 +37,7 @@ namespace CloudPOS.Repositories.Common
 
         public void Update(T entity)
         {
-            _dbContext.Update(entity);
+            _dbContext.Update<T>(entity);
         }
     }
 }

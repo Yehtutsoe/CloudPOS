@@ -31,7 +31,7 @@ namespace CloudPOS.Services
                 IsActive = true,
                 Quantity = productViewModel.Quantity
             };
-            Console.WriteLine($"Saving product with code: {entity.Code} and name: {entity.Name}");
+           // Console.WriteLine($"Saving product with code: {entity.Code} and name: {entity.Name}");
             _unitOfWork.Products.Create(entity);
             _unitOfWork.Commit();
         }
@@ -136,16 +136,12 @@ namespace CloudPOS.Services
             {
                 throw new Exception("Product not found");
             }
-            existingProduct.Id = productViewModel.Id;
             existingProduct.Name = productViewModel.Name;
-            existingProduct.Code = productViewModel.Code;
             existingProduct.CostPrice = productViewModel.CostPrice;
             existingProduct.SalePrice = productViewModel.SalePrice;
             existingProduct.DiscountPrice = productViewModel.DiscountPrice;
             existingProduct.BrandId = productViewModel.BrandId;
             existingProduct.CategoryId = productViewModel.CategoryId;
-            existingProduct.CreatedAt = DateTime.Now;
-            existingProduct.IsActive = true;
             existingProduct.Quantity = productViewModel.Quantity;
             existingProduct.BarCode = productViewModel.BarCode;
             _unitOfWork.Products.Update(existingProduct);

@@ -50,17 +50,17 @@ namespace CloudPOS.UnitOfWork
 
         public void Commit()
         {
-            _context.SaveChanges(); // ✅ Commit transaction
+            _context.SaveChanges(); //  Commit transaction
         }
 
         public void Dispose()
         {
-            _context.Dispose(); // ✅ Dispose context to avoid memory leak
+            _context.Dispose(); //  Dispose context to avoid memory leak
         }
 
         public void Rollback()
         {
-            // ✅ Rollback transaction (Not disposing here)
+            //  Rollback transaction (Not disposing here)
             _context.Database.CurrentTransaction?.Rollback();
         }
 

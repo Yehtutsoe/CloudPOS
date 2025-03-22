@@ -7,18 +7,17 @@ namespace CloudPOS.Controllers
     public class InventoryController : Controller
     {
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly IProductRepository _productRepository;
 
-        public InventoryController(IInventoryRepository inventoryRepository,IProductRepository productRepository)
+        public InventoryController(IInventoryRepository inventoryRepository)
         {
             _inventoryRepository = inventoryRepository;
-            _productRepository = productRepository;
         }
         public IActionResult List()
         {
             var inventoryBalance = _inventoryRepository.GetAll().Select(s => new InventoryViewModel
             {
                 Id = s.Id,
+                ProductName = s.Products.Name,
                 Quantity = s.Quantity,
                 CreateAt = s.CreatedAt,
                 

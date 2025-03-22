@@ -8,10 +8,10 @@ namespace CloudPOS.Models.ViewModels
         public string Name { get; set; }
         public string Code { get; set; }
         public string? Description { get; set; }
-        public Decimal SalePrice { get; set; }
-        public Decimal DiscountPrice { get; set; }
-        public int Quantity { get; set; }
-        public Decimal CostPrice { get; set; }
+        public Decimal? SalePrice { get; set; }
+        public Decimal? DiscountPrice { get; set; }
+        public int? Quantity { get; set; }
+        public Decimal? CostPrice { get; set; }
         public string BrandId { get; set; }
         public string BrandInfo { get; set; }
         public string BarCode { get; set; }
