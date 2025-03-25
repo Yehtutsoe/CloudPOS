@@ -1,0 +1,108 @@
+﻿@model InventoryViewModel
+@{
+    ViewData["Title"] = "Product";
+}
+<h3>Stock Control</h3>
+@{
+    var info = ViewData["Info"];
+}
+@if (info != null)
+{
+    if (Convert.ToBoolean(ViewData["Status"]))
+    {
+        <div class="alert alert-success" role="alert">
+            @info
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @info
+        </div>
+    }
+}
+<form action="/inventory/entry" method="post" enctype="multipart/form-data">
+    
+    <div class="row g-3">
+        <div class="col-md-4">           
+                <label class="form-label">Transaction Type</label>
+                <select class="form-select" name="TransatcionType">
+                    <option value="" selected>[ Select One ]</option>
+                    <option value="Income">Income</option>
+                    <option value="Damage">Damage</option>
+                    <option value="Lost">Lost</option>
+                    <option value="Adjustment">Adjustment</option>
+                </select>
+        </div>
+        <div class="col-md-4">
+                <label class="form-label">Category</label>
+                <select class="form-select" id="categoryDropdown" name="CategoryId">
+                    <option value="">[Select One]</option>
+                    @foreach(var category in ViewBag.Categories){
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Product</label>
+            <select class="form-select" name="ProductId" id="productDropdown">
+                <option value="">[ Select One ]</option>
+            </select>
+            
+        </div>
+    </div>
+    <div class="row g-3 mt-2">
+        <div class="col-md-4">
+            <label class="form-label">Quantity</label>
+            <input type="number" value="" class="form-control" name="Quantity"/>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i>Save</button>
+    <a href="/inventory/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function (){ // Corrected .read() to .ready()
+        $('#categoryDropdown').change(function(){
+            var categoryId = $(this).val();
+            if(categoryId){
+                $.ajax({
+                    url: '@Url.Action("GetProduct", "Inventory")',
+                    type: 'GET',
+                    data:{categoryId:categoryId},
+                    success:function(data){
+                        $('#productDropdown').empty();
+                        $('#productDropdown').append($('<option>',{
+                            value:'',
+                            text:'Select the Product' // Fixed "Text" to "text"
+                        }));
+                        if (data && data.length > 0) {
+                            console.log("Data Success");
+                            $.each(data, function (index, product) {
+                                $('#productDropdown').append($('<option>', {
+                                    value: product.id,
+                                    text: product.name // Ensure correct property names
+                                }));
+                            });
+                        } else {
+                            $('#productDropdown').append($('<option>', {
+                                value: '',
+                                text: 'No items available'
+                            }));
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching items: " + error);
+                    }
+                });
+            }
+            else{
+                $('#productDropdown').empty().append('<option selected>Select an Item</option>');
+            }
+        });
+    });
+</script>
+
+</script>

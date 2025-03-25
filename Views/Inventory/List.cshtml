@@ -1,11 +1,13 @@
-﻿@model IList<InventoryViewModel>
+﻿@model IEnumerable<InventoryViewModel>
 
 <h1 class="mb-3">Inventory List Informartion</h1>
 <table class="table table-hover" id="InventoryTable">
     <thead class="table-dark">
         <tr>
             <th scope="col">No</th>
-            <th scope="col">Product</th>
+            <th scope="col">Category</th>
+            <th scope="col">Product Code</th>
+            <th scope="col">Product Name</th>
             <th scope="col">Quantity</th>
             <th scope="col">Create Date</th>
         </tr>
@@ -17,6 +19,8 @@
             @foreach(var inventory in Model){
             <tr>
                 <td>@i</td>
+                <td>@inventory.CategoryName</td>
+                <td>@inventory.ProductCode</td>
                 <td>@inventory.ProductName</td>
                 <td>@inventory.Quantity</td>
                 <td>@inventory.CreateAt</td>

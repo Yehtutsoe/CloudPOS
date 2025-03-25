@@ -69,7 +69,8 @@ builder.Services.AddSingleton<IEmailSender,EmailSender>();
 builder.Services.AddTransient<IReport, Report>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<IInventoryRepository,InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 var app = builder.Build();
 

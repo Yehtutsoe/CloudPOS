@@ -1,28 +1,66 @@
 ﻿using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories.Domain;
+using CloudPOS.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudPOS.Controllers
 {
     public class InventoryController : Controller
     {
-        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IInventoryService _inventoryService;
+        private readonly IProductService _productService;
+        private readonly ICategoryService _categoryService;
 
-        public InventoryController(IInventoryRepository inventoryRepository)
+        public InventoryController(IInventoryService inventoryService,IProductService productService,ICategoryService categoryService)
         {
-            _inventoryRepository = inventoryRepository;
+            _inventoryService = inventoryService;
+            _productService = productService;
+            _categoryService = categoryService;
         }
-        public IActionResult List()
+        [HttpGet]
+        public IActionResult GetProduct(string categoryId)
         {
-            var inventoryBalance = _inventoryRepository.GetAll().Select(s => new InventoryViewModel
+            var products = _productService.GetProductByCategory(categoryId);
+            return Json(products);
+        }
+        public IActionResult Entry()
+        {
+            LoadDropdownData();            
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Entry(InventoryViewModel ui)
+        {
+            if (!ModelState.IsValid)
             {
-                Id = s.Id,
-                ProductName = s.Products.Name,
-                Quantity = s.Quantity,
-                CreateAt = s.CreatedAt,
-                
-            }).ToList();
-            return View(inventoryBalance);
+                LoadDropdownData();
+                return View(ui);
+            }
+
+            try
+            {
+                _inventoryService.CreateOrUpdate(ui);
+                ViewData["Info"] = "Successfully Save the record to database";
+                ViewData["Status"] = true;
+            }
+            catch (Exception ex)
+            {
+                ViewData["Info"] = "Can not Save the record to database" + ex.Message;
+                ViewData["Status"] = false;
+            }
+            LoadDropdownData();
+            return RedirectToAction("List");
+        }
+        public IActionResult List(string? productId,string? categoryId)
+        {
+            var inventory =   _inventoryService.GetAll(productId, categoryId);
+            LoadDropdownData();
+            return View(inventory);
+        }
+
+        private void LoadDropdownData()
+        {
+            ViewBag.Products = _productService.GetProducts();
+            ViewBag.Categories = _categoryService.GetCategories();
         }
     }
 }

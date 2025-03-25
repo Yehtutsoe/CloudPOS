@@ -75,12 +75,8 @@ namespace CloudPOS.Services
             {
                 throw new Exception("Category not found to update");
             }
-            existingEntity.Id = categoryViewModel.Id;
-            existingEntity.Code = categoryViewModel.Code;
             existingEntity.Name = categoryViewModel.Name;
             existingEntity.Description = categoryViewModel.Description;
-            existingEntity.CreatedAt = DateTime.Now;
-            existingEntity.IsActive = true;
             _unitOfWork.Categories.Update(existingEntity);
             _unitOfWork.Commit();
         }

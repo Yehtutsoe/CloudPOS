@@ -22,8 +22,8 @@
     }
 }
 
-<table id="PriceTable" class="table">
-    <thead>
+<table id="PriceTable" class="table table-hover">
+    <thead class="table-dark">
         <tr>
             <th scope="col">No</th>
             <th scope="col">Product</th>
@@ -32,46 +32,71 @@
             <th scope="col">WholeSale Price</th>
             <th scope="col">RetailSale Price</th>
             <th scope="col">Actions</th>
-            <th scope="col"></th>
+            
         </tr>
     </thead>
     <tbody>
-        @if (Model.Any())
-        {
+     
+        @{
             int i = 1;
-            foreach (var Price in Model)
+        }
+            @foreach (var price in Model)
             {
                 <tr>
                     <th scope="row">@i</th>
-                    <td>@Price.ProductName</td>
-                    <td>@Price.PricingDate.ToString("yyyy-MM-dd")</td>
-                    <td>@Price.PurchasePrice</td>
-                    <td>@Price.WholeSalePrice</td>
-                    <td>@Price.RetailSalePrice</td>
+                    <td>@price.ProductName</td>
+                    <td>@price.PricingDate.ToString("yyyy-MM-dd")</td>
+                    <td>@price.PurchasePrice</td>
+                    <td>@price.WholeSalePrice</td>
+                    <td>@price.RetailSalePrice</td>
 
-                    <td>
-                        <a href="/Price/edit?id=@Price.Id" class="btn btn-success">Edit</a>
-                    </td>
-                    <td>
-                        <a href="/Price/delete?id=@Price.Id" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete?');">Delete</a>
-                    </td>
+                <td>
+                    <a href="/price/Edit?id=@price.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>
+                    <a href="javascript:void(0)" class="btn btn-danger delete-button" data-url="/price/Delete?id=@price.Id" data-name="@price.ProductName"><i class="fa-solid fa-trash"></i></a>
+                </td>
                 </tr>
                 i++;
             }
-        }
-        else
-        {
-            <tr>
-                <td colspan="9" class="text-center">There is no data available!</td>
-            </tr>
-        }
+        
+        
     </tbody>
 </table>
 
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
-        $('#PriceTable').DataTable();
+        // Initialize DataTable
+        $("#PriceTable").DataTable();
+
+        // Handle Delete Button Click
+        $(".delete-button").on("click", function (e) {
+            e.preventDefault();
+            // Get data attributes
+            let url = $(this).data("url");
+            let name = $(this).data("name");
+
+            // SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `You are about to delete "${name}". This action cannot be undone.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to the delete URL
+                    Swal.fire({
+                        title: 'Success',
+                        text: `You delete "${name}".`,
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = url;
+                    });
+                }
+            });
+        });
     });
 </script>
-
 

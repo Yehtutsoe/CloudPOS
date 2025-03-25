@@ -11,5 +11,6 @@
         public DateTime CreateAt { get; set; }
         public DateTime ModifiedAt { get; set; }
         public int Quantity { get; set; }
+        public string TransactionType { get; set; }
     }
 }

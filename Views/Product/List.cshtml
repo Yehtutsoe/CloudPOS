@@ -35,9 +35,9 @@
             <th scope="col">Name</th>
             <th scope="col">BarCode</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Cost Price</th>
+           @* <th scope="col">Cost Price</th>
             <th scope="col">Sale Price</th>
-            <th scope="col">Disount Price</th>
+            <th scope="col">Disount Price</th> *@
             <th scope="col">Description</th>
             <th scope="col">Action</th>
         </tr>
@@ -50,15 +50,15 @@
         {
             <tr>
                 <td scope="row">@i</td>
+                <td>@product.Code</td>
                 <td>@product.CategoryInfo</td>
                 <td>@product.BrandInfo</td>
-                <td>@product.Code</td>
                 <td>@product.Name</td>
                 <td>@product.BarCode</td>
                 <td>@product.Quantity</td>
-                <td>@product.CostPrice</td>
+              @*  <td>@product.CostPrice</td>
                 <td>@product.SalePrice</td>
-                <td>@product.DiscountPrice</td>
+                <td>@product.DiscountPrice</td> *@
                 <td>@product.Description</td>
                 <td>
                     <a href="/product/edit?id=@product.Id" class="btn btn-primary"><i class="fa-solid fa-pencil"></i></a>

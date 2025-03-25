@@ -112,12 +112,9 @@ namespace CloudPOS.Services
             {
                 throw new Exception("Brand not found to update");
             }
-            existingEntity.Id = brandViewModel.Id;
-            existingEntity.Code = brandViewModel.Code;
             existingEntity.Name = brandViewModel.Name;
             existingEntity.CategoryId = brandViewModel.CategoryId;
-            existingEntity.CreatedAt = DateTime.Now;
-            existingEntity.IsActive = true;
+
             _unitOfWork.Brands.Update(existingEntity);
             _unitOfWork.Commit();
         }

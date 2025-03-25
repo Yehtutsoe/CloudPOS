@@ -45,9 +45,9 @@ namespace CloudPOS.Services
 
         public IEnumerable<PriceViewModel> GetAll()
         {
-            var prices = (from price in _unitOfWork.Prices.GetAll()
-                          join product in _unitOfWork.Products.GetAll()
-                          on price.Id equals product.Id
+            IEnumerable<PriceViewModel> prices = (from price in _unitOfWork.Prices.GetAll().ToList()
+                          join product in _unitOfWork.Products.GetAll().ToList()
+                          on price.ProductId equals product.Id
                           select new PriceViewModel
                           {
                               Id = price.Id,

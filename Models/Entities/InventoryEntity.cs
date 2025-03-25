@@ -10,7 +10,7 @@ namespace CloudPOS.Models.Entities
         [MaxLength(15)]
         public int Quantity { get; set; }
         [MaxLength(15)]
-        public DateTime AdjustmentDate { get; set; }
+        public DateTime? AdjustmentDate { get; set; }
         [MaxLength(35)]
         public string? Reason { get; set; }
         public string ProductId { get; set; }
