@@ -1,6 +1,9 @@
-﻿@model IEnumerable<SaleOrderViewModel>
+﻿@model IEnumerable<StockLedgerViewModel>
+@{
+    ViewData["Title"] = "StockLedger";
+}
 
-<h3 class="mb-4 text-primary">Sales List</h3>
+<h3 class="mb-4 text-primary">StockLedger List</h3>
 
 <div class="card p-4 shadow-sm">
     <form method="get" id="filterForm">
@@ -17,7 +20,7 @@
                     <input type="date" name="toDate" class="form-control" />
                 </div>
             </div>
-            <div class="col-md-3">
+           @* <div class="col-md-3">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Voucher No</label>
                     <select class="form-select" name="VoucherNo">
@@ -35,15 +38,12 @@
                         }
                     </select>
                 </div>
-            </div>
+            </div> *@
             <div class="col-md-3 d-flex align-items-end">
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary">
                         <i class="fa fa-search"></i> Search
                     </button>
-                    <a href="/sale/entry" class="btn btn-success">
-                        <i class="fa-solid fa-cart-plus"></i> New Sale
-                    </a>
                 </div>
             </div>
         </div>
@@ -51,37 +51,37 @@
 </div>
 
 <div class="table-responsive mt-4">
-    <table class="table table-hover table-bordered" id="saleTable">
+    <table class="table table-hover table-bordered" id="stockLedgerTable">
         <thead class="table-dark">
             <tr>
                 <th>No</th>
-                <th>Sale Date</th>
-                <th>Voucher No</th>
-                <th>Sale Type</th>
-                <th class="text-end">Cash Amount</th>
+                <th>Ledger Date</th>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>In Qty</th>
+                <th>Out Qty</th>
+                <th>Status</th>
+
             </tr>
         </thead>
         <tbody>
             @if (Model != null && Model.Any())
             {
                 int i = 1;
-                decimal cashAmountSum = 0;
-                foreach (var item in Model)
+
+                foreach (var stock in Model)
                 {
-                    cashAmountSum += item.CashAmount;
                     <tr>
                         <td>@i</td>
-                        <td>@item.SaleDate.ToString("yyyy-MM-dd")</td>
-                        <td>@item.VoucherNo</td>
-                        <td>@item.SaleType</td>
-                        <td class="text-end">@item.CashAmount.ToString("C")</td>
+                        <td>@stock.LedgerDate?.ToString("yyyy-MM-dd")</td>
+                        <td>@stock.ProductCode</td>
+                        <td>@stock.ProductName</td>
+                        <td>@stock.InQty</td>
+                        <td>@stock.OutQty</td>
+                        <td>@stock.TransactionType</td>
                     </tr>
                     i++;
                 }
-                <tr class="fw-bold">
-                    <td colspan="4" class="text-end">Total</td>
-                    <td class="text-end">@cashAmountSum.ToString("C")</td>
-                </tr>
             }
             else
             {
@@ -107,9 +107,8 @@
         $('#filterForm').on('submit', function (event) {
             const fromDate = $('[name="fromDate"]').val();
             const toDate = $('[name="toDate"]').val();
-            const voucherNo = $('[name="VoucherNo"]').val();
-
-            if (!(fromDate && toDate) && !voucherNo) {
+            
+            if (!(fromDate && toDate)) {
                 alert("Please select a date range or a voucher number.");
                 event.preventDefault();
             }

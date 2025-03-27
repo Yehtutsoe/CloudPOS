@@ -28,6 +28,7 @@ namespace CloudPOS.Services
                 BrandId = productViewModel.BrandId,
                 CategoryId = productViewModel.CategoryId,
                 CreatedAt = DateTime.Now,
+                Description = productViewModel.Description,
                 IsActive = true,
                 Quantity = productViewModel.Quantity
             };

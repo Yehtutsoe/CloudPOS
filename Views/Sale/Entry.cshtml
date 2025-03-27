@@ -51,13 +51,13 @@
                     <label for="wholesale" class="form-check-label">WholeSale</label>
                 </div>
                 
-                <!-- Stock Switch 
-                <div class="form-check form-switch">
-                    <input type="checkbox" id="stockSwitch" class="form-check-input">
-                    <label for="stockSwitch" class="form-check-label">Stock On/Off</label>
+                <!-- Stock Switch -->
+                <div class="form-check form-switch ms-3">
+                    <input type="checkbox" id="stockSwitch" class="form-check-input" checked>
+                    <label for="stockSwitch" class="form-check-label">Stock Off/On</label>
                     <input type="hidden" id="stockSwitchHidden" name="StockSwitch" />
                 </div>
-                -->
+
             </div>
         </div>
     </div>
@@ -224,7 +224,13 @@
                             console.log(data);
                             // Assuming data contains ProductId, Price, and ProductName
                             $('#itemId').val(data.productId);
-                            $('#price').val(data.retailSalePrice); // or data.WholeSalePrice based on your logic
+                            var saleType = $('input[name="saleType"]:checked').val();
+                            if(saleType === 'Retail'){
+                                $('#price').val(data.retailSalePrice || 0.00);// or data.details based on your logic
+                            }else if(saleType === 'Wholesale'){
+                                $('#price').val(data.wholeSalePrice || 0.00);
+                            }
+                             
                         } else {
                             alert('Product not found.');
                         }
@@ -233,8 +239,15 @@
                         alert('Error retrieving product details.');
                     }
                 });
+           
             }
         });
+        //stock Switch
+        $('#stockSwitch').on('change', function () {
+            var isChecked = $(this).is(':checked');
+            $('#stockSwitchHidden').val(isChecked ? "true" : "false");
+            console.log('Stock switch toggled:', isChecked ? 'On' : 'Off');
+            });
         // Add button handler
         $('#addButton').on('click', function () {
             var itemId = $('#itemId').val();

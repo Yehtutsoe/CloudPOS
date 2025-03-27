@@ -47,7 +47,6 @@ namespace CloudPOS.Services
                             throw new InvalidOperationException("ProductId is missing for one of the sale items.");
                         }
 
-                        Console.WriteLine($"✅ ProductId: {details.ProductId}, Quantity: {details.Quantity}");
                         if (model.StockSwitch)
                         {
                             var stockAvailable = _unitOfWork.Inventories.GetAvaliableStock(details.ProductId);
@@ -92,7 +91,7 @@ namespace CloudPOS.Services
                         _unitOfWork.SaleItems.Create(saleItemEntity);
                     }
                     _unitOfWork.Commit();
-                    transaction.Commit(); // ✅ Commit after all operations
+                    transaction.Commit(); //Commit after all operations
                 }
                 catch (Exception)
                 {

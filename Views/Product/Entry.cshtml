@@ -1,82 +1,12 @@
-﻿@model ProductViewModel
+﻿@model Tuple<ProductViewModel,PriceViewModel>
 
 <h2 class="mt-1">Product Entry Form</h2>
-<form action="/product/entry" method="post">
-    <div class="col-6">
-       <div class="form-group mb-1">
-            <label class="form-label" asp-for="Code">Code</label>
-            <input type="text" asp-for="Code" class="form-control" readonly />
-            <span asp-validation-for="Code" class="text-danger"></span>
-       </div>
-        
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="CategoryId">Category</label>
-            <select asp-items="@(new SelectList(ViewBag.Categorys,"Value","Text"))" class="form-control" asp-for="CategoryId" id="CategoryId">
-                <option value=""> [ Select One ]</option>
-            </select>
-            <span class="text-danger" asp-validation-for="CategoryId"></span>
-        </div>
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="BrandId">Brand</label>
-            <select asp-items="@(new SelectList(ViewBag.Brands,"Value","Text"))" class="form-control" asp-for="BrandId" id="BrandId">
-                <option value="x"> [ Select One ]</option>
-            </select>
-            <span class="text-danger" asp-validation-for="BrandId"></span>
-        </div>
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="Name">
-                Name
-            </label>
-            <input type="text" asp-for="Name" class="form-control" />
-            <span class="text-danger" asp-validation-for="Name"></span>
-        </div>
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="BarCode">
-                BarCode
-            </label>
-            <input type="text" asp-for="BarCode" class="form-control" />
-            <span class="text-danger" asp-validation-for="BarCode"></span>
-        </div>
-        
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="Quantity">
-                Quantity
-            </label>
-            <input type="text" asp-for="Quantity" class="form-control" />
-            <span class="text-danger" asp-validation-for="Quantity"></span>
-        </div>
-        <!--
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="CostPrice">
-                Cost Price
-            </label>
-            <input type="number" asp-for="CostPrice" class="form-control" />
-            <span class="text-danger" asp-validation-for="CostPrice"></span>
-        </div>
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="SalePrice">
-                Sale Price
-            </label>
-            <input type="number" asp-for="SalePrice" class="form-control" />
-            <span class="text-danger" asp-validation-for="SalePrice"></span>
-        </div>
-                -->
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="DiscountPrice">
-                Discount Price
-            </label>
-            <input type="number" asp-for="DiscountPrice" class="form-control" />
-            <span class="text-danger" asp-validation-for="DiscountPrice"></span>
-        </div>
-
-        <div class="form-group mb-1">
-            <label class="form-label" asp-for="Description">
-                Description
-            </label>
-            <textarea type="text" rows="2" asp-for="Description" class="form-control" ></textarea>
-            <span class="text-danger" asp-validation-for="Description"></span>
-        </div>
+<form action="/product/entry" method="post" enctype="multipart/form-data">
+    <div class="col-md-4">
+        <label class="form-label">Code</label>
+        <input type="text" name="ProductViewModel.Code" value="@Model.Item1.Code" readonly class="form-control" />
     </div>
+    
     <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Save</button>
     <a href="/product/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>

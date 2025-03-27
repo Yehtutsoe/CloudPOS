@@ -32,10 +32,18 @@ namespace CloudPOS.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Debugging: Show model state errors in console
+                foreach (var modelError in ModelState)
+                {
+                    foreach (var error in modelError.Value.Errors)
+                    {
+                        Console.WriteLine($"Field: {modelError.Key}, Error: {error.ErrorMessage}");
+                    }
+                }
+
                 LoadDropdownData();
                 return View(ui);
             }
-
             try
             {
                 _inventoryService.CreateOrUpdate(ui);
@@ -48,7 +56,7 @@ namespace CloudPOS.Controllers
                 ViewData["Status"] = false;
             }
             LoadDropdownData();
-            return RedirectToAction("List");
+            return View(ui);
         }
         public IActionResult List(string? productId,string? categoryId)
         {

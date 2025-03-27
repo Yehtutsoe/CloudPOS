@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<PurchaseViewModel>
 
+@{
+    ViewData["Title"] = "Purchase List";
+}
+
 <h3 class="mb-4 text-primary">Purchase List</h3>
 
 @{
@@ -12,61 +16,60 @@
     </div>
 }
 
+<!-- Include jQuery & DataTables CSS/JS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<!-- Include SweetAlert for confirmation dialogs -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="card p-4 shadow-sm">
     <form id="filterForm" method="get">
         <div class="row">
             <div class="col-md-3">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">From Date</label>
-                    <input type="date" class="form-control" name="fromDate" />
-                </div>
+                <label class="form-label fw-bold">From Date</label>
+                <input type="date" class="form-control" name="fromDate" />
             </div>
             <div class="col-md-3">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">To Date</label>
-                    <input type="date" class="form-control" name="toDate" />
-                </div>
+                <label class="form-label fw-bold">To Date</label>
+                <input type="date" class="form-control" name="toDate" />
             </div>
             <div class="col-md-3">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Voucher No</label>
-                    <select class="form-select" name="PurchaseId">
-                        <option value="">[ Select Voucher NO ]</option>
-                        @if (ViewBag.Purchases != null)
+                <label class="form-label fw-bold">Voucher No</label>
+                <select class="form-select" name="PurchaseId">
+                    <option value="">[ Select Voucher NO ]</option>
+                    @if (ViewBag.Purchases != null)
+                    {
+                        @foreach (var purchase in ViewBag.Purchases)
                         {
-                            @foreach (var purchase in ViewBag.Purchases)
-                            {
-                                <option value="@purchase.Id">@purchase.VoucherNo</option>
-                            }
+                            <option value="@purchase.Id">@purchase.VoucherNo</option>
                         }
-                        else
-                        {
-                            <option disabled>No Voucher NO available</option>
-                        }
-                    </select>
-                </div>
+                    }
+                    else
+                    {
+                        <option disabled>No Voucher NO available</option>
+                    }
+                </select>
             </div>
             <div class="col-md-3">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Supplier</label>
-                    <select class="form-select" name="SupplierId">
-                        <option value="">[ Select Supplier ]</option>
-                        @if (ViewBag.Suppliers != null)
+                <label class="form-label fw-bold">Supplier</label>
+                <select class="form-select" name="SupplierId">
+                    <option value="">[ Select Supplier ]</option>
+                    @if (ViewBag.Suppliers != null)
+                    {
+                        foreach (var supplier in ViewBag.Suppliers)
                         {
-                            foreach (var supplier in ViewBag.Suppliers)
-                            {
-                                <option value="@supplier.Id">@supplier.Name</option>
-                            }
+                            <option value="@supplier.Id">@supplier.Name</option>
                         }
-                        else
-                        {
-                            <option disabled>No Supplier available</option>
-                        }
-                    </select>
-                </div>
+                    }
+                    else
+                    {
+                        <option disabled>No Supplier available</option>
+                    }
+                </select>
             </div>
         </div>
-        <div class="text-end">
+        <div class="text-end mt-3">
             <button type="submit" class="btn btn-primary"><i class="fa-solid fa-search"></i> Search</button>
             <a href="/Purchase/entry" class="btn btn-success"><i class="fa-solid fa-plus"></i> New Purchase</a>
         </div>
@@ -89,10 +92,8 @@
             @if (Model != null && Model.Any())
             {
                 int i = 1;
-                decimal totalAmountSum = 0;
-                @foreach (var item in Model)
+                foreach (var item in Model)
                 {
-                    totalAmountSum += item.TotalAmount;
                     <tr>
                         <td>@i</td>
                         <td>@item.PurchaseDate.ToString("dd-MM-yyyy")</td>
@@ -107,11 +108,6 @@
                     </tr>
                     i++;
                 }
-                <tr class="fw-bold">
-                    <td colspan="4" class="text-end">Total</td>
-                    <td class="text-end">@totalAmountSum.ToString("C")</td>
-                    <td></td>
-                </tr>
             }
             else
             {
@@ -120,18 +116,53 @@
                 </tr>
             }
         </tbody>
+        @if (Model != null && Model.Any())
+        {
+            <tfoot>
+                <tr class="fw-bold">
+                    <td colspan="4" class="text-end">Total</td>
+                    <td class="text-end">@Model.Sum(x => x.TotalAmount).ToString("C")</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        }
     </table>
 </div>
 
 <script>
     $(document).ready(function () {
-        try {
-            $("#PurchaseDataTable").DataTable();
-        } catch (error) {
-            Swal.fire('Error', 'DataTables initialization failed: ' + error.message, 'error');
+        // Initialize DataTable
+        if ($("#PurchaseDataTable").length > 0) {
+            try {
+                var table = $("#PurchaseDataTable").DataTable({
+                    "paging": true,
+                    "pageLength": 10,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    "dom": '<"top"lf>rt<"bottom"ip><"clear">',
+                    "footerCallback": function (row, data, start, end, display) {
+                        // Keep footer visible
+                        $(this.api().table().footer()).show();
+                    }
+                });
+
+                // Make sure footer stays visible after pagination
+                table.on('draw.dt', function () {
+                    $('#PurchaseDataTable tfoot').show();
+                });
+
+            } catch (error) {
+                console.error("DataTables initialization error:", error);
+                Swal.fire('Error', 'Failed to initialize table: ' + error.message, 'error');
+            }
         }
 
-        $(".delete-button").on("click", function (e) {
+        // Handle delete action
+        $(document).on("click", ".delete-button", function (e) {
             e.preventDefault();
             let url = $(this).data("url");
             let name = $(this).data("name");
@@ -149,35 +180,36 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         url: url,
-                        type: 'POST', // Ensure your Delete action supports POST
+                        type: 'POST',
                         success: function (response) {
                             Swal.fire({
                                 title: 'Deleted!',
-                                text: `"${name}" has been deleted.`,
+                                text: `"${name}" has been deleted successfully.`,
                                 icon: 'success'
                             }).then(() => {
-                                location.reload(); // Refresh page after deletion
+                                location.reload();
                             });
                         },
-                        error: function () {
-                            Swal.fire('Error', 'Failed to delete. Try again!', 'error');
+                        error: function (xhr) {
+                            let errorMessage = xhr.responseText ? xhr.responseText : 'Failed to delete. Please try again!';
+                            Swal.fire('Error', errorMessage, 'error');
                         }
                     });
                 }
             });
         });
 
+        // Validate search filters before submitting
         $('#filterForm').on('submit', function (event) {
-            const fromDate = $('[name="fromDate"]').val();
-            const toDate = $('[name="toDate"]').val();
-            const purchaseId = $('[name="PurchaseId"]').val();
-            const supplierId = $('[name="SupplierId"]').val();
+            let fromDate = $('[name="fromDate"]').val();
+            let toDate = $('[name="toDate"]').val();
+            let purchaseId = $('[name="PurchaseId"]').val();
+            let supplierId = $('[name="SupplierId"]').val();
 
-            if (!(fromDate && toDate) && !purchaseId && !supplierId) {
-                Swal.fire('Warning', 'Please select a date range or filter criteria!', 'warning');
+            if (!fromDate && !toDate && !purchaseId && !supplierId) {
+                Swal.fire('Warning', 'Please select at least one filter before searching!', 'warning');
                 event.preventDefault();
             }
         });
     });
 </script>
-

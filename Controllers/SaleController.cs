@@ -35,8 +35,8 @@ namespace CloudPOS.Controllers
         }
         private void BindingSale()
         {
-            var Sales = _saleOrderService.GetAll();
-            ViewBag.Sale = Sales;
+            var sales = _saleOrderService.GetAll();
+            ViewBag.Sales = sales;
         }
         [HttpGet]
         public IActionResult GetProductDetails(string barCode)

@@ -24,9 +24,10 @@
 <form action="/inventory/entry" method="post" enctype="multipart/form-data">
     
     <div class="row g-3">
+        <!-- <input type="hidden" name="Id" value="@Model?.Id" /> -->
         <div class="col-md-4">           
                 <label class="form-label">Transaction Type</label>
-                <select class="form-select" name="TransatcionType">
+            <select class="form-select" name="TransactionType">
                     <option value="" selected>[ Select One ]</option>
                     <option value="Income">Income</option>
                     <option value="Damage">Damage</option>
@@ -51,10 +52,10 @@
             
         </div>
     </div>
-    <div class="row g-3 mt-2">
+    <div class="row g-3 mt-2 mb-3">
         <div class="col-md-4">
             <label class="form-label">Quantity</label>
-            <input type="number" value="" class="form-control" name="Quantity"/>
+            <input type="number" value="" class="form-control" name="Quantity" required/>
         </div>
     </div>
     <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i>Save</button>
@@ -103,6 +104,4 @@
             }
         });
     });
-</script>
-
 </script>

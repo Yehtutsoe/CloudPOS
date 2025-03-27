@@ -14,13 +14,19 @@ namespace CloudPOS.Controllers
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
         private readonly IBrandService _brandService;
+        private readonly IPriceService _priceService;
         private readonly IReport _report;
 
-        public ProductController(IProductService productService,ICategoryService categoryService,IBrandService modelService,IReport report)
+        public ProductController(IProductService productService,
+                                 ICategoryService categoryService,
+                                 IBrandService modelService,
+                                 IPriceService priceService,
+                                 IReport report)
         {
             _productService = productService;
             _categoryService = categoryService;
             _brandService = modelService;
+            _priceService = priceService;
             _report = report;
         }
         [HttpGet]
@@ -33,6 +39,7 @@ namespace CloudPOS.Controllers
         public IActionResult Entry()
         {
             string nextCode = _productService.GetNextProductCode();
+
             ProductViewModel productViewModel = new ProductViewModel
             {
                 Code = nextCode,
@@ -46,9 +53,17 @@ namespace CloudPOS.Controllers
                 BrandInfo = string.Empty,
                 CategoryInfo = string.Empty
             };
+            PriceViewModel priceViewModel = new PriceViewModel
+            {
+                PurchasePrice = 0.00m,
+                RetailSalePrice = 0.00m,
+                WholeSalePrice = 0.00m
+            };
+            ViewData["Info"] = null;
+            ViewData["Status"] = null;
             BindBrandData();
             BindCategroyData();
-            return View(productViewModel);
+            return View(Tuple.Create(productViewModel,priceViewModel));
         }
         private void BindBrandData()
         {

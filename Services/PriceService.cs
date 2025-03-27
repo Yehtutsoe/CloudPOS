@@ -88,17 +88,16 @@ namespace CloudPOS.Services
 
         public void Update(PriceViewModel priceViewModel)
         {
-            PriceEntity entity = new PriceEntity()
-            {
-                Id = priceViewModel.Id,
-                IsActive = true,
-                PricingDate = priceViewModel.PricingDate,
-                ProductId = priceViewModel.ProductId,
-                PurchasePrice = priceViewModel.PurchasePrice,
-                WholeSalePrice = priceViewModel.WholeSalePrice,
-                RetailSalePrice = priceViewModel.RetailSalePrice  
-            };
-            _unitOfWork.Prices.Update(entity);
+            var existingPrice = _unitOfWork.Prices.GetBy(p => p.Id == priceViewModel.Id).FirstOrDefault();
+            if (existingPrice != null) {
+                throw new Exception("Price not found");
+            }
+            existingPrice.PricingDate = priceViewModel.PricingDate;
+            existingPrice.ProductId = priceViewModel.ProductId;
+            existingPrice.PurchasePrice = priceViewModel.PurchasePrice;
+            existingPrice.WholeSalePrice = priceViewModel.WholeSalePrice;
+            existingPrice.RetailSalePrice = priceViewModel.RetailSalePrice;
+            _unitOfWork.Prices.Update(existingPrice);
             _unitOfWork.Commit();
         }
     }
