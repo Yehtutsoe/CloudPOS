@@ -10,7 +10,6 @@ namespace CloudPOS.Models.Entities
         public string Name { get; set; }
         [MaxLength(50)]
         public string Code { get; set; }
-        [StringLength(450)]      
         public string? Description { get; set; }
         public string BarCode { get; set; }
         public int? Quantity { get; set; }
