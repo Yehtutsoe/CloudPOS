@@ -22,7 +22,7 @@
         <div class="form-group mb-1">
             <label class="form-label" asp-for="BrandId">Brand</label>
             <select asp-items="@(new SelectList(ViewBag.Brands,"Value","Text"))" class="form-control" name="BrandId" asp-for="BrandId" id="BrandId">
-                <option value="x"> [ Select One ]</option>
+                <option value=""> [ Select One ]</option>
             </select>
             <span class="text-danger" asp-validation-for="BrandId"></span>
         </div>
@@ -40,34 +40,36 @@
             <input type="text" asp-for="@Model.BarCode" name="BarCode" class="form-control" />
             <span class="text-danger" asp-validation-for="BarCode"></span>
         </div>
+        <!--
         <div class="form-group mb-1">
             <label class="form-label" asp-for="Quantity">
                 Quantity
             </label>
-            <input type="text" asp-for="@Model.Quantity" name="Quantity" class="form-control" />
+            <input type="text" asp-for="" name="Quantity" class="form-control" />
             <span class="text-danger" asp-validation-for="Quantity"></span>
         </div>
-        <div class="form-group mb-1">
+       <div class="form-group mb-1">
             <label class="form-label" asp-for="CostPrice">
                 Cost Price
             </label>
-            <input type="number" value="@Model.CostPrice" name="CostPrice" class="form-control" />
+            <input type="number" value="" name="CostPrice" class="form-control" />
             <span class="text-danger" asp-validation-for="CostPrice"></span>
         </div>
         <div class="form-group mb-1">
             <label class="form-label" asp-for="SalePrice">
                 Sale Price
             </label>
-            <input type="number" asp-for="@Model.SalePrice" name="SalePrice" class="form-control" />
+            <input type="number" asp-for="" name="SalePrice" class="form-control" />
             <span class="text-danger" asp-validation-for="SalePrice"></span>
         </div>
         <div class="form-group mb-1">
             <label class="form-label" asp-for="DiscountPrice">
                 Discount Price
             </label>
-            <input type="number" asp-for="@Model.DiscountPrice" name="DiscountPrice" class="form-control" />
+            <input type="number" asp-for="" name="DiscountPrice" class="form-control" />
             <span class="text-danger" asp-validation-for="DiscountPrice"></span>
         </div>
+        -->
         <div class="form-group mb-1">
             <label class="form-label" asp-for="Description">
                 Description

@@ -46,10 +46,7 @@ namespace CloudPOS.Controllers
                 Name =string.Empty,
                 CategoryId =string.Empty,
                 BrandId =string.Empty,
-                CostPrice = 0.00m,
-                SalePrice = 0.00m,
                 Description =string.Empty,
-                Quantity = 0,
                 BrandInfo = string.Empty,
                 CategoryInfo = string.Empty
             };
@@ -67,30 +64,30 @@ namespace CloudPOS.Controllers
         }
         private void BindBrandData()
         {
-            var brands = _brandService.GetBrands().Select(b => new SelectListItem() { Value = b.Id, Text = b.Name }).ToList();
-            ViewBag.Brands = brands ?? new List<SelectListItem>();
+            var brands = _brandService.GetBrands(); //.Select(b => new SelectListItem() { Value = b.Id, Text = b.Name }).ToList();
+            ViewBag.Brands = brands;  //?? new List<SelectListItem>();
         }
         private void BindCategroyData()
         {
-            var category = _categoryService.GetCategories().Select(c => new SelectListItem() { Value = c.Id, Text = c.Name }).ToList();
-            ViewBag.Categorys = category ?? new List<SelectListItem>();
+            var category = _categoryService.GetCategories(); //.Select(c => new SelectListItem() { Value = c.Id, Text = c.Name }).ToList();
+            ViewBag.Categorys = category; //?? new List<SelectListItem>();
         }
         [HttpPost]
         [Authorize(Roles ="Admin")]
-        public IActionResult Entry(ProductViewModel productViewModel)
+        public IActionResult Entry(ProductViewModel productViewModel,PriceViewModel priceViewModel)
         {
             try
             {
                 var alreadyExist = _productService.IsAlreadyExist(productViewModel);
                 if (alreadyExist)
                 {
-                    ViewData["Info"] = "Product is Already exist in Database";
+                    ViewData["Info"] = "Product name is Already exist in Database";
                     ViewData["Status"] = false;
                     BindBrandData();
                     BindCategroyData();
-                    return View(productViewModel);
+                    return View(Tuple.Create(productViewModel,priceViewModel));
                 }
-                _productService.Create(productViewModel);
+                _productService.Create(productViewModel,priceViewModel);
                 ViewData["Info"] = "Successfull save the record";
                 ViewData["Status"] = true;
             }
@@ -114,10 +111,10 @@ namespace CloudPOS.Controllers
         public IActionResult Report(string productName,string modelId,string categoryId)
         {
             string fileDownloadName = $"productReport{Guid.NewGuid():N}.xlsx";
-          // Console.WriteLine($"🔎 Searching with - Product Name: {productName}, ModelId: {modelId}, CategoryId: {categoryId}");
+          // Console.WriteLine($"Searching with - Product Name: {productName}, ModelId: {modelId}, CategoryId: {categoryId}");
 
             IList<ProductReport> productReports  = _report.GetProductReportBy(productName, modelId, categoryId);
-           //Console.WriteLine($"📊 Total Records Found: {productReports.Count}");
+           //Console.WriteLine($"Total Records Found: {productReports.Count}");
             if (productReports.Count > 0)
             {
                 var fileContentInByte = ReportHelper.ExportToExcel(productReports, fileDownloadName);

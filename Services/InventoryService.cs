@@ -1,5 +1,6 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
+using CloudPOS.Repositories.Domain;
 using CloudPOS.UnitOfWork;
 
 namespace CloudPOS.Services
@@ -10,127 +11,129 @@ namespace CloudPOS.Services
 
         public InventoryService(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
         }
 
         public void CreateOrUpdate(InventoryViewModel inventoryViewModel)
         {
             try
             {
-                var existingInventoryBalance =_unitOfWork.Inventories.GetInventoryByProduct(inventoryViewModel.ProductId);
+                string productId = inventoryViewModel.ProductId;
+                string categoryId = inventoryViewModel.CategoryId;
+                DateTime earliestDate = inventoryViewModel.EarliestDate;
+                var existingInventoryBalance = _unitOfWork.Inventories.GetInventoryByProductAndEarliest(productId,earliestDate);
 
                 if (existingInventoryBalance != null)
                 {
-                     UpdateExistingInventory(existingInventoryBalance, inventoryViewModel);
+                    switch (inventoryViewModel.TransactionType)
+                    {
+                        case "Income":
+                            existingInventoryBalance.Quantity += inventoryViewModel.Quantity;
+                            break;
+                        case "Damage":
+                        case "Lost":
+                            if (inventoryViewModel.Quantity > existingInventoryBalance.Quantity)
+                            {
+                                throw new Exception("New quantity cannot be greater than the existing quantity.");
+                            }
+                            existingInventoryBalance.Quantity -= inventoryViewModel.Quantity;
+                            if (existingInventoryBalance.Quantity < 0) existingInventoryBalance.Quantity = 0;
+                            break;
+                        case "Adjustment":
+                            // Allow adjustment only if new quantity is less than or equal to old quantity
+                            if (inventoryViewModel.Quantity > existingInventoryBalance.Quantity)
+                            {
+                                throw new Exception("New quantity cannot be greater than the existing quantity.");
+
+                            }
+                            existingInventoryBalance.Quantity = inventoryViewModel.Quantity; // Direct Adjustment
+                            break;
+                        default:
+                            throw new Exception("Invalid transaction type");
+                    }
+                    _unitOfWork.Inventories.Update(existingInventoryBalance);
+                    StockLedgerEntity stockLedgerEntity = new StockLedgerEntity()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.Now,
+                        IsActive = true,
+                        LedgerDate = DateTime.Now,
+                        Quantity = inventoryViewModel.Quantity,
+                        ProductId = productId,
+                        TransactionType = inventoryViewModel.TransactionType,
+                        EarliestDate = earliestDate
+
+                    };
+                    _unitOfWork.StockLedgers.Create(stockLedgerEntity);
                 }
                 else
                 {
                     if (inventoryViewModel.TransactionType == "Income")
                     {
-                        CreateNewInventory(inventoryViewModel);
+                        InventoryEntity inventoryEntity = new InventoryEntity()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            CreatedAt = DateTime.Now,
+                            IsActive = true,
+                            ProductId = productId,
+                            Quantity = inventoryViewModel.Quantity,
+                            EarliestDate = earliestDate
+                        };
+                        _unitOfWork.Inventories.Create(inventoryEntity);
+                        StockLedgerEntity stockLedgerEntity = new StockLedgerEntity()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Quantity = inventoryViewModel.Quantity,
+                            CreatedAt = DateTime.Now,
+                            IsActive = true,
+                            LedgerDate = DateTime.Now,
+                            ProductId = productId,
+                            TransactionType = inventoryViewModel.TransactionType,
+                            EarliestDate = earliestDate
+                        };
+                        _unitOfWork.StockLedgers.Create(stockLedgerEntity);
                     }
                     else
                     {
-                        throw new InvalidOperationException("Cannot add non-Income transaction on a non-existing stock balance record.");
+                        throw new Exception("Cannot add non-Income transaction on a non-existing stock balance record");
                     }
                 }
-
-                _unitOfWork.Commit();
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error in CreateOrUpdateAsync: {ex.Message}", ex);
+
+                throw new Exception($"Error in CreateOrUpdate method: {ex.Message}", ex);
             }
-        }
-
-        private void UpdateExistingInventory(InventoryEntity inventory, InventoryViewModel model)
-        {
-            switch (model.TransactionType)
-            {
-                case "Income":
-                    inventory.Quantity += model.Quantity;
-                    break;
-                case "Damage":
-                case "Lost":
-                case "Adjustment":
-                    if (model.Quantity > inventory.Quantity)
-                    {
-                        throw new InvalidOperationException("New quantity cannot be greater than the existing quantity.");
-                    }
-                    inventory.Quantity = model.TransactionType == "Adjustment" ? model.Quantity : inventory.Quantity - model.Quantity;
-                    break;
-                default:
-                    throw new ArgumentException("Invalid transaction type.");
-            }
-
-            _unitOfWork.Inventories.Update(inventory);
-            CreateStockLedger(model);
-        }
-
-        private void CreateNewInventory(InventoryViewModel model)
-        {
-            var inventoryEntity = new InventoryEntity
-            {
-                Id = Guid.NewGuid().ToString(),
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true,
-                ProductId = model.ProductId,
-                CategoryId = model.CategoryId,
-                Quantity = model.Quantity
-            };
-
-            _unitOfWork.Inventories.Create(inventoryEntity);
-            CreateStockLedger(model);
-        }
-
-        private void CreateStockLedger(InventoryViewModel model)
-        {
-            var stockLedgerEntity = new StockLedgerEntity
-            {
-                Id = Guid.NewGuid().ToString(),
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true,
-                LedgerDate = DateTime.UtcNow,
-                Quantity = model.Quantity,
-                ProductId = model.ProductId,
-                TransactionType = model.TransactionType
-            };
-
-            _unitOfWork.StockLedgers.Create(stockLedgerEntity);
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<InventoryViewModel> GetAll(string productId, string categoryId)
         {
-            var inventories = _unitOfWork.Inventories.GetAll();
-            var products =_unitOfWork.Products.GetAll();
-            var categories = _unitOfWork.Categories.GetAll();
-
-            var inventoryList = (from ivn in inventories
-                                 join product in products on ivn.ProductId equals product.Id
-                                 join category in categories on ivn.CategoryId equals category.Id
-                                 select new InventoryViewModel
-                                 {
-                                     Id = ivn.Id,
-                                     CategoryId = category.Id,
-                                     ProductId = product.Id,
-                                     ProductCode =product.Code,
-                                     ProductName = product.Name,
-                                     CategoryName = category.Name,
-                                     CreateAt = ivn.CreatedAt,
-                                     Quantity = ivn.Quantity
-                                 }).AsQueryable();
-
+            IEnumerable<InventoryViewModel> inventory = (from ivn in _unitOfWork.Inventories.GetAll()
+                                                         join produt in _unitOfWork.Products.GetAll()
+                                                         on ivn.ProductId equals produt.Id
+                                                         join category in _unitOfWork.Categories.GetAll()
+                                                         on ivn.CategoryId equals category.Id
+                                                         select new InventoryViewModel
+                                                         {
+                                                             Id = ivn.Id,
+                                                             CategoryId = category.Id,
+                                                             ProductId = produt.Id,
+                                                             ProductName = produt.Name,
+                                                             CategoryName = category.Name,
+                                                             CreateAt = DateTime.Now,
+                                                             ModifiedAt = DateTime.Now,
+                                                             Quantity = ivn.Quantity
+                                                         }).AsEnumerable();
             if (!string.IsNullOrEmpty(productId))
             {
-                inventoryList = inventoryList.Where(inv => inv.ProductId == productId);
+                inventory = inventory.Where(inv => inv.ProductId == productId);
             }
-
-            if (!string.IsNullOrEmpty(categoryId)) // Previously, you were checking for an empty string incorrectly
+            if (string.IsNullOrEmpty(categoryId))
             {
-                inventoryList = inventoryList.Where(inv => inv.CategoryId == categoryId);
+                inventory = inventory.Where(inv => inv.CategoryId == categoryId);
             }
-
-            return inventoryList.ToList();
+            return inventory;
         }
     }
 }

@@ -26,10 +26,11 @@ namespace CloudPOS.Services
                               ProductCode = p?.Code ?? "N/A",
                               ProductName = p?.Name ?? "N/A",
                               Quantity = sl.Quantity,
+                              EarliestDate = sl.EarliestDate,
                               LedgerDate = sl.LedgerDate,
                               TransactionType = sl.TransactionType ?? "Unknow",
                               InQty = (sl.TransactionType == "Income" || sl.TransactionType == "Purchase") ? (sl.Quantity) : 0,
-                              OutQty = (sl.TransactionType == "Damage" || sl.TransactionType == "Lost" || sl.TransactionType == "Adjustment" || sl.TransactionType == "Sale") || sl.TransactionType == "Purchase Delete" ? (sl.Quantity) : 0 * -1
+                              OutQty = (sl.TransactionType == "Damage" || sl.TransactionType == "Lost" || sl.TransactionType == "Adjustment" || sl.TransactionType == "Sale") || sl.TransactionType == "Purchase Delete" ? (sl.Quantity) : 0*-1
 
                           });
             if(fromDate.HasValue && toDate.HasValue)

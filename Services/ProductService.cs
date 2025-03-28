@@ -1,6 +1,7 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.UnitOfWork;
+using Humanizer;
 
 
 namespace CloudPOS.Services
@@ -14,7 +15,7 @@ namespace CloudPOS.Services
             _unitOfWork = unitOfWork;
         }
 
-        public void Create(ProductViewModel productViewModel)
+        public void Create(ProductViewModel productViewModel, PriceViewModel priceViewModel)
         {
             ProductEntity entity = new ProductEntity()
             {
@@ -22,18 +23,26 @@ namespace CloudPOS.Services
                 Name = productViewModel.Name,
                 Code = productViewModel.Code,
                 BarCode = productViewModel.BarCode,
-                CostPrice = productViewModel.CostPrice,
-                DiscountPrice = productViewModel.DiscountPrice,
-                SalePrice = productViewModel.SalePrice,
                 BrandId = productViewModel.BrandId,
                 CategoryId = productViewModel.CategoryId,
                 CreatedAt = DateTime.Now,
                 Description = productViewModel.Description,
                 IsActive = true,
-                Quantity = productViewModel.Quantity
             };
            // Console.WriteLine($"Saving product with code: {entity.Code} and name: {entity.Name}");
             _unitOfWork.Products.Create(entity);
+            PriceEntity priceEntity = new PriceEntity()
+            {
+                Id = Guid.NewGuid().ToString(),
+                ProductId = entity.Id,
+                IsActive = true,
+                CreatedAt = DateTime.Now,
+                PricingDate = priceViewModel.PricingDate,
+                PurchasePrice = priceViewModel.PurchasePrice,
+                RetailSalePrice = priceViewModel.RetailSalePrice,
+                WholeSalePrice = priceViewModel.WholeSalePrice
+            };
+            _unitOfWork.Prices.Create(priceEntity);
             _unitOfWork.Commit();
         }
 
@@ -69,10 +78,6 @@ namespace CloudPOS.Services
                                                           Code = p.Code,
                                                           CategoryId = c.Id,
                                                           BrandId = b.Id,
-                                                          Quantity = p.Quantity,
-                                                          DiscountPrice = p.DiscountPrice,
-                                                          CostPrice = p.CostPrice,
-                                                          SalePrice = p.SalePrice,
                                                           Description = p.Description,
                                                           CategoryInfo = c.Name,
                                                           BrandInfo = b.Name,
@@ -92,10 +97,6 @@ namespace CloudPOS.Services
                                             Description = s.Description,
                                             Code = s.Code,
                                             Name = s.Name,
-                                            Quantity = s.Quantity,
-                                            CostPrice = s.CostPrice,
-                                            SalePrice = s.SalePrice,
-                                            DiscountPrice = s.DiscountPrice,
                                             BarCode = s.BarCode
 
                                         }).SingleOrDefault();
@@ -138,13 +139,10 @@ namespace CloudPOS.Services
                 throw new Exception("Product not found");
             }
             existingProduct.Name = productViewModel.Name;
-            existingProduct.CostPrice = productViewModel.CostPrice;
-            existingProduct.SalePrice = productViewModel.SalePrice;
-            existingProduct.DiscountPrice = productViewModel.DiscountPrice;
             existingProduct.BrandId = productViewModel.BrandId;
             existingProduct.CategoryId = productViewModel.CategoryId;
-            existingProduct.Quantity = productViewModel.Quantity;
             existingProduct.BarCode = productViewModel.BarCode;
+            existingProduct.Description = productViewModel.Description;
             _unitOfWork.Products.Update(existingProduct);
             _unitOfWork.Commit();
         }

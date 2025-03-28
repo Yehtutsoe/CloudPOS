@@ -26,5 +26,6 @@ namespace CloudPOS.Models.ViewModels
 
         [Required(ErrorMessage = "Transaction Type is required.")]
         public string TransactionType { get; set; }
+        public DateTime EarliestDate { get; set; }
     }
 }

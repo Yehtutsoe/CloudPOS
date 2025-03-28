@@ -6,9 +6,9 @@ namespace CloudPOS.Repositories.Domain
 {
     public interface IInventoryRepository : IBaseRepository<InventoryEntity>
     {
-        InventoryEntity GetInventoryByProduct(string productId);
-        void UpdateInventoryBalanceByProduct(string productId, int quantity,string categoryId);
-        List<(string? ProductId,int QuantityUsed)> ReduceForSale(string productId, int quantity);
+        InventoryEntity GetInventoryByProductAndEarliest(string productId,DateTime earliestDate);
+        void UpdateInventoryBalanceByProductAndEarliest(string productId, int quantity,string categoryId,DateTime earliestDate);
+        List<(string EarliestDate,int QuantityUsed)> ReduceForSale(string productId, int quantity);
         int GetAvaliableStock(string productId);
 
     }

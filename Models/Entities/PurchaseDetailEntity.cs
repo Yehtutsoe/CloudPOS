@@ -14,5 +14,6 @@ namespace CloudPOS.Models.Entities
         public ProductEntity Products { get; set; }
         public Decimal TotalPrice { get; set; }
         public Decimal Price { get; set; }
+        public DateTime EarliestDate { get; set; }
     }
 }

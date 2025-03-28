@@ -4,6 +4,7 @@
     {
         public string id { get; set; }
         public DateTime? LedgerDate { get; set; }
+        public DateTime? EarliestDate { get; set; }
         public string ProductName { get; set; }
         public string ProductCode { get; set; }
         public string ProductId { get; set; }

@@ -18,60 +18,56 @@ namespace CloudPOS.Repositories.Domain
             return _dbContext.Inventories.Where(iv => iv.ProductId == productId).Sum(iv => iv.Quantity);
         }
 
-        public InventoryEntity GetInventoryByProduct(string productId)
+        public InventoryEntity GetInventoryByProductAndEarliest(string productId,DateTime earliestDate)
         {
-            return _dbContext.Inventories.FirstOrDefault(iv => iv.ProductId == productId);
+            return _dbContext.Inventories.FirstOrDefault(iv => iv.ProductId == productId && iv.EarliestDate.Date == earliestDate.Date);
         }
 
-        public List<(string? ProductId, int QuantityUsed)> ReduceForSale(string productId, int quantity)
+        public List<(string EarliestDate, int QuantityUsed)> ReduceForSale(string productId, int quantity)
         {
-            if (string.IsNullOrWhiteSpace(productId))
-            {
-                throw new ArgumentException("Product ID cannot be null or empty.", nameof(productId));
-            }
 
-            if (quantity <= 0)
+            var stockBalances = _dbContext.Inventories
+                                          .Where(sb => sb.ProductId == productId && sb.Quantity == quantity)
+                                          .OrderBy(sb=> sb.EarliestDate)
+                                          .ToList();
+            var usedBatch = new List<(string EarliestDate, int QuantityUsed)>();
+            foreach(var stockBalance in stockBalances)
             {
-                throw new ArgumentException("Quantity must be greater than zero.", nameof(quantity));
+                if (quantity <= 0)
+                    break;
+                int usedQuantity = 0;
+            if(stockBalance.Quantity >= quantity)
+                {
+                    usedQuantity = quantity;
+                    stockBalance.Quantity -= quantity;
+                    quantity = 0;
+                }
+                else
+                {
+                    usedQuantity = quantity;
+                    quantity -= stockBalance.Quantity;
+                    stockBalance.Quantity = 0;
+                }
+                _dbContext.Inventories.Update(stockBalance);
+                usedBatch.Add((EarliestDate:stockBalance.EarliestDate.ToString(), QuantityUsed:usedQuantity));
             }
-
-            // Fetch inventory record
-            var inventory = _dbContext.Inventories.FirstOrDefault(v => v.ProductId == productId);
-            if (inventory == null)
-            {
-                throw new KeyNotFoundException("Product not found in inventory.");
-            }
-
-            if (inventory.Quantity < quantity)
+            if (quantity > 0)
             {
                 throw new InvalidOperationException("Not enough stock available.");
             }
 
-            // Track used quantities
-            var usedQuantities = new List<(string? ProductId, int QuantityUsed)>();
-
-            // Deduct stock and record usage
-            int usedQuantity = Math.Min(inventory.Quantity, quantity);
-            inventory.Quantity -= usedQuantity;
-            inventory.AdjustmentDate = DateTime.UtcNow;
-
-            usedQuantities.Add((productId, usedQuantity));
-
             _dbContext.SaveChanges();
-
-            return usedQuantities;
+            return usedBatch;
         }
 
-
-
-
-        public void UpdateInventoryBalanceByProduct(string productId, int quantity, string categoryId)
+        public void UpdateInventoryBalanceByProductAndEarliest(string productId, int quantity, string categoryId,DateTime earliestDate)
         {
-            var inventoryEntity = _dbContext.Inventories.FirstOrDefault(v => v.ProductId == productId && v.CategoryId == categoryId);
+            var inventoryEntity = _dbContext.Inventories.FirstOrDefault(v => v.ProductId == productId && 
+                                                                             v.CategoryId == categoryId &&
+                                                                             v.EarliestDate.Date == earliestDate.Date);
             if (inventoryEntity != null)
             {
                 inventoryEntity.Quantity += quantity;
-                inventoryEntity.AdjustmentDate = DateTime.Now;
                 if (inventoryEntity.Quantity < 0)
                 {
                     throw new InvalidOperationException($"Insufficient stock for Product: {productId} and Cannot reduce stock below zero.");
@@ -91,8 +87,10 @@ namespace CloudPOS.Repositories.Domain
                     Quantity = quantity,
                     CategoryId = categoryId,
                     ProductId = productId,
-                    AdjustmentDate = DateTime.Now,
-                    CreatedAt = DateTime.Now
+                    EarliestDate = earliestDate,
+                    CreatedAt = DateTime.Now,
+                    IsActive = true,
+                    
                 };
                 _dbContext.Inventories.Add(inventoryEntity);
             }

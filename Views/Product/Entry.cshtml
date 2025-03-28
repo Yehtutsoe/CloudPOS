@@ -2,11 +2,66 @@
 
 <h2 class="mt-1">Product Entry Form</h2>
 <form action="/product/entry" method="post" enctype="multipart/form-data">
-    <div class="col-md-4">
-        <label class="form-label">Code</label>
-        <input type="text" name="ProductViewModel.Code" value="@Model.Item1.Code" readonly class="form-control" />
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Code</label>
+            <input type="text" name="ProductViewModel.Code" value="@Model.Item1.Code" readonly class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="CategoryId" name="ProductViewModel.CategoryId">
+                <option value="">[ Select One ]</option>
+                @foreach(var category in ViewBag.Categorys){
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Brand</label>
+            <select class="form-select" id="BrandId" name="ProductViewModel.BrandId">
+                <option value="">[ Select One ]</option>
+                @foreach (var brand in ViewBag.Brands)
+                {
+                    <option value="@brand.Id">@brand.Name</option>
+                }
+            </select>
+        </div>
     </div>
-    
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Name</label>
+            <input type="text" name="ProductViewModel.Name" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">BarCode</label>
+            <input type="text" name="ProductViewModel.BarCode" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Pricing Date</label>
+            <input type="date" name="PriceViewModel.PricingDate" class="form-control" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label class="form-label">Purchase Price</label>
+            <input type="number" name="PriceViewModel.PurchasePrice" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Retail Sale Price</label>
+            <input type="number" name="PriceViewModel.RetailSalePrice" class="form-control" required />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Whole Sale Price</label>
+            <input type="number" name="PriceViewModel.WholeSalePrice" class="form-control" required />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label">Description</label>
+            <textarea rows="3" name="ProductViewModel.Description" class="form-control" required></textarea>
+        </div>
+    </div>
+   
     <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i>Save</button>
     <a href="/product/list" class="btn btn-warning"><i class="fa fa-window-close"></i>Cancel</a>
 </form>

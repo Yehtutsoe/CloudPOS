@@ -50,12 +50,7 @@ namespace CloudPOS.Controllers
 
             if (details != null)
             {
-                return Json(new
-                {
-                    ProductId = details.ProductId,
-                    RetailSalePrice = details.RetailSalePrice,
-                    WholeSalePrice = details.WholeSalePrice
-                });
+                return Json(details);
             }
 
             return Json(null);

@@ -43,7 +43,7 @@ namespace CloudPOS.Services
                     {
                         if (string.IsNullOrEmpty(details.ProductId))
                         {
-                            Console.WriteLine("ProductId is null or empty for one of the sale items!");
+                            //Console.WriteLine("ProductId is null or empty for one of the sale items!");
                             throw new InvalidOperationException("ProductId is missing for one of the sale items.");
                         }
 

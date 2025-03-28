@@ -34,12 +34,8 @@ namespace CloudPOS.Repositories.Report.common
             var products = query.Select(s => new ProductReport
             {
                 Name = s.Name,
-                CostPrice = s.CostPrice,
-                Quantity = s.Quantity,
-                SalePrice = s.SalePrice,
                 Description= s.Description,
                 ProductCode = s.Code,
-                TotalAmount = s.SalePrice,
                 BrandInfo = s.BrandInfo,
                 CategoryInfo = s.CategoryInfo,
                 ReportedAt = DateTime.Now
