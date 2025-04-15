@@ -67,6 +67,7 @@ namespace CloudPOS.Services
                                     ProductId = details.ProductId,
                                     LedgerDate = DateTime.Now,
                                     Quantity = usage.QuantityUsed,
+                                    EarliestDate = DateTime.Parse(usage.EarliestDate),
                                     TransactionType = "Sale"
                                 };
                                 _unitOfWork.StockLedgers.Create(stockLedgerEntity);
@@ -85,8 +86,7 @@ namespace CloudPOS.Services
                             Quantity = details.Quantity,
                             TotalPrice = details.Total,
                             SaleAmount = details.Amount,
-                            SaleId = saleEntity.Id
-                            
+                            SaleId = saleEntity.Id                                                        
                         };
                         _unitOfWork.SaleItems.Create(saleItemEntity);
                     }

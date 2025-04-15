@@ -1,6 +1,5 @@
 ﻿using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories.Domain;
 using CloudPOS.UnitOfWork;
 
 namespace CloudPOS.Services
@@ -77,7 +76,8 @@ namespace CloudPOS.Services
                             IsActive = true,
                             ProductId = productId,
                             Quantity = inventoryViewModel.Quantity,
-                            EarliestDate = earliestDate
+                            EarliestDate = earliestDate,
+                            CategoryId = categoryId
                         };
                         _unitOfWork.Inventories.Create(inventoryEntity);
                         StockLedgerEntity stockLedgerEntity = new StockLedgerEntity()
@@ -88,6 +88,7 @@ namespace CloudPOS.Services
                             IsActive = true,
                             LedgerDate = DateTime.Now,
                             ProductId = productId,
+                            SourceId = inventoryEntity.Id,
                             TransactionType = inventoryViewModel.TransactionType,
                             EarliestDate = earliestDate
                         };
@@ -109,29 +110,39 @@ namespace CloudPOS.Services
 
         public IEnumerable<InventoryViewModel> GetAll(string productId, string categoryId)
         {
-            IEnumerable<InventoryViewModel> inventory = (from ivn in _unitOfWork.Inventories.GetAll()
-                                                         join produt in _unitOfWork.Products.GetAll()
-                                                         on ivn.ProductId equals produt.Id
+                                        var inventory = (from ivn in _unitOfWork.Inventories.GetAll()
+                                                         where ivn.IsActive
+                                                         join product in _unitOfWork.Products.GetAll()
+                                                         on ivn.ProductId equals product.Id
                                                          join category in _unitOfWork.Categories.GetAll()
                                                          on ivn.CategoryId equals category.Id
                                                          select new InventoryViewModel
                                                          {
                                                              Id = ivn.Id,
                                                              CategoryId = category.Id,
-                                                             ProductId = produt.Id,
-                                                             ProductName = produt.Name,
+                                                             ProductId = product.Id,
+                                                             ProductName = product.Name,
+                                                             ProductCode = product.Code,
                                                              CategoryName = category.Name,
-                                                             CreateAt = DateTime.Now,
-                                                             ModifiedAt = DateTime.Now,
-                                                             Quantity = ivn.Quantity
+                                                             CreateAt = ivn.CreatedAt,
+                                                             ModifiedAt = ivn.CreatedAt,
+                                                             Quantity = ivn.Quantity,
+                                                             EarliestDate = ivn.EarliestDate,
+                                                             
                                                          }).AsEnumerable();
+            Console.WriteLine($"[DEBUG] Total Inventory Records Retrieved: {inventory.Count()}");
+
             if (!string.IsNullOrEmpty(productId))
             {
                 inventory = inventory.Where(inv => inv.ProductId == productId);
+                Console.WriteLine($"[DEBUG] Filtered by ProductId: {productId}, Count: {inventory.Count()}");
+
             }
-            if (string.IsNullOrEmpty(categoryId))
+            if (!string.IsNullOrEmpty(categoryId))
             {
                 inventory = inventory.Where(inv => inv.CategoryId == categoryId);
+                Console.WriteLine($"[DEBUG] Filtered by CategoryId: {categoryId}, Count: {inventory.Count()}");
+
             }
             return inventory;
         }

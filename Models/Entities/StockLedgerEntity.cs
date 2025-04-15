@@ -7,6 +7,7 @@ namespace CloudPOS.Models.Entities
     {
         public DateTime LedgerDate { get; set; }
         public DateTime EarliestDate { get; set; }
+        public string SourceId { get; set; }
         public string ProductId { get; set; }
         [ForeignKey(nameof(ProductId))] 
         public ProductEntity Products { get; set; }

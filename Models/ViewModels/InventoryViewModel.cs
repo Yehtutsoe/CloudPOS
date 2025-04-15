@@ -8,7 +8,6 @@ namespace CloudPOS.Models.ViewModels
 
         [Required(ErrorMessage = "Product is required.")]
         public string? ProductId { get; set; }
-
         public string? ProductName { get; set; }
         public string? ProductCode { get; set; }
 

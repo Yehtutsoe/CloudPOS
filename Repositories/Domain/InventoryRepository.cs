@@ -96,5 +96,8 @@ namespace CloudPOS.Repositories.Domain
             }
             _dbContext.SaveChanges();
         }
+
+        public override IEnumerable<InventoryEntity> GetAll() => _dbContext.Inventories.Where(i => i.IsActive).ToList();
+
     }
 }

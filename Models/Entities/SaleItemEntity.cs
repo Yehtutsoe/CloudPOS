@@ -11,7 +11,7 @@ namespace CloudPOS.Models.Entities
         public int Quantity { get; set; }
         public Decimal Price { get; set; }
         public Decimal TotalPrice { get; set; }
-        public Decimal DiscountAmount { get; set; }
+        public Decimal? DiscountAmount { get; set; }
         [Required]
         public string ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]

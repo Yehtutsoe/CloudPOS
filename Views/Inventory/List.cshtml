@@ -9,7 +9,7 @@
             <th scope="col">Product Code</th>
             <th scope="col">Product Name</th>
             <th scope="col">Quantity</th>
-            <th scope="col">Create Date</th>
+            <th scope="col">Earliest Date</th>
         </tr>
     </thead>
     @{
@@ -23,7 +23,7 @@
                 <td>@inventory.ProductCode</td>
                 <td>@inventory.ProductName</td>
                 <td>@inventory.Quantity</td>
-                <td>@inventory.CreateAt</td>
+                <td>@inventory.EarliestDate.ToString("yyyy-MM-dd")</td>
             </tr>
             i++;
             }

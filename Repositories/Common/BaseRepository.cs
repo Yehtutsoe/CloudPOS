@@ -25,7 +25,7 @@ namespace CloudPOS.Repositories.Common
             _dbContext.Remove<T>(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
             return _dbSet.AsNoTracking().AsEnumerable();
         }

@@ -61,6 +61,7 @@ namespace CloudPOS.Controllers
         public IActionResult List(string? productId,string? categoryId)
         {
             var inventory =   _inventoryService.GetAll(productId, categoryId);
+            Console.WriteLine($"Inventory Count: {inventory?.Count() ?? 0}");
             LoadDropdownData();
             return View(inventory);
         }

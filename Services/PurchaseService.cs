@@ -66,6 +66,7 @@ namespace CloudPOS.Services
                         TransactionType = "Purchase",
                         CreatedAt = currentTime,
                         IsActive = true,
+                        SourceId = purchaseEntity.Id,
                         EarliestDate = detail.EarliestDate
                     };
 
