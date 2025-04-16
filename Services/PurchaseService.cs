@@ -10,28 +10,28 @@ namespace CloudPOS.Services
 
         public PurchaseService(IUnitOfWork unitOfWork)
         {
-            this._unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         public void Create(PurchaseWithDetailViewModel models)
         {
-            using var transaction = _unitOfWork.BeginTransaction(); // Start transaction
+            using var transaction = _unitOfWork.BeginTransaction();
             try
             {
                 var purchaseViewModels = models.Purchase;
                 var purchaseDetailViewModels = models.ProductDetails;
-                var currentTime = DateTime.UtcNow; // Use UTC for consistency
+                var currentTime = DateTime.UtcNow;
 
-                decimal purchaseTotal = purchaseDetailViewModels.Sum(i => i.TotalPrice); // Optimized sum calculation
+                decimal purchaseTotal = purchaseDetailViewModels.Sum(i => i.TotalPrice);
 
-                PurchaseEntity purchaseEntity = new PurchaseEntity()
+                var purchaseEntity = new PurchaseEntity()
                 {
                     Id = Guid.NewGuid().ToString(),
                     PurchaseDate = purchaseViewModels.PurchaseDate,
                     SupplierId = purchaseViewModels.SupplierId,
                     VoucherNo = purchaseViewModels.VoucherNo,
                     CreatedAt = currentTime,
-                    TotalCost = purchaseTotal, // Use calculated total cost
+                    TotalCost = purchaseTotal,
                     Deliverystatus = purchaseViewModels.Deliverystatus,
                     IsActive = true,
                 };
@@ -40,7 +40,7 @@ namespace CloudPOS.Services
 
                 foreach (var detail in purchaseDetailViewModels)
                 {
-                    PurchaseDetailEntity purchaseDetailEntity = new PurchaseDetailEntity()
+                    var purchaseDetailEntity = new PurchaseDetailEntity()
                     {
                         Id = Guid.NewGuid().ToString(),
                         Quantity = detail.Quantity,
@@ -50,14 +50,20 @@ namespace CloudPOS.Services
                         TotalPrice = detail.TotalPrice,
                         IsActive = true,
                         CreatedAt = currentTime,
+                        EarliestDate = detail.EarliestDate
                     };
 
                     var product = _unitOfWork.Products.FindById(detail.ProductId);
                     var categoryId = product?.CategoryId;
 
-                    _unitOfWork.Inventories.UpdateInventoryBalanceByProductAndEarliest(detail.ProductId, detail.Quantity,categoryId,detail.EarliestDate);
+                    _unitOfWork.Inventories.UpdateInventoryBalanceByProductAndEarliest(
+                        detail.ProductId,
+                        detail.Quantity,
+                        categoryId,
+                        detail.EarliestDate // ✅ EarliestDate passed as DateTime
+                    );
 
-                    StockLedgerEntity stockLedgerEntity = new StockLedgerEntity()
+                    var stockLedgerEntity = new StockLedgerEntity()
                     {
                         Id = Guid.NewGuid().ToString(),
                         LedgerDate = currentTime,
@@ -67,7 +73,7 @@ namespace CloudPOS.Services
                         CreatedAt = currentTime,
                         IsActive = true,
                         SourceId = purchaseEntity.Id,
-                        EarliestDate = detail.EarliestDate
+                        EarliestDate = detail.EarliestDate // ✅ Stored with correct date
                     };
 
                     _unitOfWork.StockLedgers.Create(stockLedgerEntity);
@@ -91,23 +97,23 @@ namespace CloudPOS.Services
             {
                 var purchase = _unitOfWork.Purchases.FindById(Id);
                 if (purchase == null)
-                {
                     return false;
-                }
 
-                //purchase.IsActive = false; // Mark purchase as inactive
-                _unitOfWork.Purchases.Update(purchase);
+                // Optionally mark inactive
+                //_unitOfWork.Purchases.Update(purchase);
 
                 var purchaseDetails = _unitOfWork.PurchaseDetails.FindByPurchaseId(Id).ToList();
 
                 foreach (var detail in purchaseDetails)
                 {
-                    _unitOfWork.Inventories.UpdateInventoryBalanceByProductAndEarliest(detail.ProductId,
-                                                                                       -detail.Quantity,
-                                                                                       null,
-                                                                                       detail.EarliestDate); // Reduce inventory
+                    _unitOfWork.Inventories.UpdateInventoryBalanceByProductAndEarliest(
+                        detail.ProductId,
+                        -detail.Quantity,
+                        null,
+                        detail.EarliestDate // ✅ Reduce by date-based batch
+                    );
 
-                    StockLedgerEntity stockLedger = new StockLedgerEntity()
+                    var stockLedger = new StockLedgerEntity()
                     {
                         Id = Guid.NewGuid().ToString(),
                         LedgerDate = DateTime.UtcNow,
@@ -136,28 +142,28 @@ namespace CloudPOS.Services
 
         public IEnumerable<PurchaseViewModel> GetAll(DateTime? fromDate = null, DateTime? toDate = null, string? supplierId = null, string? purchaseId = null)
         {
-            var query = _unitOfWork.Purchases.GetAll().Where(p => p.IsActive) // Fetch only active purchases
+            var query = _unitOfWork.Purchases.GetAll().Where(p => p.IsActive)
                 .Join(_unitOfWork.Suppliers.GetAll().Where(s => s.IsActive),
-                      p => p.SupplierId,
-                      s => s.Id,
-                      (p, s) => new PurchaseViewModel
-                      {
-                          Id = p.Id,
-                          PurchaseDate = p.PurchaseDate,
-                          Deliverystatus = p.Deliverystatus,
-                          SupplierId = p.SupplierId,
-                          VoucherNo = p.VoucherNo,
-                          SupplierInfo = s.Name,
-                          TotalAmount = p.TotalCost
-                      });
+                    p => p.SupplierId,
+                    s => s.Id,
+                    (p, s) => new PurchaseViewModel
+                    {
+                        Id = p.Id,
+                        PurchaseDate = p.PurchaseDate,
+                        Deliverystatus = p.Deliverystatus,
+                        SupplierId = p.SupplierId,
+                        VoucherNo = p.VoucherNo,
+                        SupplierInfo = s.Name,
+                        TotalAmount = p.TotalCost
+                    });
 
             if (fromDate.HasValue)
             {
-                query = query.Where(s => s.PurchaseDate != null && s.PurchaseDate >= fromDate.Value);
+                query = query.Where(s => s.PurchaseDate >= fromDate.Value);
             }
             if (toDate.HasValue)
             {
-                query = query.Where(s => s.PurchaseDate != null && s.PurchaseDate <= toDate.Value);
+                query = query.Where(s => s.PurchaseDate <= toDate.Value);
             }
             if (!string.IsNullOrEmpty(supplierId) && supplierId != "Select an Supplier")
             {

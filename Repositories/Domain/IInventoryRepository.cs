@@ -8,7 +8,7 @@ namespace CloudPOS.Repositories.Domain
     {
         InventoryEntity GetInventoryByProductAndEarliest(string productId,DateTime earliestDate);
         void UpdateInventoryBalanceByProductAndEarliest(string productId, int quantity,string categoryId,DateTime earliestDate);
-        List<(string EarliestDate,int QuantityUsed)> ReduceForSale(string productId, int quantity);
+        List<(DateTime EarliestDate, int QuantityUsed)> ReduceForSale(string productId, int quantity);
         int GetAvaliableStock(string productId);
 
     }

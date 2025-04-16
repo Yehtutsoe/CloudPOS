@@ -130,18 +130,18 @@ namespace CloudPOS.Services
                                                              EarliestDate = ivn.EarliestDate,
                                                              
                                                          }).AsEnumerable();
-            Console.WriteLine($"[DEBUG] Total Inventory Records Retrieved: {inventory.Count()}");
+            //Console.WriteLine($"[DEBUG] Total Inventory Records Retrieved: {inventory.Count()}");
 
             if (!string.IsNullOrEmpty(productId))
             {
                 inventory = inventory.Where(inv => inv.ProductId == productId);
-                Console.WriteLine($"[DEBUG] Filtered by ProductId: {productId}, Count: {inventory.Count()}");
+              //  Console.WriteLine($"[DEBUG] Filtered by ProductId: {productId}, Count: {inventory.Count()}");
 
             }
             if (!string.IsNullOrEmpty(categoryId))
             {
                 inventory = inventory.Where(inv => inv.CategoryId == categoryId);
-                Console.WriteLine($"[DEBUG] Filtered by CategoryId: {categoryId}, Count: {inventory.Count()}");
+              //  Console.WriteLine($"[DEBUG] Filtered by CategoryId: {categoryId}, Count: {inventory.Count()}");
 
             }
             return inventory;

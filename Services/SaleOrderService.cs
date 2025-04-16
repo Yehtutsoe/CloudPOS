@@ -46,7 +46,7 @@ namespace CloudPOS.Services
                             //Console.WriteLine("ProductId is null or empty for one of the sale items!");
                             throw new InvalidOperationException("ProductId is missing for one of the sale items.");
                         }
-
+                        model.StockSwitch = true;
                         if (model.StockSwitch)
                         {
                             var stockAvailable = _unitOfWork.Inventories.GetAvaliableStock(details.ProductId);
@@ -63,15 +63,17 @@ namespace CloudPOS.Services
                                 {
                                     Id = Guid.NewGuid().ToString(),
                                     IsActive = true,
+                                    SourceId= details.ProductId,
                                     CreatedAt = DateTime.Now,
                                     ProductId = details.ProductId,
                                     LedgerDate = DateTime.Now,
                                     Quantity = usage.QuantityUsed,
-                                    EarliestDate = DateTime.Parse(usage.EarliestDate),
+                                    EarliestDate = usage.EarliestDate, 
                                     TransactionType = "Sale"
                                 };
                                 _unitOfWork.StockLedgers.Create(stockLedgerEntity);
                             }
+
                         }
 
                         // Create Sale Item

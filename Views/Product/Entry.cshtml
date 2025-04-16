@@ -5,7 +5,7 @@
     <div class="row mb-3">
         <div class="col-md-4">
             <label class="form-label">Code</label>
-            <input type="text" name="ProductViewModel.Code" value="@Model.Item1.Code" readonly class="form-control" />
+            <input type="text" name="ProductViewModel.Code" value="@Model?.Item1.Code" readonly class="form-control" />
         </div>
         <div class="col-md-4">
             <label class="form-label">Category</label>
@@ -19,11 +19,8 @@
         <div class="col-md-4">
             <label class="form-label">Brand</label>
             <select class="form-select" id="BrandId" name="ProductViewModel.BrandId">
-                <option value="">[ Select One ]</option>
-                @foreach (var brand in ViewBag.Brands)
-                {
-                    <option value="@brand.Id">@brand.Name</option>
-                }
+                <option selected>[ Select One ]</option>
+                <!-- Brands will be dynamically populated here based on the selected category -->
             </select>
         </div>
     </div>

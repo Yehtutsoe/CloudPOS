@@ -17,7 +17,7 @@ namespace CloudPOS.Services
 
         public void Create(ProductViewModel productViewModel, PriceViewModel priceViewModel)
         {
-            ProductEntity entity = new ProductEntity()
+            ProductEntity productEntity = new ProductEntity()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = productViewModel.Name,
@@ -30,11 +30,11 @@ namespace CloudPOS.Services
                 IsActive = true,
             };
            // Console.WriteLine($"Saving product with code: {entity.Code} and name: {entity.Name}");
-            _unitOfWork.Products.Create(entity);
+            _unitOfWork.Products.Create(productEntity);
             PriceEntity priceEntity = new PriceEntity()
             {
                 Id = Guid.NewGuid().ToString(),
-                ProductId = entity.Id,
+                ProductId = productEntity.Id,
                 IsActive = true,
                 CreatedAt = DateTime.Now,
                 PricingDate = priceViewModel.PricingDate,

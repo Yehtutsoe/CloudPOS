@@ -7,11 +7,8 @@ namespace CloudPOS.Models.Entities
     {
         public int Quantity { get; set; }
         public string PurchaseId { get; set; }
-        [ForeignKey(nameof(PurchaseId))]
-        public PurchaseEntity Purchases { get; set; }
+        public virtual PurchaseEntity Purchase { get; set; }
         public string ProductId { get; set; }
-        [ForeignKey(nameof(ProductId))]
-        public ProductEntity Products { get; set; }
         public Decimal TotalPrice { get; set; }
         public Decimal Price { get; set; }
         public DateTime EarliestDate { get; set; }

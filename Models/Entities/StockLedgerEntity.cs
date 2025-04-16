@@ -9,8 +9,6 @@ namespace CloudPOS.Models.Entities
         public DateTime EarliestDate { get; set; }
         public string SourceId { get; set; }
         public string ProductId { get; set; }
-        [ForeignKey(nameof(ProductId))] 
-        public ProductEntity Products { get; set; }
         public int Quantity { get; set; }
         public string TransactionType { get; set; }
     }

@@ -177,6 +177,7 @@ namespace CloudPOS.Controllers
             }
             return RedirectToAction("List");
         }
+        [HttpGet]
         public IActionResult GetBrandByCategory(string categoryId)
         {
             var brands = _brandService.GetBrandsByCategory(categoryId)

@@ -6,8 +6,6 @@ namespace CloudPOS.Models.Entities
     public class PriceEntity:BaseEntity
     {
         public string ProductId { get; set; }
-        [ForeignKey(nameof(ProductId))]
-        public ProductEntity Products { get; set; }
         public DateTime PricingDate { get; set; }
         public decimal PurchasePrice { get; set; }
         public decimal RetailSalePrice { get; set; }

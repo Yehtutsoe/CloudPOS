@@ -23,20 +23,23 @@ namespace CloudPOS.Repositories.Domain
             return _dbContext.Inventories.FirstOrDefault(iv => iv.ProductId == productId && iv.EarliestDate.Date == earliestDate.Date);
         }
 
-        public List<(string EarliestDate, int QuantityUsed)> ReduceForSale(string productId, int quantity)
+        public List<(DateTime EarliestDate, int QuantityUsed)> ReduceForSale(string productId, int quantity)
         {
-
             var stockBalances = _dbContext.Inventories
-                                          .Where(sb => sb.ProductId == productId && sb.Quantity == quantity)
-                                          .OrderBy(sb=> sb.EarliestDate)
+                                          .Where(sb => sb.ProductId == productId && sb.Quantity > 0)
+                                          .OrderBy(sb => sb.EarliestDate)
                                           .ToList();
-            var usedBatch = new List<(string EarliestDate, int QuantityUsed)>();
-            foreach(var stockBalance in stockBalances)
+
+            var usedBatch = new List<(DateTime EarliestDate, int QuantityUsed)>();
+
+            foreach (var stockBalance in stockBalances)
             {
                 if (quantity <= 0)
                     break;
+
                 int usedQuantity = 0;
-            if(stockBalance.Quantity >= quantity)
+
+                if (stockBalance.Quantity >= quantity)
                 {
                     usedQuantity = quantity;
                     stockBalance.Quantity -= quantity;
@@ -44,21 +47,26 @@ namespace CloudPOS.Repositories.Domain
                 }
                 else
                 {
-                    usedQuantity = quantity;
+                    usedQuantity = stockBalance.Quantity;
                     quantity -= stockBalance.Quantity;
                     stockBalance.Quantity = 0;
                 }
+
                 _dbContext.Inventories.Update(stockBalance);
-                usedBatch.Add((EarliestDate:stockBalance.EarliestDate.ToString(), QuantityUsed:usedQuantity));
+
+                usedBatch.Add((EarliestDate: stockBalance.EarliestDate, QuantityUsed: usedQuantity)); // ✅ now using DateTime
             }
+
             if (quantity > 0)
             {
                 throw new InvalidOperationException("Not enough stock available.");
             }
 
             _dbContext.SaveChanges();
+
             return usedBatch;
         }
+
 
         public void UpdateInventoryBalanceByProductAndEarliest(string productId, int quantity, string categoryId,DateTime earliestDate)
         {
