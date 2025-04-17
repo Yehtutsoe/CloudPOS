@@ -43,17 +43,17 @@ namespace CloudPOS.Controllers
         {
             if (string.IsNullOrEmpty(barCode))
             {
-                return Json(null);
+                return BadRequest("Barcode is required.");
             }
 
-            var details = _priceService.ProductDetailsByBarCode(barCode);
+            var productDetails = _priceService.ProductDetailsByBarCode(barCode);
 
-            if (details != null)
+            if (productDetails == null)
             {
-                return Json(details);
+                return NotFound("Product not found.");
             }
 
-            return Json(null);
+            return Ok(productDetails);
         }
         [HttpPost]
         public IActionResult Entry(SaleWithSaleItemViewModel model)

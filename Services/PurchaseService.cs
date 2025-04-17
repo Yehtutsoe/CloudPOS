@@ -60,7 +60,7 @@ namespace CloudPOS.Services
                         detail.ProductId,
                         detail.Quantity,
                         categoryId,
-                        detail.EarliestDate // ✅ EarliestDate passed as DateTime
+                        detail.EarliestDate // EarliestDate passed as DateTime
                     );
 
                     var stockLedgerEntity = new StockLedgerEntity()
@@ -73,7 +73,7 @@ namespace CloudPOS.Services
                         CreatedAt = currentTime,
                         IsActive = true,
                         SourceId = purchaseEntity.Id,
-                        EarliestDate = detail.EarliestDate // ✅ Stored with correct date
+                        EarliestDate = detail.EarliestDate //Stored with correct date
                     };
 
                     _unitOfWork.StockLedgers.Create(stockLedgerEntity);
@@ -110,7 +110,7 @@ namespace CloudPOS.Services
                         detail.ProductId,
                         -detail.Quantity,
                         null,
-                        detail.EarliestDate // ✅ Reduce by date-based batch
+                        detail.EarliestDate 
                     );
 
                     var stockLedger = new StockLedgerEntity()

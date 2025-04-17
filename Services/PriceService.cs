@@ -1,4 +1,5 @@
-﻿using CloudPOS.Models.Entities;
+﻿using CloudPOS.Migrations;
+using CloudPOS.Models.Entities;
 using CloudPOS.Models.ViewModels;
 using CloudPOS.UnitOfWork;
 
@@ -83,7 +84,23 @@ namespace CloudPOS.Services
 
         public ProductPriceViewModel ProductDetailsByBarCode(string BarCode)
         {
-            return _unitOfWork.Prices.GetProductDetailsByBarCode(BarCode);
+            var products = _unitOfWork.Products.GetBy(p => p.BarCode == BarCode).FirstOrDefault();
+            if(products == null)
+            {
+                return null;
+            }
+            var prices = _unitOfWork.Prices.GetBy(p => p.ProductId == products.Id).FirstOrDefault();
+            if(prices == null)
+            {
+                return null;
+            }
+            return new ProductPriceViewModel
+            {
+                ProductId = products.Id,
+                ProductName = products.Name,
+                WholeSalePrice = prices.WholeSalePrice,
+                RetailSalePrice = prices.RetailSalePrice
+            };
         }
 
         public void Update(PriceViewModel priceViewModel)

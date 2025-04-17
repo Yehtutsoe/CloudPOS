@@ -46,7 +46,7 @@ namespace CloudPOS.Services
                             //Console.WriteLine("ProductId is null or empty for one of the sale items!");
                             throw new InvalidOperationException("ProductId is missing for one of the sale items.");
                         }
-                        model.StockSwitch = true;
+                        //model.StockSwitch = true;
                         if (model.StockSwitch)
                         {
                             var stockAvailable = _unitOfWork.Inventories.GetAvaliableStock(details.ProductId);
