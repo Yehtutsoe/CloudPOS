@@ -1,7 +1,8 @@
 using CloudPOS.DAO;
 using CloudPOS.Repositories.Domain;
-using CloudPOS.Repositories.Report.common;
 using CloudPOS.Services;
+using CloudPOS.Services.Report;
+using CloudPOS.Services.ReportingServices;
 using CloudPOS.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -65,12 +66,15 @@ builder.Services.AddScoped<IPriceService, PriceService>();
 builder.Services.AddScoped<IPriceRepository, PriceRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddSingleton<IEmailSender,EmailSender>();
-builder.Services.AddTransient<IReport, Report>();
+builder.Services.AddTransient<IProductReportService, Report>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IInventoryRepository,InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IProfitReportService,ProfitReportService>();
 
+builder.Logging.AddConsole(); // Add console logging
+builder.Logging.AddDebug();   // Add debug logging
 var app = builder.Build();
 
 

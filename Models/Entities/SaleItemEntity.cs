@@ -6,7 +6,7 @@ namespace CloudPOS.Models.Entities
     [Table("SaleItem")]
     public class SaleItemEntity:BaseEntity
     {
-        
+        public decimal? PurchasePrice { get; set; }
         public int Quantity { get; set; }
         public Decimal Price { get; set; }
         public Decimal TotalPrice { get; set; }

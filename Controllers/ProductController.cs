@@ -1,7 +1,6 @@
 ﻿using CloudPOS.Models.ViewModels;
-using CloudPOS.Repositories.Report.common;
-using CloudPOS.Repositories.Report.ReportDataSet;
 using CloudPOS.Services;
+using CloudPOS.Services.Report;
 using CloudPOS.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +14,13 @@ namespace CloudPOS.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IBrandService _brandService;
         private readonly IPriceService _priceService;
-        private readonly IReport _report;
+        private readonly IProductReportService _report;
 
         public ProductController(IProductService productService,
                                  ICategoryService categoryService,
                                  IBrandService modelService,
                                  IPriceService priceService,
-                                 IReport report)
+                                 IProductReportService report)
         {
             _productService = productService;
             _categoryService = categoryService;
@@ -113,7 +112,7 @@ namespace CloudPOS.Controllers
             string fileDownloadName = $"productReport{Guid.NewGuid():N}.xlsx";
           // Console.WriteLine($"Searching with - Product Name: {productName}, ModelId: {modelId}, CategoryId: {categoryId}");
 
-            IList<ProductReport> productReports  = _report.GetProductReportBy(productName, modelId, categoryId);
+            IList<ProductReportViewModel> productReports  = _report.GetProductReportBy(productName, modelId, categoryId);
            //Console.WriteLine($"Total Records Found: {productReports.Count}");
             if (productReports.Count > 0)
             {

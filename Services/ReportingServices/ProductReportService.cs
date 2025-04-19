@@ -1,9 +1,8 @@
-﻿using CloudPOS.Repositories.Report.ReportDataSet;
-using CloudPOS.Services;
+﻿using CloudPOS.Models.ViewModels;
 
-namespace CloudPOS.Repositories.Report.common
+namespace CloudPOS.Services.Report
 {
-    public class Report : IReport
+    public class Report : IProductReportService
     {
         private readonly IProductService _productService;
 
@@ -11,7 +10,7 @@ namespace CloudPOS.Repositories.Report.common
         {
             _productService = productService;
         }
-        public IList<ProductReport> GetProductReportBy(string productName, string categoryId, string modelId)
+        public IList<ProductReportViewModel> GetProductReportBy(string productName, string categoryId, string modelId)
         {
             var query = _productService.GetAll().AsQueryable();
 
@@ -31,10 +30,10 @@ namespace CloudPOS.Repositories.Report.common
                 query = query.Where(w => w.BrandId.Trim() == modelId.Trim());
             }
 
-            var products = query.Select(s => new ProductReport
+            var products = query.Select(s => new ProductReportViewModel
             {
                 Name = s.Name,
-                Description= s.Description,
+                Description = s.Description,
                 ProductCode = s.Code,
                 BrandInfo = s.BrandInfo,
                 CategoryInfo = s.CategoryInfo,

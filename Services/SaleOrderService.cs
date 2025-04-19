@@ -85,6 +85,7 @@ namespace CloudPOS.Services
                             IsActive = true,
                             ProductId = details.ProductId,
                             Price = details.Price,
+                            PurchasePrice = details.Price, // for profit calculation
                             Quantity = details.Quantity,
                             TotalPrice = details.Total,
                             SaleAmount = details.Amount,
