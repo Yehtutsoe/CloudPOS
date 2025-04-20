@@ -1,4 +1,26 @@
-﻿<form action="/profitreport/profitreport" method="post" id="reportForm">
+﻿@{
+    ViewData["Title"] = "ProfitReport";
+}
+<h3>Profit Report</h3>
+@{
+    var info = ViewData["Info"];
+}
+@if (info != null)
+{
+    if (Convert.ToBoolean(ViewData["status"]))
+    {
+        <div class="alert alert-success" role="alert">
+            @info
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            @info
+        </div>
+    }
+}
+<form action="/profitreport/profitreport" method="post" id="reportForm">
     <div class="form-group">
         <label class="form-label">From Date</label>
         <input type="date" name="fromDate" class="form-control" />

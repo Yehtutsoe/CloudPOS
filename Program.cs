@@ -72,6 +72,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IInventoryRepository,InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IProfitReportService,ProfitReportService>();
+builder.Services.AddScoped<IPurchaseDetailsReportService, PurchaseDetailsReportService>();
 
 builder.Logging.AddConsole(); // Add console logging
 builder.Logging.AddDebug();   // Add debug logging
