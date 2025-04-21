@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Sale Item Report";
+}
+
+<h3>Sale Item Report</h3>
+
+@{
+    var info = ViewData["Info"];
+}
+
+@if (info != null)
+{
+    if (Convert.ToBoolean(ViewData["Status"]))
+    {
+        <div class="alert alert-success">@info</div>
+    }
+    else
+    {
+        <div class="alert alert-danger">@info</div>
+    }
+}
+
+<form action="/saleitemreport/Report" method="post">
+    <div class="form-group mb-3">
+        <label>From Date</label>
+        <input type="date" name="FromDate" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label>To Date</label>
+        <input type="date" name="ToDate" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label>Product</label>
+        <select name="ProductId" class="form-select">
+            <option value="">[ Select One ]</option>
+            @foreach (var product in ViewBag.Products)
+            {
+                <option value="@product.Id">@product.Name</option>
+            }
+        </select>
+    </div>
+    <input type="hidden" name="IsDownload" value="false" />
+    <button type="submit" class="btn btn-primary"> View Report</button>
+</form>
+
+<!-- Separate Download Form -->
+<form action="/saleitemreport/Report" method="post" style="margin-top: 10px;">
+    <input type="hidden" name="FromDate" value="@ViewBag.FromDate" />
+    <input type="hidden" name="ToDate" value="@ViewBag.ToDate" />
+    <input type="hidden" name="ProductId" value="@ViewBag.ProductId" />
+    <input type="hidden" name="IsDownload" value="true" />
+    <button type="submit" class="btn btn-success"> Download Excel</button>
+</form>
+@if (ViewBag.ReportData != null)
+{
+    <hr />
+    <h4>Report Result</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Sale Date</th>
+                <th>Voucher No</th>
+                <th>Sale Type</th>
+                <th>Category</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Discount Percent</th>
+                <th>Discount Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var saleItem in ViewBag.ReportData)
+            {
+                <tr>
+                    <td>@saleItem.SaleDate</td>
+                    <td>@saleItem.VoucherNo</td>
+                    <td>@saleItem.SaleType</td>
+                    <td>@saleItem.CategoryName</td>
+                    <td>@saleItem.ProductName</td>
+                    <td>@saleItem.Quantity</td>
+                    <td>@saleItem.Price</td>
+                    <td>@saleItem.Total</td>
+                    <td>@saleItem.DiscountPercent</td>
+                    <td>@saleItem.DiscountAmount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

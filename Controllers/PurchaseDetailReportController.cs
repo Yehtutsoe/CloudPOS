@@ -10,15 +10,14 @@ namespace CloudPOS.Controllers
     {
         private readonly IPurchaseDetailsReportService _detailsReportService;
         private readonly IProductService _productService;
-        private readonly ISupplierService _supplierService;
+
 
         public PurchaseDetailReportController(IPurchaseDetailsReportService detailsReportService,
-                                              IProductService productService,
-                                              ISupplierService supplierService)
+                                              IProductService productService)
         {
             this._detailsReportService = detailsReportService;
             this._productService = productService;
-            this._supplierService = supplierService;
+
         }
         public IActionResult Report()
         {
